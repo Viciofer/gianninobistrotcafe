@@ -4,9 +4,9 @@ import { PageHeader } from "@/components/PageHeader";
 export const Route = createFileRoute("/menu")({
   head: () => ({
     meta: [
-      { title: "Menù — Tenuta Corsini" },
-      { name: "description", content: "Il menù stagionale della Tenuta Corsini: antipasti, primi, secondi e dolci della tradizione toscana." },
-      { property: "og:title", content: "Menù — Tenuta Corsini" },
+      { title: "Menù — Giannino Bistrot Cafè" },
+      { name: "description", content: "Il menù stagionale della Giannino Bistrot Cafè: antipasti, primi, secondi e dolci della tradizione toscana." },
+      { property: "og:title", content: "Menù — Giannino Bistrot Cafè" },
       { property: "og:description", content: "Cucina toscana stagionale, dal focolare al piatto." },
     ],
   }),

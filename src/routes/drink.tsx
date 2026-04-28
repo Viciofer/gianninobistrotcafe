@@ -4,10 +4,10 @@ import { PageHeader } from "@/components/PageHeader";
 export const Route = createFileRoute("/drink")({
   head: () => ({
     meta: [
-      { title: "Drink List — Tenuta Corsini" },
+      { title: "Drink List — Giannino Bistrot Cafè" },
       { name: "description", content: "Caffetteria, bibite, birre, cocktail, gin, whisky, rum, vodka, mezcal, grappe, liquori e amari." },
-      { property: "og:title", content: "Drink List — Tenuta Corsini" },
-      { property: "og:description", content: "La selezione completa di drink, distillati e caffetteria della Tenuta Corsini." },
+      { property: "og:title", content: "Drink List — Giannino Bistrot Cafè" },
+      { property: "og:description", content: "La selezione completa di drink, distillati e caffetteria della Giannino Bistrot Cafè." },
     ],
   }),
   component: DrinkPage,

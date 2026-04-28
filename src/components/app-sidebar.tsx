@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Home, UtensilsCrossed, Wine, Martini, Mail } from "lucide-react";
+import logoGiannino from "@/assets/logo-giannino.png";
 import {
   Sidebar,
   SidebarContent,
@@ -14,7 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 
 const items = [
-  { title: "Storia", url: "/", icon: Home },
+  { title: "Home", url: "/", icon: Home },
   { title: "Menù", url: "/menu", icon: UtensilsCrossed },
   { title: "Carta dei Vini", url: "/vini", icon: Wine },
   { title: "Drink List", url: "/drink", icon: Martini },
@@ -29,16 +30,19 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="px-6 py-8 border-b border-sidebar-border">
-        <div className="flex flex-col group-data-[collapsible=icon]:items-center">
-          <span className="text-[10px] tracking-[0.25em] text-sidebar-foreground/60 uppercase group-data-[collapsible=icon]:hidden">
-            Tenuta Corsini
+        <div className="flex flex-col items-center">
+          <img
+            src={logoGiannino}
+            alt="Giannino Bistrot Cafè"
+            className="size-20 rounded-full object-cover group-data-[collapsible=icon]:size-8"
+          />
+          <span className="mt-3 text-[10px] tracking-[0.25em] text-sidebar-foreground/60 uppercase group-data-[collapsible=icon]:hidden">
+            Est. 1974
           </span>
-          <h1 className="font-serif text-2xl text-sidebar-foreground mt-1 group-data-[collapsible=icon]:hidden">
-            Gestionale
+          <h1 className="font-serif text-xl text-sidebar-foreground mt-1 group-data-[collapsible=icon]:hidden text-center leading-tight">
+            Giannino<br />
+            <span className="text-sm text-sidebar-foreground/70">Bistrot · Cafè</span>
           </h1>
-          <span className="hidden group-data-[collapsible=icon]:block font-serif text-xl text-accent">
-            TC
-          </span>
         </div>
       </SidebarHeader>
       <SidebarContent className="px-3 py-6">

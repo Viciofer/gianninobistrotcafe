@@ -5,9 +5,9 @@ import { MapPin, Phone, Mail, Clock } from "lucide-react";
 export const Route = createFileRoute("/contatti")({
   head: () => ({
     meta: [
-      { title: "Contatti — Tenuta Corsini" },
-      { name: "description", content: "Contatti, indirizzo e mappa della Tenuta Corsini a Santo Stefano di Camastra (ME)." },
-      { property: "og:title", content: "Contatti — Tenuta Corsini" },
+      { title: "Contatti — Giannino Bistrot Cafè" },
+      { name: "description", content: "Contatti, indirizzo e mappa della Giannino Bistrot Cafè a Santo Stefano di Camastra (ME)." },
+      { property: "og:title", content: "Contatti — Giannino Bistrot Cafè" },
       { property: "og:description", content: "Vieni a trovarci in Via Nazionale 34, Santo Stefano di Camastra (ME)." },
     ],
   }),
@@ -115,7 +115,7 @@ function ContattiPage() {
           </p>
           <div className="relative aspect-[4/5] md:aspect-[3/4] w-full overflow-hidden border border-border bg-muted">
             <iframe
-              title="Mappa Tenuta Corsini"
+              title="Mappa Giannino Bistrot Cafè"
               src={mapsEmbed}
               className="absolute inset-0 w-full h-full"
               style={{ border: 0 }}

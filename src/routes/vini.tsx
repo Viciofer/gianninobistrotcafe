@@ -4,9 +4,9 @@ import { PageHeader } from "@/components/PageHeader";
 export const Route = createFileRoute("/vini")({
   head: () => ({
     meta: [
-      { title: "Carta dei Vini — Tenuta Corsini" },
-      { name: "description", content: "Champagne, spumanti, bianchi, rosati e rossi italiani e internazionali selezionati per la Tenuta Corsini." },
-      { property: "og:title", content: "Carta dei Vini — Tenuta Corsini" },
+      { title: "Carta dei Vini — Giannino Bistrot Cafè" },
+      { name: "description", content: "Champagne, spumanti, bianchi, rosati e rossi italiani e internazionali selezionati per la Giannino Bistrot Cafè." },
+      { property: "og:title", content: "Carta dei Vini — Giannino Bistrot Cafè" },
       { property: "og:description", content: "La nostra selezione di etichette: Champagne, bollicine, bianchi, rosati e rossi." },
     ],
   }),

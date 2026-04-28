@@ -4,10 +4,10 @@ import heroImg from "@/assets/hero-sala.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Storia — Tenuta Corsini" },
-      { name: "description", content: "La storia della Tenuta Corsini, dal 1924: tradizione toscana, cucina del focolare e ospitalità." },
-      { property: "og:title", content: "Storia — Tenuta Corsini" },
-      { property: "og:description", content: "Dal 1924 custodi di una tradizione toscana fatta di rito, cura e tempo." },
+      { title: "Home — Giannino Bistrot Cafè" },
+      { name: "description", content: "La storia della Giannino Bistrot Cafè, dal 1974: tradizione toscana, cucina del focolare e ospitalità." },
+      { property: "og:title", content: "Home — Giannino Bistrot Cafè" },
+      { property: "og:description", content: "Dal 1974 custodi di una tradizione toscana fatta di rito, cura e tempo." },
     ],
   }),
   component: Index,
@@ -27,7 +27,7 @@ function Index() {
           </h1>
           <div className="space-y-6 text-base md:text-lg leading-relaxed text-muted-foreground font-light max-w-[58ch]">
             <p className="text-pretty">
-              Dal 1924, le mura di questa tenuta custodiscono molto più che semplici ricette.
+              Dal 1974, le mura di questa tenuta custodiscono molto più che semplici ricette.
               Ogni piatto che esce dalla nostra cucina è un frammento di storia toscana, un atto
               di devozione verso una terra aspra e generosa. Non chiediamo ai nostri ospiti di
               consumare un pasto, ma di partecipare a un rito di famiglia.
@@ -41,7 +41,7 @@ function Index() {
 
           <div className="mt-14 grid grid-cols-3 gap-px bg-border border border-border">
             {[
-              { k: "Fondazione", v: "1924" },
+              { k: "Fondazione", v: "1974" },
               { k: "Coperti", v: "45" },
               { k: "Etichette", v: "1.480" },
             ].map((s) => (
@@ -57,7 +57,7 @@ function Index() {
           <figure className="relative p-3 border border-border bg-card shadow-2xl shadow-foreground/10">
             <img
               src={heroImg}
-              alt="Sala interna della Tenuta Corsini al tramonto"
+              alt="Sala interna della Giannino Bistrot Cafè al tramonto"
               width={1024}
               height={1280}
               className="w-full aspect-[4/5] object-cover"
