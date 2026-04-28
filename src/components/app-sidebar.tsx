@@ -1,0 +1,81 @@
+import { Link, useRouterState } from "@tanstack/react-router";
+import { Home, UtensilsCrossed, Wine, Martini, Mail } from "lucide-react";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarHeader,
+  SidebarFooter,
+} from "@/components/ui/sidebar";
+
+const items = [
+  { title: "Storia", url: "/", icon: Home },
+  { title: "Menù", url: "/menu", icon: UtensilsCrossed },
+  { title: "Carta dei Vini", url: "/vini", icon: Wine },
+  { title: "Drink List", url: "/drink", icon: Martini },
+  { title: "Contatti", url: "/contatti", icon: Mail },
+];
+
+export function AppSidebar() {
+  const currentPath = useRouterState({
+    select: (router) => router.location.pathname,
+  });
+
+  return (
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="px-6 py-8 border-b border-sidebar-border">
+        <div className="flex flex-col group-data-[collapsible=icon]:items-center">
+          <span className="text-[10px] tracking-[0.25em] text-sidebar-foreground/60 uppercase group-data-[collapsible=icon]:hidden">
+            Tenuta Corsini
+          </span>
+          <h1 className="font-serif text-2xl text-sidebar-foreground mt-1 group-data-[collapsible=icon]:hidden">
+            Gestionale
+          </h1>
+          <span className="hidden group-data-[collapsible=icon]:block font-serif text-xl text-accent">
+            TC
+          </span>
+        </div>
+      </SidebarHeader>
+      <SidebarContent className="px-3 py-6">
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-[10px] tracking-[0.25em] text-sidebar-foreground/50 uppercase px-3 mb-2">
+            Navigazione
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu className="gap-1">
+              {items.map((item) => {
+                const active = currentPath === item.url;
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={active}
+                      tooltip={item.title}
+                      className="h-11 px-3 text-sm tracking-wider uppercase data-[active=true]:bg-sidebar-accent data-[active=true]:text-accent data-[active=true]:border-l-2 data-[active=true]:border-accent rounded-none"
+                    >
+                      <Link to={item.url}>
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+      <SidebarFooter className="border-t border-sidebar-border px-6 py-5">
+        <div className="flex items-center gap-2 text-[10px] tracking-widest uppercase text-sidebar-foreground/60 group-data-[collapsible=icon]:justify-center">
+          <span className="size-1.5 rounded-full bg-accent shadow-[0_0_8px_var(--candle)]" />
+          <span className="group-data-[collapsible=icon]:hidden">Servizio attivo</span>
+        </div>
+      </SidebarFooter>
+    </Sidebar>
+  );
+}
