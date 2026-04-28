@@ -295,56 +295,56 @@ const groups: Group[] = [
 
 function DrinkPage() {
   return (
-    <div className="max-w-4xl mx-auto px-6 md:px-10 py-12 md:py-20">
+    <div className="px-4 md:px-12 lg:px-20 py-12 md:py-20 max-w-5xl mx-auto">
       <PageHeader
         chapter="Capitolo IV"
         title="Drink List"
         subtitle="Caffetteria, bibite, cocktail d'autore, gin, distillati, grappe e amari. Una selezione costruita giorno dopo giorno."
       />
 
-      <nav aria-label="Indice drink list" className="mb-16 grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-2">
-        {groups.map((g) => (
-          <a
-            key={g.id}
-            href={`#${g.id}`}
-            className="text-[11px] tracking-[0.2em] uppercase text-muted-foreground hover:text-accent transition-colors py-1 border-b border-border/50"
-          >
-            {g.title}
-          </a>
-        ))}
+      <nav aria-label="Indice drink list" className="mb-16 border-y border-border py-6">
+        <span className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground block mb-3">Indice</span>
+        <ul className="flex flex-wrap gap-x-6 gap-y-2">
+          {groups.map((g) => (
+            <li key={g.id}>
+              <a
+                href={`#${g.id}`}
+                className="text-sm text-foreground/80 hover:text-accent transition-colors underline-offset-4 hover:underline"
+              >
+                {g.title}
+              </a>
+            </li>
+          ))}
+        </ul>
       </nav>
 
       <div className="space-y-20">
         {groups.map((group) => (
-          <section key={group.id} id={group.id} className="scroll-mt-24">
-            <h2 className="font-serif text-3xl md:text-4xl font-light text-foreground border-b border-accent/40 pb-3 mb-10">
+          <section key={group.id} id={group.id} className="scroll-mt-20">
+            <h2 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-2">
               {group.title}
             </h2>
+            <div className="h-px w-12 bg-accent mb-10" />
 
-            <div className="space-y-12">
+            <div className="space-y-10">
               {group.sections.map((section) => (
-                <div key={section.id} id={section.id} className="scroll-mt-24">
-                  <div className="mb-6">
-                    <h3 className="font-serif text-xl md:text-2xl text-foreground">{section.title}</h3>
-                    {section.subtitle && (
-                      <span className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground">
-                        {section.subtitle}
-                      </span>
-                    )}
-                  </div>
-
-                  <ul className="divide-y divide-border/40">
+                <div key={section.id} id={section.id} className="scroll-mt-20">
+                  {section.title && section.title !== group.title && (
+                    <h3 className="text-[11px] tracking-[0.3em] uppercase text-accent font-medium mb-5">
+                      {section.title}
+                    </h3>
+                  )}
+                  <ul className="divide-y divide-border/60">
                     {section.items.map((item, i) => (
-                      <li key={i} className="py-3 flex items-baseline gap-4">
-                        <div className="flex-1 min-w-0">
-                          <p className="text-foreground font-light">{item.name}</p>
+                      <li key={i} className="grid grid-cols-[1fr_auto] gap-x-6 py-4 items-baseline">
+                        <div className="min-w-0">
+                          <p className="font-serif text-lg text-foreground leading-snug">{item.name}</p>
                           {item.desc && (
-                            <p className="text-xs text-muted-foreground italic mt-0.5">{item.desc}</p>
+                            <p className="text-sm text-muted-foreground mt-1 font-light">{item.desc}</p>
                           )}
                         </div>
-                        <span aria-hidden className="flex-1 border-b border-dotted border-border/60 self-end mb-1.5 hidden sm:block" />
                         {item.price && (
-                          <span className="font-serif text-foreground tabular-nums whitespace-nowrap">
+                          <span className="font-serif text-lg text-accent tabular-nums whitespace-nowrap">
                             € {item.price}
                           </span>
                         )}
@@ -358,8 +358,8 @@ function DrinkPage() {
         ))}
       </div>
 
-      <p className="mt-20 text-[11px] tracking-[0.2em] uppercase text-muted-foreground text-center">
-        I prezzi sono espressi in Euro · Servizio incluso
+      <p className="mt-20 pt-8 border-t border-border text-xs text-muted-foreground italic">
+        I prezzi sono espressi in Euro. Servizio incluso. Per distillati e selezioni fuori carta, chiedere al banco.
       </p>
     </div>
   );
