@@ -19,9 +19,9 @@ const telefono = "0921 995719";
 const email = "info@tenutacorsini.it";
 
 const mapsEmbed =
-  "https://www.google.com/maps?q=" +
+  "https://maps.google.com/maps?q=" +
   encodeURIComponent(indirizzo) +
-  "&output=embed";
+  "&t=&z=16&ie=UTF8&iwloc=&output=embed";
 const mapsLink =
   "https://www.google.com/maps/search/?api=1&query=" +
   encodeURIComponent(indirizzo);
