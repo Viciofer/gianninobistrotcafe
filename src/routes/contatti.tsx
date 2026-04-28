@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "@/components/PageHeader";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { ClientOnly } from "@tanstack/react-router";
+import { InteractiveMap } from "@/components/InteractiveMap";
 
 export const Route = createFileRoute("/contatti")({
   head: () => ({
@@ -18,10 +20,9 @@ const indirizzo = "Via Nazionale, 34, 98077 Santo Stefano di Camastra ME";
 const telefono = "0921 995719";
 const email = "info@tenutacorsini.it";
 
-const mapsEmbed =
-  "https://www.google.com/maps?q=" +
-  encodeURIComponent(indirizzo) +
-  "&output=embed";
+// Coordinate Via Nazionale 34, Santo Stefano di Camastra (ME)
+const LAT = 38.0179;
+const LNG = 14.3528;
 const mapsLink =
   "https://www.google.com/maps/search/?api=1&query=" +
   encodeURIComponent(indirizzo);
@@ -113,17 +114,23 @@ function ContattiPage() {
           <p className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-4">
             La nostra posizione
           </p>
-          <div className="relative aspect-[4/5] md:aspect-[3/4] w-full overflow-hidden border border-border bg-muted">
-            <iframe
-              title="Mappa Giannino Bistrot Cafè"
-              src={mapsEmbed}
-              className="absolute inset-0 w-full h-full"
-              style={{ border: 0 }}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              allowFullScreen
-            />
+          <div className="relative aspect-[4/5] md:aspect-[3/4] w-full overflow-hidden border border-border bg-muted z-0">
+            <ClientOnly fallback={<div className="absolute inset-0 grid place-items-center text-xs text-muted-foreground">Caricamento mappa…</div>}>
+              <InteractiveMap
+                lat={LAT}
+                lng={LNG}
+                label="Giannino Bistrot Cafè · Via Nazionale 34"
+              />
+            </ClientOnly>
           </div>
+          <a
+            href={mapsLink}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-block mt-3 text-xs tracking-[0.2em] uppercase text-accent hover:underline underline-offset-4"
+          >
+            Apri in Google Maps →
+          </a>
         </div>
       </div>
     </div>
