@@ -48,9 +48,6 @@ function Index() {
               className="w-full aspect-[4/5] object-cover"
             />
             <div className="absolute inset-3 bg-accent/10 mix-blend-overlay pointer-events-none" />
-            <figcaption className="mt-3 text-center text-xs tracking-[0.25em] uppercase text-muted-foreground italic font-serif">
-              Sala dei Ritratti
-            </figcaption>
           </figure>
         </div>
       </div>
