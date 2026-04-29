@@ -22,20 +22,17 @@ function Index() {
             Capitolo I — Identità
           </span>
           <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] text-balance text-foreground mb-10">
-            Il peso del tempo,<br />
-            <em className="text-accent">la leggerezza del lino.</em>
+            Stesse radici,<br />
+            <em className="text-accent">nuovo orizzonte.</em>
           </h1>
           <div className="space-y-6 text-base md:text-lg leading-relaxed text-muted-foreground font-light max-w-[58ch]">
             <p className="text-pretty">
-              Dal 1974, le mura di questa tenuta custodiscono molto più che semplici ricette.
-              Ogni piatto che esce dalla nostra cucina è un frammento di storia toscana, un atto
-              di devozione verso una terra aspra e generosa. Non chiediamo ai nostri ospiti di
-              consumare un pasto, ma di partecipare a un rito di famiglia.
+              Accanto alla tradizione, nasce un nuovo gusto. C'è la Trattoria che conoscete
+              da cinquant'anni, e da oggi c'è un nuovo posto dove incontrarsi.
             </p>
             <p className="text-pretty">
-              Il focolare a legna, l'argenteria d'epoca, le tovaglie in lino grezzo: non sono
-              vezzi estetici ma ancore sensoriali che legano il presente al nostro passato.
-              Ogni membro dello staff è un custode silenzioso di questa atmosfera.
+              Siamo orgogliosi di presentarvi il nostro Bistrot: il luogo dove la nostra
+              storia dal 1974 incontra la contemporaneità.
             </p>
           </div>
 
