@@ -13,38 +13,63 @@ export const Route = createFileRoute("/menu")({
   component: MenuPage,
 });
 
-type Dish = { name: string; desc: string; price: string };
-const sezioni: { titolo: string; piatti: Dish[] }[] = [
+type Dish = { name: string; desc?: string; price: string };
+const sezioni: { titolo: string; orario?: string; piatti: Dish[]; nota?: string }[] = [
   {
-    titolo: "Antipasti",
+    titolo: "Colazione",
     piatti: [
-      { name: "Crostini neri di fegatini", desc: "Pane toscano, fegatini di pollo, capperi e acciughe.", price: "12" },
-      { name: "Tagliere del casale", desc: "Salumi del Mugello, pecorino di Pienza, mostarde di stagione.", price: "18" },
-      { name: "Carpaccio di Chianina", desc: "Rucola selvatica, scaglie di parmigiano, olio nuovo.", price: "16" },
+      { name: "Crostone di pane", desc: "Uova strapazzate, avocado, philadelphia, bacon croccante.", price: "6,50" },
+      { name: "Croissant salato", desc: "Salmone marinato all'erbette, avocado e philadelphia.", price: "5,50" },
+      { name: "Croissant cunzato", desc: "Prosciutto cotto, pomodoro, misticanza, formaggio.", price: "5,50" },
+      { name: "Croissant", desc: "Cioccolato, marmellata e crema.", price: "1,50" },
+      { name: "Pancake", desc: "Con crema alla nocciola e frutta fresca.", price: "5,50" },
+      { name: "French toast", desc: "Miele di ape nera, mandorle tostate e frutti di bosco.", price: "5,50" },
+      { name: "Torta del bistrot", price: "3,00" },
     ],
   },
   {
-    titolo: "Primi",
+    titolo: "Insalate & Antipasti",
+    orario: "Dalle 12:00 alle 15:00",
     piatti: [
-      { name: "Pici al ragù bianco di cinta senese", desc: "Pasta tirata a mano, ragù lento di sette ore.", price: "18" },
-      { name: "Pappardelle al cinghiale", desc: "Cinghiale di caccia, alloro, ginepro e vino rosso.", price: "20" },
-      { name: "Ribollita del giorno", desc: "Cavolo nero, fagioli zolfini, pane raffermo.", price: "14" },
+      { name: "Caprese", desc: "Mozzarella di bufala, pomodoro cuore di bue e olio al basilico.", price: "10,00" },
+      { name: "Tonno sott'olio al pepe", desc: "Pomodorino rosso e giallo, capperi, patate novelle, cipolla rossa e vinaigrette alle olive verdi.", price: "12,00" },
+      { name: "Insalata di Cesare", desc: "Pollo grigliato, misticanza, crostini di pane, scaglie di parmigiano, yogurt all'erbette.", price: "12,00" },
+      { name: "Crostone dell'artigiano", desc: "Pane ai cereali con gambero, hummus di ceci e pomodorino confit.", price: "15,00" },
+    ],
+    nota: "Coperto 2,00",
+  },
+  {
+    titolo: "Club Sandwich & Panini",
+    orario: "Dalle 12:00 alle 15:00",
+    piatti: [
+      { name: "Gran toast alla mediterranea", desc: "Prosciutto cotto alla brace, asiago, misticanza e pomodoro.", price: "6,00" },
+      { name: "Club sandwich al salmone marinato", desc: "Formaggio fresco, misticanza e guacamole, con patate fritte.", price: "12,00" },
+      { name: "Hamburger di scottona 200gr", desc: "Cicoria ripassata e scamorza affumicata, con patate fritte.", price: "10,00" },
+    ],
+    nota: "Coperto 2,00",
+  },
+  {
+    titolo: "Apericena",
+    orario: "Dalle 18:00 alle 21:00",
+    piatti: [
+      { name: "Bruschette del bistrot", desc: "3 pezzi.", price: "6,00" },
+      { name: "Caprino in carrozza e miele", desc: "3 pezzi.", price: "6,00" },
+      { name: "Arancine", desc: "3 pezzi.", price: "4,50" },
+      { name: "Bon bon", desc: "Di baccalà fritto e maionese alle olive, 3 pezzi.", price: "7,00" },
+      { name: "Selezione di salumi siciliani per 2 persone", desc: "Mortadella di bufala, pancetta coppata, porchetta di suino nero e verdure croccanti.", price: "22,00" },
     ],
   },
   {
-    titolo: "Secondi",
+    titolo: "Secondi e Contorni",
+    orario: "Dalle 18:00 alle 21:00",
     piatti: [
-      { name: "Bistecca alla fiorentina (per 2)", desc: "Chianina IGP, brace di leccio, fagioli all'uccelletto.", price: "75" },
-      { name: "Coniglio in porchetta", desc: "Finocchio selvatico, aglio, vino bianco.", price: "26" },
-      { name: "Baccalà alla livornese", desc: "Pomodoro, olive nere, capperi.", price: "24" },
+      { name: "1974", desc: "Suprema di pollo, con salsa alla Giuseppina e patate novelle al timo.", price: "15,00" },
+      { name: "Polpo alla griglia", desc: "Con pesto di zucchine, porro croccante e olio al basilico.", price: "16,00" },
+      { name: "Entrecote di vitello", desc: "Scaglie di piacentino ennese e cicoria ripassata.", price: "16,00" },
+      { name: "Sandwich", desc: "Maialino nero dei Nebrodi, insalata, salsa bbq, con patate fritte.", price: "10,00" },
+      { name: "Insalata", desc: "Pomodoro, misticanza, crostini di pane, mozzarella di bufala, tonno sott'olio al pepe.", price: "12,00" },
     ],
-  },
-  {
-    titolo: "Dolci",
-    piatti: [
-      { name: "Cantucci e Vin Santo", desc: "Mandorle di Toscana, Vin Santo del Chianti.", price: "10" },
-      { name: "Torta della nonna", desc: "Crema al limone, pinoli tostati.", price: "9" },
-    ],
+    nota: "Coperto 2,00",
   },
 ];
 
@@ -59,20 +84,32 @@ function MenuPage() {
       <div className="space-y-14">
         {sezioni.map((s) => (
           <section key={s.titolo}>
-            <h2 className="font-serif text-3xl text-foreground mb-6 flex items-center gap-4">
-              <span className="text-accent">✦</span> {s.titolo}
-            </h2>
+            <div className="mb-6">
+              <h2 className="font-serif text-3xl text-foreground flex items-center gap-4">
+                <span className="text-accent">✦</span> {s.titolo}
+              </h2>
+              {s.orario && (
+                <p className="text-[11px] tracking-[0.2em] uppercase text-muted-foreground mt-2 ml-8">
+                  {s.orario}
+                </p>
+              )}
+            </div>
             <ul className="divide-y divide-border border-y border-border">
               {s.piatti.map((p) => (
                 <li key={p.name} className="py-5 flex items-baseline gap-6">
                   <div className="flex-1">
                     <h3 className="font-serif text-xl text-foreground">{p.name}</h3>
-                    <p className="text-sm text-muted-foreground mt-1 font-light">{p.desc}</p>
+                    {p.desc && (
+                      <p className="text-sm text-muted-foreground mt-1 font-light">{p.desc}</p>
+                    )}
                   </div>
                   <div className="font-serif text-xl text-accent tabular-nums">€ {p.price}</div>
                 </li>
               ))}
             </ul>
+            {s.nota && (
+              <p className="text-xs italic text-muted-foreground mt-3 text-right">{s.nota}</p>
+            )}
           </section>
         ))}
       </div>
