@@ -45,7 +45,7 @@ function Index() {
               Da lei abbiamo imparato l'arte delle torte della nonna e la sapienza della storica salsa alla Giuseppina, una ricetta che profuma ancora oggi i nostri piatti di famiglia. Qui, tra i vecchi ricordi di sarde, pomodori e cannoli o tra le pennellate di verderame e ocra del nostro design, potete gustare, un boccone alla volta, l'evoluzione gentile della nostra cucina, cultura del gusto e simbolo d'ospitalità.
             </p>
             <p className="text-pretty italic text-right">
-              Elena e Maria
+              Elena e Mario
             </p>
           </div>
         </div>
