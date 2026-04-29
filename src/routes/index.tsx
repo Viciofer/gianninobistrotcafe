@@ -35,6 +35,9 @@ function Index() {
             <p className="text-pretty">
               Siamo orgogliosi di presentarvi il nostro Bistrot: il luogo dove la nostra storia dal 1974 incontra la contemporaneità.
             </p>
+            <p className="text-pretty">
+              Colazione, brunch, pranzo, lounge e aperitivi. Atmosfera curata, sapori ricercati e un'accoglienza che ti fa sentire sempre al posto giusto.
+            </p>
           </div>
         </div>
 
