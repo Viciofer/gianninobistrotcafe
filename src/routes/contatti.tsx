@@ -14,18 +14,16 @@ export const Route = createFileRoute("/contatti")({
   component: ContattiPage,
 });
 
-const indirizzo = "Via Nazionale, 34, 98077 Santo Stefano di Camastra ME";
+const indirizzo = "Via Nazionale, 38, 98077 Santo Stefano di Camastra ME";
 const telefono = "0921 995719";
 const email = "info@tenutacorsini.it";
 
-// Coordinate del pin indicato nell'allegato, su Vicolo Gerbino lato Via Nazionale
-const coords = "38.014166,14.352642";
+// Pin posizionato sull'indirizzo civico esatto
+const query = encodeURIComponent(indirizzo);
 const mapsEmbed =
-  "https://maps.google.com/maps?q=" +
-  coords +
-  "&t=&z=18&ie=UTF8&iwloc=&output=embed";
+  "https://maps.google.com/maps?q=" + query + "&t=&z=18&ie=UTF8&iwloc=&output=embed";
 const mapsLink =
-  "https://www.google.com/maps/search/?api=1&query=" + coords;
+  "https://www.google.com/maps/search/?api=1&query=" + query;
 
 function ContattiPage() {
   return (
@@ -46,7 +44,7 @@ function ContattiPage() {
                   Dove siamo
                 </p>
                 <p className="font-serif text-xl text-foreground leading-snug">
-                  Via Nazionale, 34
+                  Via Nazionale, 38
                 </p>
                 <p className="font-serif text-xl text-foreground leading-snug">
                   98077 Santo Stefano di Camastra (ME)
