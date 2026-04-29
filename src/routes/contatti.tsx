@@ -18,8 +18,8 @@ const indirizzo = "Via Nazionale, 34, 98077 Santo Stefano di Camastra ME";
 const telefono = "0921 995719";
 const email = "info@tenutacorsini.it";
 
-// Coordinate all'inizio di Vico Giovanni Gerbino (lato Via Nazionale)
-const coords = "38.014086,14.352541";
+// Coordinate del pin indicato nell'allegato, su Vicolo Gerbino lato Via Nazionale
+const coords = "38.014166,14.352642";
 const mapsEmbed =
   "https://maps.google.com/maps?q=" +
   coords +
