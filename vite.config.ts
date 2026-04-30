@@ -8,10 +8,7 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
   tanstackStart: {
-    prerender: {
-      routes: ["/"],
-      crawlLinks: true,
-    },
+    deployment: "static",
   },
   vite: {
     base: "/gianninobistrotcafe/",
