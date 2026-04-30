@@ -76,3 +76,12 @@ Il progetto utilizza **Bun** come gestore di pacchetti (opzionale, supporta anch
 - `npm run build`: Genera la build per la produzione (Cloudflare).
 - `npm run lint`: Esegue il controllo della qualità del codice.
 - `npm run format`: Formatta il codice secondo le regole di Prettier.
+
+---
+
+## 7. Deployment no GitHub Pages
+Este projeto possui uma configuração especial para ser hospedado no **GitHub Pages** como uma **Single Page Application (SPA)**. 
+
+Para detalhes sobre como esta solução funciona, por que ela foi necessária e como mantê-la, consulte o guia dedicado:
+👉 **[Guia de Deploy - GitHub Pages](./GITHUB_PAGES_DEPLOY.md)**
+
