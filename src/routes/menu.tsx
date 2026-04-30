@@ -78,8 +78,7 @@ function MenuPage() {
     <div className="px-6 md:px-16 lg:px-24 py-12 md:py-20 max-w-5xl mx-auto">
       <PageHeader
         chapter="Capitolo II — Cucina"
-        title="Menù della stagione"
-        subtitle="Le portate cambiano con la luce e con la terra. Ciò che leggete oggi può essere stato raccolto questa mattina."
+        title="Menù"
       />
       <div className="space-y-14">
         {sezioni.map((s) => (
