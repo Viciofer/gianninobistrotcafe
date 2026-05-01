@@ -324,9 +324,6 @@ function DrinkPage() {
         ))}
       </div>
 
-      <p className="mt-20 pt-8 border-t border-border text-xs text-muted-foreground italic">
-        I prezzi sono espressi in Euro. Servizio incluso. Per distillati e selezioni fuori carta, chiedere al banco.
-      </p>
     </div>
   );
 }
