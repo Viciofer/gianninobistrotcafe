@@ -19,39 +19,6 @@ type Group = { id: string; title: string; sections: Section[] };
 
 const groups: Group[] = [
   {
-    id: "caffetteria",
-    title: "Caffetteria",
-    sections: [
-      {
-        id: "caffetteria-list",
-        title: "Caffetteria",
-        subtitle: "Cafeteria",
-        items: [
-          { name: "Caffè espresso", price: "1,20" },
-          { name: "Caffè macchiato", price: "1,50" },
-          { name: "Caffè schiumato", price: "1,50" },
-          { name: "Caffè dek", price: "1,50" },
-          { name: "Caffè americano", price: "1,50" },
-          { name: "Caffè ginseng", price: "1,80" },
-          { name: "Caffè d'orzo", price: "1,80" },
-          { name: "Caffè espresso siciliano", price: "1,80" },
-          { name: "Caffè corretto", price: "2,00" },
-          { name: "Caffè dek siciliano", price: "2,00" },
-          { name: "Marocchino", price: "2,00" },
-          { name: "Cappuccino", price: "2,00" },
-          { name: "Cappuccino siciliano", price: "2,50" },
-          { name: "Cappuccino dek", price: "2,50" },
-          { name: "Cappuccino dek siciliano", price: "3,00" },
-          { name: "Caffellatte", price: "2,50" },
-          { name: "Latte macchiato", price: "3,00" },
-          { name: "Latte mandorla", price: "3,50" },
-          { name: "Cioccolata calda", price: "4,00" },
-          { name: "Selezione di the e infusi", price: "4,00" },
-        ],
-      },
-    ],
-  },
-  {
     id: "acque-bibite",
     title: "Acque e Bibite",
     sections: [
@@ -121,7 +88,6 @@ const groups: Group[] = [
         id: "signature",
         title: "Signature Drink",
         items: [
-          { name: "Paloma", desc: "Tequila, succo di lime, soda al pompelmo rosa", price: "8,00" },
           { name: "Testa di moro", desc: "Ingredienti segreti della casa", price: "9,00" },
         ],
       },
@@ -143,6 +109,7 @@ const groups: Group[] = [
           { name: "Mojito", desc: "Rum Bianco, Lime, Zucchero di canna, Menta, Soda", price: "7,00" },
           { name: "Margarita", desc: "Tequila, Triple Sec, Succo di lime", price: "7,00" },
           { name: "Daiquiri", desc: "Rum Bianco, Succo di lime, Sciroppo di zucchero", price: "7,00" },
+          { name: "Paloma", desc: "Tequila, succo di lime, soda al pompelmo rosa", price: "8,00" },
           { name: "Moscow mule", desc: "Vodka, Ginger Beer, Succo di lime, Zenzero", price: "8,00" },
           { name: "Cosmopolitan", desc: "Vodka, Triple Sec, Succo di mirtillo rosso, Succo di lime", price: "8,00" },
           { name: "Boulevardier", desc: "Bourbon, Campari, Vermouth Rosso", price: "9,00" },
@@ -266,11 +233,11 @@ const groups: Group[] = [
         title: "Liquori",
         items: [
           { name: "Limoncello", price: "4,00" },
-          { name: "Liquore alla cannella", price: "4,00" },
-          { name: "Liquore al cioccolato", price: "4,00" },
-          { name: "Liquore alla liquirizia", price: "4,00" },
-          { name: "Martini bianco", price: "5,00" },
-          { name: "Sambuca molinari", price: "5,00" },
+          { name: "Liquore alla Cannella", price: "4,00" },
+          { name: "Liquore al Cioccolato", price: "4,00" },
+          { name: "Liquore alla Liquirizia", price: "4,00" },
+          { name: "Martini Bianco", price: "5,00" },
+          { name: "Sambuca Molinari", price: "5,00" },
           { name: "Shottino", price: "4,00" },
         ],
       },
@@ -278,12 +245,12 @@ const groups: Group[] = [
         id: "amari",
         title: "Amari",
         items: [
-          { name: "Del capo", price: "4,00" },
-          { name: "Dell'etna", price: "4,00" },
+          { name: "Del Capo", price: "4,00" },
+          { name: "Dell'Etna", price: "4,00" },
           { name: "Maliquo", price: "4,00" },
           { name: "Averna", price: "4,00" },
-          { name: "Borsci s. marzano", price: "4,00" },
-          { name: "Dente di leone", price: "4,00" },
+          { name: "Borsci S. Marzano", price: "4,00" },
+          { name: "Dente di Leone", price: "4,00" },
           { name: "Jagermeister", price: "4,00" },
           { name: "Montenegro", price: "4,00" },
           { name: "Petrus", price: "4,00" },
@@ -297,9 +264,8 @@ function DrinkPage() {
   return (
     <div className="px-4 md:px-12 lg:px-20 py-12 md:py-20 max-w-5xl mx-auto">
       <PageHeader
-        chapter="Capitolo IV"
         title="Drink List"
-        subtitle="Caffetteria, bibite, cocktail d'autore, gin, distillati, grappe e amari. Una selezione costruita giorno dopo giorno."
+        subtitle="Bibite, cocktail d'autore, gin, distillati, grappe e amari. Una selezione costruita giorno dopo giorno."
       />
 
       <nav aria-label="Indice drink list" className="mb-16 border-y border-border py-6">
@@ -358,9 +324,6 @@ function DrinkPage() {
         ))}
       </div>
 
-      <p className="mt-20 pt-8 border-t border-border text-xs text-muted-foreground italic">
-        I prezzi sono espressi in Euro. Servizio incluso. Per distillati e selezioni fuori carta, chiedere al banco.
-      </p>
     </div>
   );
 }

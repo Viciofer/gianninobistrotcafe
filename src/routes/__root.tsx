@@ -72,10 +72,6 @@ function RootComponent() {
         <div className="flex-1 flex flex-col min-w-0">
           <header className="h-14 flex items-center gap-3 border-b border-border px-4 md:px-8 bg-background/80 backdrop-blur-sm sticky top-0 z-20">
             <SidebarTrigger className="text-foreground hover:text-accent" />
-            <div className="h-4 w-px bg-border" />
-            <span className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground">
-              Manuale Operativo
-            </span>
           </header>
           <main className="flex-1">
             <Outlet />
