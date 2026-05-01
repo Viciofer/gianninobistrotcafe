@@ -1,7 +1,9 @@
-export function PageHeader({ chapter, title, subtitle }: { chapter: string; title: string; subtitle?: string }) {
+export function PageHeader({ chapter, title, subtitle }: { chapter?: string; title: string; subtitle?: string }) {
   return (
     <header className="mb-12 md:mb-16">
-      <span className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground">{chapter}</span>
+      {chapter && (
+        <span className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground">{chapter}</span>
+      )}
       <h1 className="font-serif text-4xl md:text-6xl font-light leading-[1.05] text-foreground mt-4 text-balance">
         {title}
       </h1>

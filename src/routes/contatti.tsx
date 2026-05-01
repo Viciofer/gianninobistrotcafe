@@ -16,7 +16,7 @@ export const Route = createFileRoute("/contatti")({
 
 const indirizzo = "Via Nazionale, 34, 98077 Santo Stefano di Camastra ME";
 const telefono = "0921 995719";
-const email = "info@tenutacorsini.it";
+const email = "gianninobistrotcafe@gmail.com";
 
 // Pin posizionato su Via Nazionale 38 (posizione reale del locale)
 const pinAddress = "Via Nazionale, 38, 98077 Santo Stefano di Camastra ME";
@@ -29,11 +29,7 @@ const mapsLink =
 function ContattiPage() {
   return (
     <div className="max-w-5xl mx-auto px-6 md:px-12 py-16 md:py-24">
-      <PageHeader
-        chapter="Capitolo V"
-        title="Contatti"
-        subtitle="Per prenotazioni, eventi privati o semplicemente per salutarci. Saremo lieti di accogliervi."
-      />
+      <PageHeader title="Contatti" />
 
       <div className="grid md:grid-cols-2 gap-10 md:gap-16">
         <div className="space-y-10">

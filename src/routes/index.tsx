@@ -18,16 +18,13 @@ function Index() {
     <article className="px-6 md:px-16 lg:px-24 py-12 md:py-20 max-w-7xl mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
         <div className="lg:col-span-7 flex flex-col justify-center">
-          <span className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-6">
-            Capitolo I — Identità
-          </span>
           <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] text-balance text-foreground mb-10">
             Stesse radici,<br />
             <em className="text-accent">nuovo orizzonte.</em>
           </h1>
           <div className="space-y-6 text-base md:text-lg leading-relaxed text-muted-foreground font-light max-w-[58ch]">
-            <p className="text-pretty">
-              Accanto alla tradizione, nasce un nuovo gusto: stesse radici, nuovo orizzonte.
+            <p className="text-pretty font-light">
+              Accanto alla tradizione, nasce un nuovo gusto
             </p>
             <p className="text-pretty">
               C'è la Trattoria che conoscete da cinquant'anni, e da oggi c'è un nuovo posto dove incontrarsi.

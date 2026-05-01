@@ -42,7 +42,7 @@ const carta: Macro[] = [
           { name: "Almerita — Brut Rosé", desc: "Pinot Nero 100%", price: "55" },
           { name: "Berlucchi — Brut", desc: "Chardonnay 90%, Pinot Nero 10%", price: "40" },
           { name: "Berlucchi — Brut Rosé", desc: "Chardonnay 55%, Pinot Nero 45%", price: "45" },
-          { name: "C. Milazzo — Dosaggio Zero", desc: "Chardonnay, Inzolia", price: "45" },
+          { name: "C. Milazzo — Dosaggio Zero Rosé", desc: "Chardonnay, Inzolia", price: "45" },
           { name: "C. Milazzo — Metodo Classico", desc: "Chardonnay, Inzolia", price: "35" },
           { name: "C. Milazzo — Riserva V38AG", desc: "Chardonnay, Inzolia", price: "58" },
           { name: "Casa Grazia — Euforia Brut Rosé", desc: "Frappato 100%", price: "26" },
@@ -274,7 +274,6 @@ function ViniPage() {
   return (
     <div className="px-4 md:px-12 lg:px-20 py-12 md:py-20 max-w-5xl mx-auto">
       <PageHeader
-        chapter="Capitolo III"
         title="Carta dei Vini"
         subtitle="Una selezione di etichette siciliane, nazionali e internazionali. Champagne, bollicine, bianchi, rosati e rossi scelti per accompagnare ogni piatto della nostra cucina."
       />
