@@ -22,9 +22,9 @@ function Index() {
             Stesse radici,<br />
             <em className="text-accent">nuovo orizzonte.</em>
           </h1>
-          <div className="space-y-6 text-base md:text-lg leading-relaxed text-muted-foreground font-light max-w-[58ch]">
+          <div className="font-serif space-y-6 text-lg md:text-xl leading-relaxed text-muted-foreground font-light max-w-[58ch]">
             <p className="text-pretty font-light">
-              Accanto alla tradizione, nasce un nuovo gusto
+              Accanto alla tradizione, nasce un nuovo gusto: stesse radici, nuovo orizzonte.
             </p>
             <p className="text-pretty">
               C'è la Trattoria che conoscete da cinquant'anni, e da oggi c'è un nuovo posto dove incontrarsi.
