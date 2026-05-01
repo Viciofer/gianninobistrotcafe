@@ -26,73 +26,52 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Transform to Vite SPA and Build
+      - name: Build
+        run: npm run build
+
+      - name: Debug Output
         run: |
-          cat <<EOF > index.html
-          <!DOCTYPE html>
-          <html lang="en">
-            <head>
-              <meta charset="UTF-8" />
-              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-              <title>Giannino Bistrot Cafè</title>
-            </head>
-            <body>
-              <div id="root"></div>
-              <script type="module" src="/src/main.tsx"></script>
-            </body>
-          </html>
-          EOF
-          
-          cat <<EOF > src/main.tsx
-          import { StrictMode } from 'react'
-          import { createRoot } from 'react-dom/client'
-          import { RouterProvider } from '@tanstack/react-router'
-          import { getRouter } from './router'
-          
-          const router = getRouter()
-          
-          createRoot(document.getElementById('root')!).render(
-            <StrictMode>
-              <RouterProvider router={router} />
-            </StrictMode>
-          )
-          EOF
-          
-          cat <<EOF > vite.config.ts
-          import { defineConfig } from "vite";
-          import react from "@vitejs/plugin-react";
-          import tailwindcss from "@tailwindcss/vite";
-          import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
-          import tsConfigPaths from "vite-tsconfig-paths";
-          
-          export default defineConfig({
-            base: "/gianninobistrotcafe/",
-            plugins: [
-              tsConfigPaths({ projects: ["./tsconfig.json"] }),
-              TanStackRouterVite(),
-              react(),
-              tailwindcss(),
-            ],
-            build: {
-              outDir: "dist",
-            },
-          });
-          EOF
-          
-          sed -i 's/<html lang="en">/<div className="app-root">/g' src/routes/__root.tsx
-          sed -i 's/<\/html>/<\/div>/g' src/routes/__root.tsx
-          sed -i 's/<head>/<div className="head-content" style={{display: "none"}}>/g' src/routes/__root.tsx
-          sed -i 's/<\/head>/<\/div>/g' src/routes/__root.tsx
-          sed -i 's/<body>/<div className="body-content">/g' src/routes/__root.tsx
-          sed -i 's/<\/body>/<\/div>/g' src/routes/__root.tsx
-          
-          npm run build
+          echo "Listing root directory:"
+          ls -F
+          echo "Searching for index.html:"
+          find . -name "index.html"
 
       - name: Prepare Artifact
         run: |
-          CP_PATH="dist"
+          CP_PATH="dist/client"
+          
+          if [ ! -f "$CP_PATH/index.html" ]; then
+            echo "index.html not found! Generating dynamically based on assets..."
+            mkdir -p $CP_PATH
+            JS_FILE=$(ls $CP_PATH/assets | grep "^index-.*\.js$" | head -n 1)
+            CSS_FILE=$(ls $CP_PATH/assets | grep "^styles-.*\.css$" | head -n 1 || true)
+            
+            CSS_LINK=""
+            if [ ! -z "$CSS_FILE" ]; then
+              CSS_LINK="<link rel=\"stylesheet\" href=\"/gianninobistrotcafe/assets/$CSS_FILE\">"
+            fi
+            
+            cat <<EOF > $CP_PATH/index.html
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <title>Giannino Bistrot Cafè — Gestionale</title>
+            <meta name="description" content="Sistema gestionale del ristorante Giannino Bistrot Cafè: storia, menù, carta dei vini, drink list e contatti." />
+            $CSS_LINK
+          </head>
+          <body>
+            <div id="root"></div>
+            <script type="module" src="/gianninobistrotcafe/assets/$JS_FILE"></script>
+          </body>
+          </html>
+          EOF
+          fi
+          
           echo "DEPLOY_PATH=$CP_PATH" >> $GITHUB_ENV
           touch ./$CP_PATH/.nojekyll
+          # Copy index.html to 404.html for SPA routing
           cp ./$CP_PATH/index.html ./$CP_PATH/404.html
 
       - name: Upload Artifacts
