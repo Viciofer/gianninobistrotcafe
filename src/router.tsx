@@ -57,7 +57,6 @@ function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => vo
 export const getRouter = () => {
   const router = createRouter({
     routeTree,
-    basepath: "/gianninobistrotcafe/",
     context: {},
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
