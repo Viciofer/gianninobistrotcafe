@@ -30,17 +30,13 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Giannino Bistrot Cafè" },
-      { name: "description", content: "Giannino Bistrot Cafè" },
+      { title: "Giannino Bistrot Cafè — Gestionale" },
+      { name: "description", content: "Sistema gestionale del ristorante Giannino Bistrot Cafè: storia, menù, carta dei vini, drink list e contatti." },
       { name: "author", content: "Giannino Bistrot Cafè" },
-      { property: "og:title", content: "Giannino Bistrot Cafè" },
-      { property: "og:description", content: "Giannino Bistrot Cafè" },
+      { property: "og:title", content: "Giannino Bistrot Cafè — Gestionale" },
+      { property: "og:description", content: "Storia, menù, carta dei vini, drink list e contatti." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:title", content: "Giannino Bistrot Cafè" },
-      { name: "twitter:description", content: "Giannino Bistrot Cafè" },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/RhLAEmW8BraVyhkZ9nxCgYurVpG3/social-images/social-1777590671916-1000057900.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/RhLAEmW8BraVyhkZ9nxCgYurVpG3/social-images/social-1777590671916-1000057900.webp" },
     ],
     links: [
       {
