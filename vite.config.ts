@@ -9,12 +9,8 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 export default defineConfig({
   tanstackStart: {
     deployment: "static",
-    ssr: false,
   },
   vite: {
     base: "/gianninobistrotcafe/",
-    build: {
-      outDir: "dist",
-    },
   },
 });
