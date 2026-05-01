@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "@/components/PageHeader";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Instagram } from "lucide-react";
 
 export const Route = createFileRoute("/contatti")({
   head: () => ({
@@ -91,15 +91,31 @@ function ContattiPage() {
           </div>
 
           <div className="flex items-start gap-4">
+            <Instagram className="h-5 w-5 text-accent mt-1 shrink-0" />
+            <div>
+              <p className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-2">
+                Instagram
+              </p>
+              <a
+                href="https://www.instagram.com/giannino.bistrot/"
+                target="_blank"
+                rel="noreferrer"
+                className="font-serif text-xl text-foreground hover:text-accent transition-colors"
+              >
+                @giannino.bistrot
+              </a>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-4">
             <Clock className="h-5 w-5 text-accent mt-1 shrink-0" />
             <div>
               <p className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-2">
-                Orari
+                Quando siamo aperti
               </p>
               <ul className="font-serif text-base text-foreground space-y-1">
-                <li>Martedì – Domenica · 12:30 – 15:00</li>
-                <li>Martedì – Domenica · 19:30 – 23:00</li>
-                <li className="text-muted-foreground text-sm pt-1">Lunedì chiuso</li>
+                <li>Lunedì – Domenica</li>
+                <li className="text-muted-foreground text-sm pt-1">Giovedì chiuso</li>
               </ul>
             </div>
           </div>
