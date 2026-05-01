@@ -13,6 +13,7 @@ import { Route as ViniRouteImport } from './routes/vini'
 import { Route as MenuRouteImport } from './routes/menu'
 import { Route as DrinkRouteImport } from './routes/drink'
 import { Route as ContattiRouteImport } from './routes/contatti'
+import { Route as CaffetteriaRouteImport } from './routes/caffetteria'
 import { Route as IndexRouteImport } from './routes/index'
 
 const ViniRoute = ViniRouteImport.update({
@@ -35,6 +36,11 @@ const ContattiRoute = ContattiRouteImport.update({
   path: '/contatti',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CaffetteriaRoute = CaffetteriaRouteImport.update({
+  id: '/caffetteria',
+  path: '/caffetteria',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -43,6 +49,7 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/caffetteria': typeof CaffetteriaRoute
   '/contatti': typeof ContattiRoute
   '/drink': typeof DrinkRoute
   '/menu': typeof MenuRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/caffetteria': typeof CaffetteriaRoute
   '/contatti': typeof ContattiRoute
   '/drink': typeof DrinkRoute
   '/menu': typeof MenuRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/caffetteria': typeof CaffetteriaRoute
   '/contatti': typeof ContattiRoute
   '/drink': typeof DrinkRoute
   '/menu': typeof MenuRoute
@@ -65,14 +74,22 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contatti' | '/drink' | '/menu' | '/vini'
+  fullPaths: '/' | '/caffetteria' | '/contatti' | '/drink' | '/menu' | '/vini'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contatti' | '/drink' | '/menu' | '/vini'
-  id: '__root__' | '/' | '/contatti' | '/drink' | '/menu' | '/vini'
+  to: '/' | '/caffetteria' | '/contatti' | '/drink' | '/menu' | '/vini'
+  id:
+    | '__root__'
+    | '/'
+    | '/caffetteria'
+    | '/contatti'
+    | '/drink'
+    | '/menu'
+    | '/vini'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CaffetteriaRoute: typeof CaffetteriaRoute
   ContattiRoute: typeof ContattiRoute
   DrinkRoute: typeof DrinkRoute
   MenuRoute: typeof MenuRoute
@@ -109,6 +126,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContattiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/caffetteria': {
+      id: '/caffetteria'
+      path: '/caffetteria'
+      fullPath: '/caffetteria'
+      preLoaderRoute: typeof CaffetteriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -121,6 +145,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CaffetteriaRoute: CaffetteriaRoute,
   ContattiRoute: ContattiRoute,
   DrinkRoute: DrinkRoute,
   MenuRoute: MenuRoute,
