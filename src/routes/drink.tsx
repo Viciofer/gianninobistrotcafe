@@ -233,11 +233,11 @@ const groups: Group[] = [
         title: "Liquori",
         items: [
           { name: "Limoncello", price: "4,00" },
-          { name: "Liquore alla cannella", price: "4,00" },
-          { name: "Liquore al cioccolato", price: "4,00" },
-          { name: "Liquore alla liquirizia", price: "4,00" },
-          { name: "Martini bianco", price: "5,00" },
-          { name: "Sambuca molinari", price: "5,00" },
+          { name: "Liquore alla Cannella", price: "4,00" },
+          { name: "Liquore al Cioccolato", price: "4,00" },
+          { name: "Liquore alla Liquirizia", price: "4,00" },
+          { name: "Martini Bianco", price: "5,00" },
+          { name: "Sambuca Molinari", price: "5,00" },
           { name: "Shottino", price: "4,00" },
         ],
       },
@@ -245,12 +245,12 @@ const groups: Group[] = [
         id: "amari",
         title: "Amari",
         items: [
-          { name: "Del capo", price: "4,00" },
-          { name: "Dell'etna", price: "4,00" },
+          { name: "Del Capo", price: "4,00" },
+          { name: "Dell'Etna", price: "4,00" },
           { name: "Maliquo", price: "4,00" },
           { name: "Averna", price: "4,00" },
-          { name: "Borsci s. marzano", price: "4,00" },
-          { name: "Dente di leone", price: "4,00" },
+          { name: "Borsci S. Marzano", price: "4,00" },
+          { name: "Dente di Leone", price: "4,00" },
           { name: "Jagermeister", price: "4,00" },
           { name: "Montenegro", price: "4,00" },
           { name: "Petrus", price: "4,00" },
@@ -264,9 +264,8 @@ function DrinkPage() {
   return (
     <div className="px-4 md:px-12 lg:px-20 py-12 md:py-20 max-w-5xl mx-auto">
       <PageHeader
-        chapter="Capitolo IV"
         title="Drink List"
-        subtitle="Caffetteria, bibite, cocktail d'autore, gin, distillati, grappe e amari. Una selezione costruita giorno dopo giorno."
+        subtitle="Bibite, cocktail d'autore, gin, distillati, grappe e amari. Una selezione costruita giorno dopo giorno."
       />
 
       <nav aria-label="Indice drink list" className="mb-16 border-y border-border py-6">
