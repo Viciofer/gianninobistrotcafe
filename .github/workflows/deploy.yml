@@ -38,35 +38,19 @@ jobs:
 
       - name: Prepare Artifact
         run: |
-          CP_PATH="dist/client"
-          
-          if [ ! -f "$CP_PATH/index.html" ]; then
-            echo "index.html not found! Generating dynamically based on assets..."
-            mkdir -p $CP_PATH
-            JS_FILE=$(ls $CP_PATH/assets | grep "^index-.*\.js$" | head -n 1)
-            CSS_FILE=$(ls $CP_PATH/assets | grep "^styles-.*\.css$" | head -n 1 || true)
-            
-            CSS_LINK=""
-            if [ ! -z "$CSS_FILE" ]; then
-              CSS_LINK="<link rel=\"stylesheet\" href=\"/gianninobistrotcafe/assets/$CSS_FILE\">"
-            fi
-            
-            cat <<EOF > $CP_PATH/index.html
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-            <meta charset="utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <title>Giannino Bistrot Cafè — Gestionale</title>
-            <meta name="description" content="Sistema gestionale del ristorante Giannino Bistrot Cafè: storia, menù, carta dei vini, drink list e contatti." />
-            $CSS_LINK
-          </head>
-          <body>
-            <div id="root"></div>
-            <script type="module" src="/gianninobistrotcafe/assets/$JS_FILE"></script>
-          </body>
-          </html>
-          EOF
+          # Try to find where index.html is
+          if [ -f ".output/public/index.html" ]; then
+            CP_PATH=".output/public"
+          elif [ -f "dist/index.html" ]; then
+            CP_PATH="dist"
+          elif [ -f "dist/client/index.html" ]; then
+            CP_PATH="dist/client"
+          else
+            # If not found, create a dummy or fail
+            echo "index.html not found! Creating a placeholder for debugging."
+            mkdir -p dist
+            echo "<html><body><h1>Build failed to generate index.html</h1><p>Check the logs.</p></body></html>" > dist/index.html
+            CP_PATH="dist"
           fi
           
           echo "DEPLOY_PATH=$CP_PATH" >> $GITHUB_ENV
