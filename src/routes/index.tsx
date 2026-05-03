@@ -27,7 +27,7 @@ function Index() {
               Accanto alla tradizione, nasce un nuovo gusto.
             </p>
             <p className="text-pretty">
-              C'est la Trattoria che conoscete da cinquant'anni, e da oggi c'è un nuovo posto dove incontrarsi.
+              C'è la Trattoria che conoscete da cinquant'anni, e da oggi c'è un nuovo posto dove incontrarsi.
             </p>
             <p className="text-pretty text-justify">
               Siamo orgogliosi di presentarvi il nostro Bistrot: il luogo dove la nostra storia dal 1974 incontra la contemporaneità.
