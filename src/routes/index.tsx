@@ -23,10 +23,10 @@ function Index() {
             <em className="text-accent">nuovo orizzonte.</em>
           </h1>
           <div className="font-serif space-y-6 text-lg md:text-xl leading-relaxed text-muted-foreground font-light max-w-[58ch]">
-            <p className="text-pretty font-light">
+            <p className="text-pretty text-justify font-light">
               Accanto alla tradizione, nasce un nuovo gusto.
             </p>
-            <p className="text-pretty">
+            <p className="text-pretty text-justify">
               C'è la Trattoria che conoscete da cinquant'anni, e da oggi c'è un nuovo posto dove incontrarsi.
             </p>
             <p className="text-pretty text-justify">
