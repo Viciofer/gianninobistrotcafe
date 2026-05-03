@@ -42,7 +42,7 @@ const groups: Group[] = [
           { name: "Coca cola", price: "2,50" },
           { name: "Coca cola zero", price: "2,50" },
           { name: "Crodino", price: "3,00" },
-          { name: "Camparino", price: "3,00" },
+          { name: "Campari soda", price: "3,00" },
           { name: "Spremuta di agrumi", price: "4,00" },
           { name: "Succo di frutta", price: "2,50" },
           { name: "The freddo", price: "2,50" },
@@ -263,10 +263,7 @@ const groups: Group[] = [
 function DrinkPage() {
   return (
     <div className="px-4 md:px-12 lg:px-20 py-12 md:py-20 max-w-5xl mx-auto">
-      <PageHeader
-        title="Drink List"
-        subtitle="Bibite, cocktail d'autore, gin, distillati, grappe e amari. Una selezione costruita giorno dopo giorno."
-      />
+      <PageHeader title="Drink List" />
 
       <nav aria-label="Indice drink list" className="mb-16 border-y border-border py-6">
         <span className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground block mb-3">Indice</span>

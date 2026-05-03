@@ -24,7 +24,7 @@ function Index() {
           </h1>
           <div className="font-serif space-y-6 text-lg md:text-xl leading-relaxed text-muted-foreground font-light max-w-[58ch]">
             <p className="text-pretty font-light">
-              Accanto alla tradizione, nasce un nuovo gusto: stesse radici, nuovo orizzonte.
+              Accanto alla tradizione, nasce un nuovo gusto.
             </p>
             <p className="text-pretty">
               C'è la Trattoria che conoscete da cinquant'anni, e da oggi c'è un nuovo posto dove incontrarsi.
