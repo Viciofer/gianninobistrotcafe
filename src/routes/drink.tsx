@@ -263,10 +263,7 @@ const groups: Group[] = [
 function DrinkPage() {
   return (
     <div className="px-4 md:px-12 lg:px-20 py-12 md:py-20 max-w-5xl mx-auto">
-      <PageHeader
-        title="Drink List"
-        subtitle="Bibite, cocktail d'autore, gin, distillati, grappe e amari. Una selezione costruita giorno dopo giorno."
-      />
+      <PageHeader title="Drink List" />
 
       <nav aria-label="Indice drink list" className="mb-16 border-y border-border py-6">
         <span className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground block mb-3">Indice</span>
