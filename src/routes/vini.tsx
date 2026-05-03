@@ -273,10 +273,7 @@ const carta: Macro[] = [
 function ViniPage() {
   return (
     <div className="px-4 md:px-12 lg:px-20 py-12 md:py-20 max-w-5xl mx-auto">
-      <PageHeader
-        title="Carta dei Vini"
-        subtitle="Una selezione di etichette siciliane, nazionali e internazionali. Champagne, bollicine, bianchi, rosati e rossi scelti per accompagnare ogni piatto della nostra cucina."
-      />
+      <PageHeader title="Carta dei Vini" />
 
       <nav aria-label="Indice carta dei vini" className="mb-16 border-y border-border py-6">
         <span className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground block mb-3">Indice</span>
