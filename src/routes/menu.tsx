@@ -60,7 +60,7 @@ const sezioni: { titolo: string; orario?: string; piatti: Dish[]; nota?: string 
     ],
   },
   {
-    titolo: "Secondi & Contorni",
+    titolo: "Secondi e Contorni",
     orario: "Dalle 18:00 alle 21:00",
     piatti: [
       { name: "1974", desc: "Suprema di pollo, con salsa alla Giuseppina e patate novelle al timo.", price: "15,00" },
