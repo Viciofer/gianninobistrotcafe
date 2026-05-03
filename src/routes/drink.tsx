@@ -196,13 +196,13 @@ const groups: Group[] = [
       },
       {
         id: "mezcal",
-        title: "Mezcal & Tequila",
+        title: "Tequila & Mezcal",
         items: [
           { name: "Montelobos" },
           { name: "Espolòn Blanco" },
           { name: "Espolòn Reposado" },
           { name: "Herradura" },
-          { name: "Xaman Espadin" },
+          { name: "Xamán Espadín" },
         ],
       },
     ],
@@ -268,13 +268,26 @@ function DrinkPage() {
       <nav aria-label="Indice drink list" className="mb-16 border-y border-border py-6">
         <span className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground block mb-3">Indice</span>
         <ul className="flex flex-wrap gap-x-6 gap-y-2">
-          {groups.map((g) => (
-            <li key={g.id}>
+          {[
+            { label: "Acque", href: "#acque" },
+            { label: "Bibite", href: "#bibite" },
+            { label: "Birre", href: "#birre" },
+            { label: "Cocktails", href: "#cocktails" },
+            { label: "Gin", href: "#gin" },
+            { label: "Whisky", href: "#whisky" },
+            { label: "Rum", href: "#rum" },
+            { label: "Vodka", href: "#vodka" },
+            { label: "Tequila", href: "#mezcal" },
+            { label: "Grappe", href: "#grappe" },
+            { label: "Liquori", href: "#liquori" },
+            { label: "Amari", href: "#amari" },
+          ].map((item) => (
+            <li key={item.href}>
               <a
-                href={`#${g.id}`}
+                href={item.href}
                 className="text-sm text-foreground/80 hover:text-accent transition-colors underline-offset-4 hover:underline"
               >
-                {g.title}
+                {item.label}
               </a>
             </li>
           ))}
