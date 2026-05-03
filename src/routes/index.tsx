@@ -29,16 +29,16 @@ function Index() {
             <p className="text-pretty">
               C'è la Trattoria che conoscete da cinquant'anni, e da oggi c'è un nuovo posto dove incontrarsi.
             </p>
-            <p className="text-pretty">
+            <p className="text-pretty text-justify">
               Siamo orgogliosi di presentarvi il nostro Bistrot: il luogo dove la nostra storia dal 1974 incontra la contemporaneità.
             </p>
-            <p className="text-pretty">
+            <p className="text-pretty text-justify">
               Colazione, brunch, pranzo, lounge e aperitivi. Atmosfera curata, sapori ricercati e un'accoglienza che ti fa sentire sempre al posto giusto.
             </p>
-            <p className="text-pretty">
+            <p className="text-pretty text-justify">
               Benvenuti a questa tavola di antiche radici, nate nel lontano 1974 dal garbo di Giannino e dal cuore di Maria. Qui, dove l'arte della ceramica incontra la passione per la buona cucina, la Musa dipinta sui nostri tavoli si fa custode dei nostri segreti e porta con grazia sul capo i simboli della nostra storia: il polpo, ricordo di Giannino giovanissimo pescatore; il pollo, protagonista dei sui celebri spiedi; le mani infarinate di Maria, pilastro della nostra cucina, che trasformava gesti semplici in riti immortali.
             </p>
-            <p className="text-pretty">
+            <p className="text-pretty text-justify">
               Da lei abbiamo imparato l'arte delle torte della nonna e la sapienza della storica salsa alla Giuseppina, una ricetta che profuma ancora oggi i nostri piatti di famiglia. Qui, tra i vecchi ricordi di sarde, pomodori e cannoli o tra le pennellate di verderame e ocra del nostro design, potete gustare, un boccone alla volta, l'evoluzione gentile della nostra cucina, cultura del gusto e simbolo d'ospitalità.
             </p>
             <p className="text-pretty italic text-right">
