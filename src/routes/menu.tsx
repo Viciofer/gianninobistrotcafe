@@ -85,7 +85,7 @@ function MenuPage() {
                 {s.titolo}
               </h2>
               {s.orario && (
-                <p className="text-[11px] tracking-[0.2em] uppercase text-muted-foreground mt-2 ml-8">
+                <p className="text-[11px] tracking-[0.2em] uppercase text-muted-foreground mt-2">
                   {s.orario}
                 </p>
               )}
