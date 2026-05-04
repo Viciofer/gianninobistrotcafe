@@ -81,11 +81,11 @@ function MenuPage() {
         {sezioni.map((s) => (
           <section key={s.titolo}>
             <div className="mb-6">
-              <h2 className="font-serif text-3xl text-foreground flex items-center gap-4">
-                <span className="text-accent">✦</span> {s.titolo}
+              <h2 className="font-serif text-3xl text-foreground">
+                {s.titolo}
               </h2>
               {s.orario && (
-                <p className="text-[11px] tracking-[0.2em] uppercase text-muted-foreground mt-2 ml-8">
+                <p className="text-[11px] tracking-[0.2em] uppercase text-muted-foreground mt-2">
                   {s.orario}
                 </p>
               )}
