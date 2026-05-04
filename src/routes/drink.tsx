@@ -269,18 +269,12 @@ function DrinkPage() {
         <span className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground block mb-3">Indice</span>
         <ul className="flex flex-wrap gap-x-6 gap-y-2">
           {[
-            { label: "Acque", href: "#acque" },
-            { label: "Bibite", href: "#bibite" },
+            { label: "Acque e Bibite", href: "#acque-bibite" },
             { label: "Birre", href: "#birre" },
             { label: "Cocktails", href: "#cocktails" },
             { label: "Gin", href: "#gin" },
-            { label: "Whisky", href: "#whisky" },
-            { label: "Rum", href: "#rum" },
-            { label: "Vodka", href: "#vodka" },
-            { label: "Tequila", href: "#mezcal" },
-            { label: "Grappe", href: "#grappe" },
-            { label: "Liquori", href: "#liquori" },
-            { label: "Amari", href: "#amari" },
+            { label: "Whisky, Rum, Vodka & Tequila", href: "#distillati" },
+            { label: "Grappe, Liquori & Amari", href: "#grappe-liquori" },
           ].map((item) => (
             <li key={item.href}>
               <a
