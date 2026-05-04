@@ -42,6 +42,7 @@ const groups: Group[] = [
           { name: "Coca Cola", price: "2,50" },
           { name: "Coca Cola Zero", price: "2,50" },
           { name: "Crodino", price: "3,00" },
+          { name: "Sanbittèr", price: "3,00" },
           { name: "Campari Soda", price: "3,00" },
           { name: "Spremuta di arance di Sicilia", price: "4,00" },
           { name: "Succo di frutta", price: "2,50" },
