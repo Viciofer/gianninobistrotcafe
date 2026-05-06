@@ -15,6 +15,8 @@ import { Route as DrinkRouteImport } from './routes/drink'
 import { Route as ContattiRouteImport } from './routes/contatti'
 import { Route as CaffetteriaRouteImport } from './routes/caffetteria'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
 
 const ViniRoute = ViniRouteImport.update({
   id: '/vini',
@@ -46,6 +48,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +66,8 @@ export interface FileRoutesByFullPath {
   '/drink': typeof DrinkRoute
   '/menu': typeof MenuRoute
   '/vini': typeof ViniRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +76,8 @@ export interface FileRoutesByTo {
   '/drink': typeof DrinkRoute
   '/menu': typeof MenuRoute
   '/vini': typeof ViniRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,12 +87,30 @@ export interface FileRoutesById {
   '/drink': typeof DrinkRoute
   '/menu': typeof MenuRoute
   '/vini': typeof ViniRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/caffetteria' | '/contatti' | '/drink' | '/menu' | '/vini'
+  fullPaths:
+    | '/'
+    | '/caffetteria'
+    | '/contatti'
+    | '/drink'
+    | '/menu'
+    | '/vini'
+    | '/admin/login'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/caffetteria' | '/contatti' | '/drink' | '/menu' | '/vini'
+  to:
+    | '/'
+    | '/caffetteria'
+    | '/contatti'
+    | '/drink'
+    | '/menu'
+    | '/vini'
+    | '/admin/login'
+    | '/admin'
   id:
     | '__root__'
     | '/'
@@ -85,6 +119,8 @@ export interface FileRouteTypes {
     | '/drink'
     | '/menu'
     | '/vini'
+    | '/admin/login'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,6 +130,8 @@ export interface RootRouteChildren {
   DrinkRoute: typeof DrinkRoute
   MenuRoute: typeof MenuRoute
   ViniRoute: typeof ViniRoute
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -140,6 +178,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -150,16 +202,9 @@ const rootRouteChildren: RootRouteChildren = {
   DrinkRoute: DrinkRoute,
   MenuRoute: MenuRoute,
   ViniRoute: ViniRoute,
+  AdminLoginRoute: AdminLoginRoute,
+  AdminIndexRoute: AdminIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

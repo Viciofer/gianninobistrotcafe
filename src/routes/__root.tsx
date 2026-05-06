@@ -2,6 +2,8 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/r
 import appCss from "../styles.css?url";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import { AuthProvider } from "@/lib/auth";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -70,18 +72,21 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <AppSidebar />
-        <div className="flex-1 flex flex-col min-w-0">
-          <header className="h-14 flex items-center gap-3 border-b border-border px-4 md:px-8 bg-background/80 backdrop-blur-sm sticky top-0 z-20">
-            <SidebarTrigger className="text-foreground hover:text-accent" />
-          </header>
-          <main className="flex-1">
-            <Outlet />
-          </main>
+    <AuthProvider>
+      <SidebarProvider>
+        <div className="min-h-screen flex w-full bg-background">
+          <AppSidebar />
+          <div className="flex-1 flex flex-col min-w-0">
+            <header className="h-14 flex items-center gap-3 border-b border-border px-4 md:px-8 bg-background/80 backdrop-blur-sm sticky top-0 z-20">
+              <SidebarTrigger className="text-foreground hover:text-accent" />
+            </header>
+            <main className="flex-1">
+              <Outlet />
+            </main>
+          </div>
         </div>
-      </div>
-    </SidebarProvider>
+        <Toaster />
+      </SidebarProvider>
+    </AuthProvider>
   );
 }
