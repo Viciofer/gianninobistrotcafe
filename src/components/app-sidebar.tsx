@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, UtensilsCrossed, Coffee, Wine, Martini, Mail } from "lucide-react";
+import { Home, UtensilsCrossed, Coffee, Wine, Martini, Mail, Lock } from "lucide-react";
 import logoGiannino from "@/assets/logo-giannino.png";
 import {
   Sidebar,
@@ -21,6 +21,7 @@ const items = [
   { title: "Drink List", url: "/drink", icon: Martini },
   { title: "Carta dei Vini", url: "/vini", icon: Wine },
   { title: "Contatti", url: "/contatti", icon: Mail },
+  { title: "Admin", url: "/admin", icon: Lock },
 ];
 
 export function AppSidebar() {
