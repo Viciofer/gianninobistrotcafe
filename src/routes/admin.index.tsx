@@ -489,8 +489,25 @@ function ProductsManager({
         <p className="text-muted-foreground italic">Nessun prodotto.</p>
       ) : (
         <ul className="divide-y divide-border border-y border-border">
-          {filtered.map((p) => (
+          {filtered.map((p, i) => {
+            const prev = i > 0 ? filtered[i - 1] : null;
+            const next = i < filtered.length - 1 ? filtered[i + 1] : null;
+            const move = async (other: Product | null) => {
+              if (!other) return;
+              const err = await swapSortOrder("products", p, other);
+              if (err) return toast.error(err.message);
+              onChange();
+            };
+            return (
             <li key={p.id} className="py-3 flex flex-wrap items-center gap-3">
+              <div className="flex flex-col">
+                <Button variant="ghost" size="icon" className="h-6 w-6" disabled={!prev} onClick={() => move(prev)} title="Sposta su">
+                  <ArrowUp className="h-3 w-3" />
+                </Button>
+                <Button variant="ghost" size="icon" className="h-6 w-6" disabled={!next} onClick={() => move(next)} title="Sposta giù">
+                  <ArrowDown className="h-3 w-3" />
+                </Button>
+              </div>
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-foreground">
                   {p.name}
