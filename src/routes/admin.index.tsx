@@ -499,32 +499,29 @@ function ProductsManager({
       ) : filtered.length === 0 ? (
         <p className="text-muted-foreground italic">Nessun prodotto.</p>
       ) : (
-        <ul className="divide-y divide-border border-y border-border">
-          {filtered.map((p, i) => {
-            const prev = i > 0 ? filtered[i - 1] : null;
-            const next = i < filtered.length - 1 ? filtered[i + 1] : null;
-            const move = async (other: Product | null) => {
-              if (!other) return;
-              const err = await swapSortOrder("products", p, other);
-              if (err) return toast.error(err.message);
-              onChange();
-            };
-            return (
-            <li key={p.id} className="py-3 flex flex-wrap items-center gap-3">
-              <div className="flex flex-col">
-                <Button variant="ghost" size="icon" className="h-6 w-6" disabled={!prev} onClick={() => move(prev)} title="Sposta su">
-                  <ArrowUp className="h-3 w-3" />
-                </Button>
-                <Button variant="ghost" size="icon" className="h-6 w-6" disabled={!next} onClick={() => move(next)} title="Sposta giù">
-                  <ArrowDown className="h-3 w-3" />
-                </Button>
-              </div>
+        (() => {
+          // Group products by category to allow drag within each group
+          const groups = new Map<string, Product[]>();
+          for (const p of filtered) {
+            const arr = groups.get(p.category_id) ?? [];
+            arr.push(p);
+            groups.set(p.category_id, arr);
+          }
+          for (const arr of groups.values()) arr.sort((a, b) => a.sort_order - b.sort_order);
+
+          const reorder = async (items: Product[]) => {
+            const err = await persistOrder("products", items);
+            if (err) return toast.error(err.message);
+            onChange();
+          };
+
+          const renderProduct = (p: Product) => (
+            <>
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-foreground">
                   {p.name}
                   {p.price && <span className="ml-3 text-accent tabular-nums">€ {p.price}</span>}
                 </p>
-                <p className="text-xs text-muted-foreground">{catLabel(p.category_id)}</p>
                 {p.description && (
                   <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{p.description}</p>
                 )}
@@ -545,10 +542,26 @@ function ProductsManager({
                   <Trash2 className="h-4 w-4 text-destructive" />
                 </Button>
               </div>
-            </li>
-            );
-          })}
-        </ul>
+            </>
+          );
+
+          return (
+            <div className="space-y-6">
+              {Array.from(groups.entries()).map(([catId, items]) => (
+                <div key={catId}>
+                  {filterCat === "__all__" && (
+                    <p className="text-xs tracking-widest uppercase text-muted-foreground mb-2">
+                      {catLabel(catId)}
+                    </p>
+                  )}
+                  <div className="border-y border-border">
+                    <SortableList items={items} onReorder={reorder} renderItem={renderProduct} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          );
+        })()
       )}
 
       {(editing || creating) && (
