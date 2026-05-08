@@ -535,7 +535,8 @@ function ProductsManager({
                 </Button>
               </div>
             </li>
-          ))}
+            );
+          })}
         </ul>
       )}
 
