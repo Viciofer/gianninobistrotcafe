@@ -5,9 +5,9 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Home — Giannino Bistrot Cafè" },
-      { name: "description", content: "La storia della Giannino Bistrot Cafè, dal 1974: tradizione toscana, cucina del focolare e ospitalità." },
+      { name: "description", content: "La storia della Giannino Bistrot Cafè, dal 1974: tradizione, cucina del focolare e ospitalità." },
       { property: "og:title", content: "Home — Giannino Bistrot Cafè" },
-      { property: "og:description", content: "Dal 1974 custodi di una tradizione toscana fatta di rito, cura e tempo." },
+      { property: "og:description", content: "Dal 1974 custodi di una tradizione fatta di rito, cura e tempo." },
     ],
   }),
   component: Index,
