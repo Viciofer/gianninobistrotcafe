@@ -33,20 +33,19 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { Pencil, Trash2, Plus, Eye, EyeOff, ArrowUp, ArrowDown } from "lucide-react";
+import { Pencil, Trash2, Plus, Eye, EyeOff } from "lucide-react";
+import { SortableList } from "@/components/SortableList";
 
-async function swapSortOrder(
+async function persistOrder(
   table: "categories" | "products",
-  a: { id: string; sort_order: number },
-  b: { id: string; sort_order: number },
+  ordered: { id: string }[],
 ) {
-  // If equal, bump b by 1 to ensure they differ
-  const aOrder = a.sort_order;
-  const bOrder = a.sort_order === b.sort_order ? b.sort_order + 1 : b.sort_order;
-  const r1 = await supabase.from(table).update({ sort_order: bOrder }).eq("id", a.id);
-  if (r1.error) return r1.error;
-  const r2 = await supabase.from(table).update({ sort_order: aOrder }).eq("id", b.id);
-  return r2.error ?? null;
+  const updates = ordered.map((it, idx) =>
+    supabase.from(table).update({ sort_order: idx }).eq("id", it.id),
+  );
+  const results = await Promise.all(updates);
+  const err = results.find((r) => r.error)?.error;
+  return err ?? null;
 }
 
 export const Route = createFileRoute("/admin/")({
