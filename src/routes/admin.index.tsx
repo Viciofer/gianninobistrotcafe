@@ -238,8 +238,28 @@ function CategoriesManager({
         <ul className="divide-y divide-border border-y border-border">
           {categories.map((c) => {
             const parent = c.parent_id ? categories.find((p) => p.id === c.parent_id) : null;
+            const siblings = categories
+              .filter((s) => s.parent_id === c.parent_id)
+              .sort((a, b) => a.sort_order - b.sort_order);
+            const idx = siblings.findIndex((s) => s.id === c.id);
+            const prev = idx > 0 ? siblings[idx - 1] : null;
+            const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
+            const move = async (other: Category | null) => {
+              if (!other) return;
+              const err = await swapSortOrder("categories", c, other);
+              if (err) return toast.error(err.message);
+              onChange();
+            };
             return (
               <li key={c.id} className="py-3 flex items-center gap-3">
+                <div className="flex flex-col">
+                  <Button variant="ghost" size="icon" className="h-6 w-6" disabled={!prev} onClick={() => move(prev)} title="Sposta su">
+                    <ArrowUp className="h-3 w-3" />
+                  </Button>
+                  <Button variant="ghost" size="icon" className="h-6 w-6" disabled={!next} onClick={() => move(next)} title="Sposta giù">
+                    <ArrowDown className="h-3 w-3" />
+                  </Button>
+                </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-foreground">
                     {parent && <span className="text-muted-foreground">{parent.name} › </span>}
