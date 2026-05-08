@@ -33,20 +33,19 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { Pencil, Trash2, Plus, Eye, EyeOff, ArrowUp, ArrowDown } from "lucide-react";
+import { Pencil, Trash2, Plus, Eye, EyeOff } from "lucide-react";
+import { SortableList } from "@/components/SortableList";
 
-async function swapSortOrder(
+async function persistOrder(
   table: "categories" | "products",
-  a: { id: string; sort_order: number },
-  b: { id: string; sort_order: number },
+  ordered: { id: string }[],
 ) {
-  // If equal, bump b by 1 to ensure they differ
-  const aOrder = a.sort_order;
-  const bOrder = a.sort_order === b.sort_order ? b.sort_order + 1 : b.sort_order;
-  const r1 = await supabase.from(table).update({ sort_order: bOrder }).eq("id", a.id);
-  if (r1.error) return r1.error;
-  const r2 = await supabase.from(table).update({ sort_order: aOrder }).eq("id", b.id);
-  return r2.error ?? null;
+  const updates = ordered.map((it, idx) =>
+    supabase.from(table).update({ sort_order: idx }).eq("id", it.id),
+  );
+  const results = await Promise.all(updates);
+  const err = results.find((r) => r.error)?.error;
+  return err ?? null;
 }
 
 export const Route = createFileRoute("/admin/")({
@@ -235,53 +234,65 @@ function CategoriesManager({
       ) : categories.length === 0 ? (
         <p className="text-muted-foreground italic">Nessuna categoria.</p>
       ) : (
-        <ul className="divide-y divide-border border-y border-border">
-          {categories.map((c) => {
-            const parent = c.parent_id ? categories.find((p) => p.id === c.parent_id) : null;
-            const siblings = categories
-              .filter((s) => s.parent_id === c.parent_id)
+        (() => {
+          const roots = categories
+            .filter((c) => c.parent_id === null)
+            .sort((a, b) => a.sort_order - b.sort_order);
+          const childrenOf = (id: string) =>
+            categories
+              .filter((c) => c.parent_id === id)
               .sort((a, b) => a.sort_order - b.sort_order);
-            const idx = siblings.findIndex((s) => s.id === c.id);
-            const prev = idx > 0 ? siblings[idx - 1] : null;
-            const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
-            const move = async (other: Category | null) => {
-              if (!other) return;
-              const err = await swapSortOrder("categories", c, other);
-              if (err) return toast.error(err.message);
-              onChange();
-            };
-            return (
-              <li key={c.id} className="py-3 flex items-center gap-3">
-                <div className="flex flex-col">
-                  <Button variant="ghost" size="icon" className="h-6 w-6" disabled={!prev} onClick={() => move(prev)} title="Sposta su">
-                    <ArrowUp className="h-3 w-3" />
-                  </Button>
-                  <Button variant="ghost" size="icon" className="h-6 w-6" disabled={!next} onClick={() => move(next)} title="Sposta giù">
-                    <ArrowDown className="h-3 w-3" />
-                  </Button>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-foreground">
-                    {parent && <span className="text-muted-foreground">{parent.name} › </span>}
-                    {c.name}
-                  </p>
-                  {c.schedule && (
-                    <p className="text-xs text-muted-foreground">{c.schedule}</p>
-                  )}
-                </div>
-                <Button variant="ghost" size="icon" onClick={() => toggleVisible(c)} title={c.visible ? "Nascondi" : "Mostra"}>
-                  {c.visible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4 text-muted-foreground" />}
-                </Button>
-                <Button variant="ghost" size="icon" onClick={() => setEditing(c)}>
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="icon" onClick={() => setConfirmDelete(c)}>
-                  <Trash2 className="h-4 w-4 text-destructive" />
-                </Button>
-              </li>
-            );
-          })}
-        </ul>
+
+          const reorder = async (items: Category[]) => {
+            const err = await persistOrder("categories", items);
+            if (err) return toast.error(err.message);
+            onChange();
+          };
+
+          const renderRow = (c: Category, isChild = false) => (
+            <>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-foreground">
+                  {isChild && <span className="text-muted-foreground">↳ </span>}
+                  {c.name}
+                </p>
+                {c.schedule && <p className="text-xs text-muted-foreground">{c.schedule}</p>}
+              </div>
+              <Button variant="ghost" size="icon" onClick={() => toggleVisible(c)} title={c.visible ? "Nascondi" : "Mostra"}>
+                {c.visible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4 text-muted-foreground" />}
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => setEditing(c)}>
+                <Pencil className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => setConfirmDelete(c)}>
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
+            </>
+          );
+
+          return (
+            <div className="border-y border-border">
+              <SortableList
+                items={roots}
+                onReorder={reorder}
+                renderItem={(c) => (
+                  <div className="flex-1 flex flex-col gap-2">
+                    <div className="flex items-center gap-3">{renderRow(c)}</div>
+                    {childrenOf(c.id).length > 0 && (
+                      <div className="ml-6 border-l border-border pl-3">
+                        <SortableList
+                          items={childrenOf(c.id)}
+                          onReorder={reorder}
+                          renderItem={(child) => renderRow(child, true)}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+              />
+            </div>
+          );
+        })()
       )}
 
       {(editing || creating) && (
@@ -488,32 +499,29 @@ function ProductsManager({
       ) : filtered.length === 0 ? (
         <p className="text-muted-foreground italic">Nessun prodotto.</p>
       ) : (
-        <ul className="divide-y divide-border border-y border-border">
-          {filtered.map((p, i) => {
-            const prev = i > 0 ? filtered[i - 1] : null;
-            const next = i < filtered.length - 1 ? filtered[i + 1] : null;
-            const move = async (other: Product | null) => {
-              if (!other) return;
-              const err = await swapSortOrder("products", p, other);
-              if (err) return toast.error(err.message);
-              onChange();
-            };
-            return (
-            <li key={p.id} className="py-3 flex flex-wrap items-center gap-3">
-              <div className="flex flex-col">
-                <Button variant="ghost" size="icon" className="h-6 w-6" disabled={!prev} onClick={() => move(prev)} title="Sposta su">
-                  <ArrowUp className="h-3 w-3" />
-                </Button>
-                <Button variant="ghost" size="icon" className="h-6 w-6" disabled={!next} onClick={() => move(next)} title="Sposta giù">
-                  <ArrowDown className="h-3 w-3" />
-                </Button>
-              </div>
+        (() => {
+          // Group products by category to allow drag within each group
+          const groups = new Map<string, Product[]>();
+          for (const p of filtered) {
+            const arr = groups.get(p.category_id) ?? [];
+            arr.push(p);
+            groups.set(p.category_id, arr);
+          }
+          for (const arr of groups.values()) arr.sort((a, b) => a.sort_order - b.sort_order);
+
+          const reorder = async (items: Product[]) => {
+            const err = await persistOrder("products", items);
+            if (err) return toast.error(err.message);
+            onChange();
+          };
+
+          const renderProduct = (p: Product) => (
+            <>
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-foreground">
                   {p.name}
                   {p.price && <span className="ml-3 text-accent tabular-nums">€ {p.price}</span>}
                 </p>
-                <p className="text-xs text-muted-foreground">{catLabel(p.category_id)}</p>
                 {p.description && (
                   <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{p.description}</p>
                 )}
@@ -534,10 +542,26 @@ function ProductsManager({
                   <Trash2 className="h-4 w-4 text-destructive" />
                 </Button>
               </div>
-            </li>
-            );
-          })}
-        </ul>
+            </>
+          );
+
+          return (
+            <div className="space-y-6">
+              {Array.from(groups.entries()).map(([catId, items]) => (
+                <div key={catId}>
+                  {filterCat === "__all__" && (
+                    <p className="text-xs tracking-widest uppercase text-muted-foreground mb-2">
+                      {catLabel(catId)}
+                    </p>
+                  )}
+                  <div className="border-y border-border">
+                    <SortableList items={items} onReorder={reorder} renderItem={renderProduct} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          );
+        })()
       )}
 
       {(editing || creating) && (
