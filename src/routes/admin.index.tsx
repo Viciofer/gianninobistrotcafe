@@ -234,53 +234,65 @@ function CategoriesManager({
       ) : categories.length === 0 ? (
         <p className="text-muted-foreground italic">Nessuna categoria.</p>
       ) : (
-        <ul className="divide-y divide-border border-y border-border">
-          {categories.map((c) => {
-            const parent = c.parent_id ? categories.find((p) => p.id === c.parent_id) : null;
-            const siblings = categories
-              .filter((s) => s.parent_id === c.parent_id)
+        (() => {
+          const roots = categories
+            .filter((c) => c.parent_id === null)
+            .sort((a, b) => a.sort_order - b.sort_order);
+          const childrenOf = (id: string) =>
+            categories
+              .filter((c) => c.parent_id === id)
               .sort((a, b) => a.sort_order - b.sort_order);
-            const idx = siblings.findIndex((s) => s.id === c.id);
-            const prev = idx > 0 ? siblings[idx - 1] : null;
-            const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
-            const move = async (other: Category | null) => {
-              if (!other) return;
-              const err = await swapSortOrder("categories", c, other);
-              if (err) return toast.error(err.message);
-              onChange();
-            };
-            return (
-              <li key={c.id} className="py-3 flex items-center gap-3">
-                <div className="flex flex-col">
-                  <Button variant="ghost" size="icon" className="h-6 w-6" disabled={!prev} onClick={() => move(prev)} title="Sposta su">
-                    <ArrowUp className="h-3 w-3" />
-                  </Button>
-                  <Button variant="ghost" size="icon" className="h-6 w-6" disabled={!next} onClick={() => move(next)} title="Sposta giù">
-                    <ArrowDown className="h-3 w-3" />
-                  </Button>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-foreground">
-                    {parent && <span className="text-muted-foreground">{parent.name} › </span>}
-                    {c.name}
-                  </p>
-                  {c.schedule && (
-                    <p className="text-xs text-muted-foreground">{c.schedule}</p>
-                  )}
-                </div>
-                <Button variant="ghost" size="icon" onClick={() => toggleVisible(c)} title={c.visible ? "Nascondi" : "Mostra"}>
-                  {c.visible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4 text-muted-foreground" />}
-                </Button>
-                <Button variant="ghost" size="icon" onClick={() => setEditing(c)}>
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="icon" onClick={() => setConfirmDelete(c)}>
-                  <Trash2 className="h-4 w-4 text-destructive" />
-                </Button>
-              </li>
-            );
-          })}
-        </ul>
+
+          const reorder = async (items: Category[]) => {
+            const err = await persistOrder("categories", items);
+            if (err) return toast.error(err.message);
+            onChange();
+          };
+
+          const renderRow = (c: Category, isChild = false) => (
+            <>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-foreground">
+                  {isChild && <span className="text-muted-foreground">↳ </span>}
+                  {c.name}
+                </p>
+                {c.schedule && <p className="text-xs text-muted-foreground">{c.schedule}</p>}
+              </div>
+              <Button variant="ghost" size="icon" onClick={() => toggleVisible(c)} title={c.visible ? "Nascondi" : "Mostra"}>
+                {c.visible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4 text-muted-foreground" />}
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => setEditing(c)}>
+                <Pencil className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => setConfirmDelete(c)}>
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
+            </>
+          );
+
+          return (
+            <div className="border-y border-border">
+              <SortableList
+                items={roots}
+                onReorder={reorder}
+                renderItem={(c) => (
+                  <div className="flex-1 flex flex-col gap-2">
+                    <div className="flex items-center gap-3">{renderRow(c)}</div>
+                    {childrenOf(c.id).length > 0 && (
+                      <div className="ml-6 border-l border-border pl-3">
+                        <SortableList
+                          items={childrenOf(c.id)}
+                          onReorder={reorder}
+                          renderItem={(child) => renderRow(child, true)}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+              />
+            </div>
+          );
+        })()
       )}
 
       {(editing || creating) && (
