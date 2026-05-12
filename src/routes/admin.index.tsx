@@ -148,22 +148,25 @@ function AdminPage() {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 mb-6">
-        <Label className="text-xs tracking-widest uppercase text-muted-foreground">Sezione</Label>
-        <Select value={section} onValueChange={(v) => setSection(v as Section)}>
-          <SelectTrigger className="w-[220px]"><SelectValue /></SelectTrigger>
-          <SelectContent>
-            {SECTIONS.map((s) => (
-              <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      {tab !== "contacts" && (
+        <div className="flex flex-wrap items-center gap-4 mb-6">
+          <Label className="text-xs tracking-widest uppercase text-muted-foreground">Sezione</Label>
+          <Select value={section} onValueChange={(v) => setSection(v as Section)}>
+            <SelectTrigger className="w-[220px]"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {SECTIONS.map((s) => (
+                <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
-      <Tabs value={tab} onValueChange={(v) => setTab(v as "products" | "categories")}>
+      <Tabs value={tab} onValueChange={(v) => setTab(v as "products" | "categories" | "contacts")}>
         <TabsList>
           <TabsTrigger value="products">Prodotti</TabsTrigger>
           <TabsTrigger value="categories">Categorie</TabsTrigger>
+          <TabsTrigger value="contacts">Contatti</TabsTrigger>
         </TabsList>
         <TabsContent value="products" className="mt-6">
           <ProductsManager
@@ -181,6 +184,9 @@ function AdminPage() {
             loading={loadingData}
             onChange={refresh}
           />
+        </TabsContent>
+        <TabsContent value="contacts" className="mt-6">
+          <ContactsManager />
         </TabsContent>
       </Tabs>
     </div>
