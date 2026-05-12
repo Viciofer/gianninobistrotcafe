@@ -693,3 +693,101 @@ function ProductDialog({
     </Dialog>
   );
 }
+
+// ---------- CONTACTS ----------
+
+type ContactInfo = {
+  id: string;
+  address_line1: string;
+  address_line2: string;
+  phone: string;
+  email: string;
+  instagram_handle: string;
+  instagram_url: string;
+  maps_pin_address: string;
+  schedule_main: string;
+  schedule_note: string;
+};
+
+function ContactsManager() {
+  const [info, setInfo] = useState<ContactInfo | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    supabase
+      .from("contact_info")
+      .select("*")
+      .limit(1)
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (error) toast.error(error.message);
+        if (data) setInfo(data as ContactInfo);
+        setLoading(false);
+      });
+  }, []);
+
+  function update<K extends keyof ContactInfo>(key: K, value: ContactInfo[K]) {
+    setInfo((prev) => (prev ? { ...prev, [key]: value } : prev));
+  }
+
+  async function save() {
+    if (!info) return;
+    setSaving(true);
+    const { id, ...payload } = info;
+    const { error } = await supabase.from("contact_info").update(payload).eq("id", id);
+    setSaving(false);
+    if (error) return toast.error(error.message);
+    toast.success("Contatti aggiornati");
+  }
+
+  if (loading) return <p className="text-muted-foreground">Caricamento…</p>;
+  if (!info) return <p className="text-muted-foreground italic">Nessuna informazione di contatto trovata.</p>;
+
+  return (
+    <div className="space-y-6 max-w-2xl">
+      <div className="grid gap-4">
+        <div className="space-y-2">
+          <Label>Indirizzo (riga 1)</Label>
+          <Input value={info.address_line1} onChange={(e) => update("address_line1", e.target.value)} />
+        </div>
+        <div className="space-y-2">
+          <Label>Indirizzo (riga 2)</Label>
+          <Input value={info.address_line2} onChange={(e) => update("address_line2", e.target.value)} />
+        </div>
+        <div className="space-y-2">
+          <Label>Telefono</Label>
+          <Input value={info.phone} onChange={(e) => update("phone", e.target.value)} />
+        </div>
+        <div className="space-y-2">
+          <Label>Email</Label>
+          <Input type="email" value={info.email} onChange={(e) => update("email", e.target.value)} />
+        </div>
+        <div className="space-y-2">
+          <Label>Instagram — handle visualizzato</Label>
+          <Input value={info.instagram_handle} onChange={(e) => update("instagram_handle", e.target.value)} placeholder="@nomeprofilo" />
+        </div>
+        <div className="space-y-2">
+          <Label>Instagram — URL completo</Label>
+          <Input value={info.instagram_url} onChange={(e) => update("instagram_url", e.target.value)} placeholder="https://www.instagram.com/..." />
+        </div>
+        <div className="space-y-2">
+          <Label>Indirizzo per il pin sulla mappa</Label>
+          <Input value={info.maps_pin_address} onChange={(e) => update("maps_pin_address", e.target.value)} />
+          <p className="text-xs text-muted-foreground">Usato per la mappa di Google. Può differire dall'indirizzo mostrato.</p>
+        </div>
+        <div className="space-y-2">
+          <Label>Orari — riga principale</Label>
+          <Input value={info.schedule_main} onChange={(e) => update("schedule_main", e.target.value)} placeholder="Lunedì – Domenica" />
+        </div>
+        <div className="space-y-2">
+          <Label>Orari — nota</Label>
+          <Input value={info.schedule_note} onChange={(e) => update("schedule_note", e.target.value)} placeholder="Giovedì chiuso" />
+        </div>
+      </div>
+      <div className="flex justify-end">
+        <Button onClick={save} disabled={saving}>{saving ? "Salvataggio…" : "Salva contatti"}</Button>
+      </div>
+    </div>
+  );
+}
