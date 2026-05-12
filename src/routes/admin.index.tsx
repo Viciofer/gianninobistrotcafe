@@ -144,10 +144,28 @@ function AdminPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <Button variant="outline" size="icon" onClick={() => setSearchOpen(true)} title="Cerca" aria-label="Cerca">
+            <Search className="h-4 w-4" />
+          </Button>
           <Link to="/" className="text-sm text-muted-foreground hover:text-accent">Sito</Link>
           <Button variant="outline" size="sm" onClick={signOut}>Esci</Button>
         </div>
       </div>
+
+      <SearchDialog
+        open={searchOpen}
+        onOpenChange={setSearchOpen}
+        onJumpToCategory={(c) => {
+          setSection(c.section);
+          setTab("categories");
+          setSearchOpen(false);
+        }}
+        onJumpToProduct={(p, sec) => {
+          setSection(sec);
+          setTab("products");
+          setSearchOpen(false);
+        }}
+      />
 
       {tab !== "contacts" && (
         <div className="flex flex-wrap items-center gap-4 mb-6">
