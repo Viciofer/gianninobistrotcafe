@@ -683,10 +683,6 @@ function ProductDialog({
               <Switch checked={visible} onCheckedChange={setVisible} id="vis-p" />
               <Label htmlFor="vis-p">Visibile</Label>
             </div>
-            <div className="flex items-center gap-2 pt-7">
-              <Switch checked={available} onCheckedChange={setAvailable} id="av-p" />
-              <Label htmlFor="av-p">Disponibile</Label>
-            </div>
           </div>
         </div>
         <DialogFooter>
