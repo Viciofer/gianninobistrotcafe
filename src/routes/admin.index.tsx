@@ -719,95 +719,259 @@ type ContactInfo = {
   id: string;
   address_line1: string;
   address_line2: string;
-  phone: string;
-  email: string;
-  instagram_handle: string;
-  instagram_url: string;
   maps_pin_address: string;
-  schedule_main: string;
-  schedule_note: string;
 };
+
+type ContactItem = {
+  id: string;
+  label: string;
+  value: string;
+  href: string | null;
+  icon: string;
+  sort_order: number;
+  visible: boolean;
+};
+
+const ICON_OPTIONS = [
+  "Phone", "Mail", "Instagram", "Clock", "Info", "MapPin",
+  "Facebook", "Globe", "MessageCircle", "Calendar", "User", "Star", "Heart", "Tag",
+];
 
 function ContactsManager() {
   const [info, setInfo] = useState<ContactInfo | null>(null);
+  const [items, setItems] = useState<ContactItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [savingInfo, setSavingInfo] = useState(false);
+  const [editing, setEditing] = useState<ContactItem | null>(null);
+  const [creating, setCreating] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState<ContactItem | null>(null);
 
-  useEffect(() => {
-    supabase
-      .from("contact_info")
-      .select("*")
-      .limit(1)
-      .maybeSingle()
-      .then(({ data, error }) => {
-        if (error) toast.error(error.message);
-        if (data) setInfo(data as ContactInfo);
-        setLoading(false);
-      });
+  const refresh = useCallback(async () => {
+    const [infoRes, itemsRes] = await Promise.all([
+      supabase.from("contact_info").select("id,address_line1,address_line2,maps_pin_address").limit(1).maybeSingle(),
+      supabase.from("contact_items").select("*").order("sort_order"),
+    ]);
+    if (infoRes.error) toast.error(infoRes.error.message);
+    if (itemsRes.error) toast.error(itemsRes.error.message);
+    if (infoRes.data) setInfo(infoRes.data as ContactInfo);
+    setItems((itemsRes.data as ContactItem[]) ?? []);
+    setLoading(false);
   }, []);
+
+  useEffect(() => { refresh(); }, [refresh]);
 
   function update<K extends keyof ContactInfo>(key: K, value: ContactInfo[K]) {
     setInfo((prev) => (prev ? { ...prev, [key]: value } : prev));
   }
 
-  async function save() {
+  async function saveInfo() {
     if (!info) return;
-    setSaving(true);
+    setSavingInfo(true);
     const { id, ...payload } = info;
     const { error } = await supabase.from("contact_info").update(payload).eq("id", id);
-    setSaving(false);
+    setSavingInfo(false);
     if (error) return toast.error(error.message);
-    toast.success("Contatti aggiornati");
+    toast.success("Indirizzo aggiornato");
+  }
+
+  async function reorderItems(next: ContactItem[]) {
+    setItems(next);
+    const err = await persistOrder("contact_items" as never, next);
+    if (err) toast.error(err.message);
+    else refresh();
+  }
+
+  async function toggleVisible(it: ContactItem) {
+    const { error } = await supabase.from("contact_items").update({ visible: !it.visible }).eq("id", it.id);
+    if (error) return toast.error(error.message);
+    refresh();
+  }
+
+  async function doDelete(it: ContactItem) {
+    const { error } = await supabase.from("contact_items").delete().eq("id", it.id);
+    if (error) return toast.error(error.message);
+    toast.success("Voce eliminata");
+    setConfirmDelete(null);
+    refresh();
   }
 
   if (loading) return <p className="text-muted-foreground">Caricamento…</p>;
-  if (!info) return <p className="text-muted-foreground italic">Nessuna informazione di contatto trovata.</p>;
 
   return (
-    <div className="space-y-6 max-w-2xl">
-      <div className="grid gap-4">
-        <div className="space-y-2">
-          <Label>Indirizzo (riga 1)</Label>
-          <Input value={info.address_line1} onChange={(e) => update("address_line1", e.target.value)} />
+    <div className="space-y-10 max-w-2xl">
+      {info && (
+        <section className="space-y-4">
+          <h2 className="text-xs tracking-[0.25em] uppercase text-muted-foreground">Indirizzo e mappa</h2>
+          <div className="grid gap-4">
+            <div className="space-y-2">
+              <Label>Indirizzo (riga 1)</Label>
+              <Input value={info.address_line1} onChange={(e) => update("address_line1", e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label>Indirizzo (riga 2)</Label>
+              <Input value={info.address_line2} onChange={(e) => update("address_line2", e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label>Indirizzo per il pin sulla mappa</Label>
+              <Input value={info.maps_pin_address} onChange={(e) => update("maps_pin_address", e.target.value)} />
+              <p className="text-xs text-muted-foreground">Usato per la mappa di Google. Può differire dall'indirizzo mostrato.</p>
+            </div>
+          </div>
+          <div className="flex justify-end">
+            <Button onClick={saveInfo} disabled={savingInfo}>{savingInfo ? "Salvataggio…" : "Salva indirizzo"}</Button>
+          </div>
+        </section>
+      )}
+
+      <section className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xs tracking-[0.25em] uppercase text-muted-foreground">Voci di contatto</h2>
+          <Button size="sm" onClick={() => setCreating(true)}>
+            <Plus className="h-4 w-4 mr-1" /> Nuova voce
+          </Button>
         </div>
-        <div className="space-y-2">
-          <Label>Indirizzo (riga 2)</Label>
-          <Input value={info.address_line2} onChange={(e) => update("address_line2", e.target.value)} />
-        </div>
-        <div className="space-y-2">
-          <Label>Telefono</Label>
-          <Input value={info.phone} onChange={(e) => update("phone", e.target.value)} />
-        </div>
-        <div className="space-y-2">
-          <Label>Email</Label>
-          <Input type="email" value={info.email} onChange={(e) => update("email", e.target.value)} />
-        </div>
-        <div className="space-y-2">
-          <Label>Instagram — handle visualizzato</Label>
-          <Input value={info.instagram_handle} onChange={(e) => update("instagram_handle", e.target.value)} placeholder="@nomeprofilo" />
-        </div>
-        <div className="space-y-2">
-          <Label>Instagram — URL completo</Label>
-          <Input value={info.instagram_url} onChange={(e) => update("instagram_url", e.target.value)} placeholder="https://www.instagram.com/..." />
-        </div>
-        <div className="space-y-2">
-          <Label>Indirizzo per il pin sulla mappa</Label>
-          <Input value={info.maps_pin_address} onChange={(e) => update("maps_pin_address", e.target.value)} />
-          <p className="text-xs text-muted-foreground">Usato per la mappa di Google. Può differire dall'indirizzo mostrato.</p>
-        </div>
-        <div className="space-y-2">
-          <Label>Orari — riga principale</Label>
-          <Input value={info.schedule_main} onChange={(e) => update("schedule_main", e.target.value)} placeholder="Lunedì – Domenica" />
-        </div>
-        <div className="space-y-2">
-          <Label>Orari — nota</Label>
-          <Input value={info.schedule_note} onChange={(e) => update("schedule_note", e.target.value)} placeholder="Giovedì chiuso" />
-        </div>
-      </div>
-      <div className="flex justify-end">
-        <Button onClick={save} disabled={saving}>{saving ? "Salvataggio…" : "Salva contatti"}</Button>
-      </div>
+        <p className="text-xs text-muted-foreground">Trascina per riordinare. Puoi aggiungere telefono, email, social, orari o qualsiasi altra informazione.</p>
+
+        {items.length === 0 ? (
+          <p className="text-muted-foreground italic">Nessuna voce.</p>
+        ) : (
+          <div className="border-y border-border">
+            <SortableList
+              items={items}
+              onReorder={reorderItems}
+              renderItem={(it) => (
+                <>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-foreground">
+                      {it.value || <span className="italic text-muted-foreground">(vuoto)</span>}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {it.label || "—"} · {it.icon}
+                      {it.href && ` · ${it.href}`}
+                    </p>
+                  </div>
+                  <Button variant="ghost" size="icon" onClick={() => toggleVisible(it)} title={it.visible ? "Nascondi" : "Mostra"}>
+                    {it.visible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4 text-muted-foreground" />}
+                  </Button>
+                  <Button variant="ghost" size="icon" onClick={() => setEditing(it)}>
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button variant="ghost" size="icon" onClick={() => setConfirmDelete(it)}>
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                  </Button>
+                </>
+              )}
+            />
+          </div>
+        )}
+      </section>
+
+      {(editing || creating) && (
+        <ContactItemDialog
+          item={editing}
+          nextSortOrder={items.length}
+          onClose={() => { setEditing(null); setCreating(false); }}
+          onSaved={() => { setEditing(null); setCreating(false); refresh(); }}
+        />
+      )}
+
+      <AlertDialog open={!!confirmDelete} onOpenChange={(o) => !o && setConfirmDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Eliminare la voce?</AlertDialogTitle>
+            <AlertDialogDescription>Operazione irreversibile.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annulla</AlertDialogCancel>
+            <AlertDialogAction onClick={() => confirmDelete && doDelete(confirmDelete)}>
+              Elimina
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
+  );
+}
+
+function ContactItemDialog({
+  item,
+  nextSortOrder,
+  onClose,
+  onSaved,
+}: {
+  item: ContactItem | null;
+  nextSortOrder: number;
+  onClose: () => void;
+  onSaved: () => void;
+}) {
+  const [label, setLabel] = useState(item?.label ?? "");
+  const [value, setValue] = useState(item?.value ?? "");
+  const [href, setHref] = useState(item?.href ?? "");
+  const [icon, setIcon] = useState(item?.icon ?? "Info");
+  const [visible, setVisible] = useState(item?.visible ?? true);
+  const [saving, setSaving] = useState(false);
+
+  async function save() {
+    if (!value.trim()) return toast.error("Il valore è obbligatorio");
+    setSaving(true);
+    const payload = {
+      label: label.trim(),
+      value: value.trim(),
+      href: href.trim() || null,
+      icon,
+      visible,
+      ...(item ? {} : { sort_order: nextSortOrder }),
+    };
+    const { error } = item
+      ? await supabase.from("contact_items").update(payload).eq("id", item.id)
+      : await supabase.from("contact_items").insert(payload);
+    setSaving(false);
+    if (error) return toast.error(error.message);
+    toast.success(item ? "Voce aggiornata" : "Voce creata");
+    onSaved();
+  }
+
+  return (
+    <Dialog open onOpenChange={(o) => !o && onClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{item ? "Modifica voce" : "Nuova voce di contatto"}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label>Etichetta (sopra il valore)</Label>
+            <Input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="es. Telefono, Email, Quando siamo aperti…" />
+          </div>
+          <div className="space-y-2">
+            <Label>Valore *</Label>
+            <Input value={value} onChange={(e) => setValue(e.target.value)} placeholder="es. 0921 995719" />
+          </div>
+          <div className="space-y-2">
+            <Label>Link (opzionale)</Label>
+            <Input value={href} onChange={(e) => setHref(e.target.value)} placeholder="es. tel:0921995719, mailto:..., https://..." />
+          </div>
+          <div className="space-y-2">
+            <Label>Icona</Label>
+            <Select value={icon} onValueChange={setIcon}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {ICON_OPTIONS.map((i) => (
+                  <SelectItem key={i} value={i}>{i}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex items-center gap-2">
+            <Switch checked={visible} onCheckedChange={setVisible} id="vis-ci" />
+            <Label htmlFor="vis-ci">Visibile</Label>
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>Annulla</Button>
+          <Button onClick={save} disabled={saving}>{saving ? "Salvataggio…" : "Salva"}</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
