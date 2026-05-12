@@ -93,7 +93,7 @@ function AdminPage() {
   const { session, isAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const [section, setSection] = useState<Section>("menu");
-  const [tab, setTab] = useState<"products" | "categories">("products");
+  const [tab, setTab] = useState<"products" | "categories" | "contacts">("products");
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingData, setLoadingData] = useState(false);
