@@ -94,6 +94,7 @@ function AdminPage() {
   const navigate = useNavigate();
   const [section, setSection] = useState<Section>("menu");
   const [tab, setTab] = useState<"products" | "categories" | "contacts">("products");
+  const [searchOpen, setSearchOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingData, setLoadingData] = useState(false);
