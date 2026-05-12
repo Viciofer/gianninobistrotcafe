@@ -33,7 +33,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { Pencil, Trash2, Plus, Eye, EyeOff } from "lucide-react";
+import { Pencil, Trash2, Plus, Eye, EyeOff, Search } from "lucide-react";
 import { SortableList } from "@/components/SortableList";
 
 async function persistOrder(
@@ -94,6 +94,7 @@ function AdminPage() {
   const navigate = useNavigate();
   const [section, setSection] = useState<Section>("menu");
   const [tab, setTab] = useState<"products" | "categories" | "contacts">("products");
+  const [searchOpen, setSearchOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingData, setLoadingData] = useState(false);
@@ -143,10 +144,28 @@ function AdminPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <Button variant="outline" size="icon" onClick={() => setSearchOpen(true)} title="Cerca" aria-label="Cerca">
+            <Search className="h-4 w-4" />
+          </Button>
           <Link to="/" className="text-sm text-muted-foreground hover:text-accent">Sito</Link>
           <Button variant="outline" size="sm" onClick={signOut}>Esci</Button>
         </div>
       </div>
+
+      <SearchDialog
+        open={searchOpen}
+        onOpenChange={setSearchOpen}
+        onJumpToCategory={(c) => {
+          setSection(c.section);
+          setTab("categories");
+          setSearchOpen(false);
+        }}
+        onJumpToProduct={(p, sec) => {
+          setSection(sec);
+          setTab("products");
+          setSearchOpen(false);
+        }}
+      />
 
       {tab !== "contacts" && (
         <div className="flex flex-wrap items-center gap-4 mb-6">
@@ -789,5 +808,148 @@ function ContactsManager() {
         <Button onClick={save} disabled={saving}>{saving ? "Salvataggio…" : "Salva contatti"}</Button>
       </div>
     </div>
+  );
+}
+
+// ---------- SEARCH DIALOG ----------
+
+function SearchDialog({
+  open,
+  onOpenChange,
+  onJumpToCategory,
+  onJumpToProduct,
+}: {
+  open: boolean;
+  onOpenChange: (o: boolean) => void;
+  onJumpToCategory: (c: Category) => void;
+  onJumpToProduct: (p: Product, section: Section) => void;
+}) {
+  const [query, setQuery] = useState("");
+  const [allCategories, setAllCategories] = useState<Category[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    setLoading(true);
+    Promise.all([
+      supabase.from("categories").select("*"),
+      supabase.from("products").select("*"),
+    ]).then(([catRes, prodRes]) => {
+      if (catRes.error) toast.error(catRes.error.message);
+      if (prodRes.error) toast.error(prodRes.error.message);
+      setAllCategories((catRes.data as Category[]) ?? []);
+      setAllProducts((prodRes.data as Product[]) ?? []);
+      setLoading(false);
+    });
+  }, [open]);
+
+  const q = query.trim().toLowerCase();
+  const catById = new Map(allCategories.map((c) => [c.id, c]));
+
+  const matchedCategories = q
+    ? allCategories.filter((c) => c.name.toLowerCase().includes(q))
+    : [];
+  const matchedProducts = q
+    ? allProducts.filter((p) => p.name.toLowerCase().includes(q))
+    : [];
+
+  const sectionLabel = (s: Section) => SECTIONS.find((x) => x.value === s)?.label ?? s;
+
+  const catBreadcrumb = (c: Category) => {
+    const parent = c.parent_id ? catById.get(c.parent_id) : null;
+    return parent ? `${sectionLabel(c.section)} › ${parent.name} › ${c.name}` : `${sectionLabel(c.section)} › ${c.name}`;
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>Cerca nel catalogo</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              autoFocus
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Nome di categoria, sotto-categoria o prodotto…"
+              className="pl-9"
+            />
+          </div>
+
+          <div className="max-h-[60vh] overflow-y-auto -mx-6 px-6">
+            {loading ? (
+              <p className="text-muted-foreground text-sm">Caricamento…</p>
+            ) : !q ? (
+              <p className="text-muted-foreground text-sm italic">Inizia a digitare per cercare.</p>
+            ) : matchedCategories.length === 0 && matchedProducts.length === 0 ? (
+              <p className="text-muted-foreground text-sm italic">Nessun risultato.</p>
+            ) : (
+              <div className="space-y-6">
+                {matchedCategories.length > 0 && (
+                  <div>
+                    <p className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-2">
+                      Categorie e sotto-categorie ({matchedCategories.length})
+                    </p>
+                    <ul className="divide-y divide-border border-y border-border">
+                      {matchedCategories.map((c) => (
+                        <li key={c.id}>
+                          <button
+                            type="button"
+                            onClick={() => onJumpToCategory(c)}
+                            className="w-full text-left py-2 px-1 hover:bg-accent/10 transition-colors"
+                          >
+                            <p className="font-medium text-foreground">{c.name}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {catBreadcrumb(c)}
+                              {c.parent_id ? " · sotto-categoria" : ""}
+                              {!c.visible && " · nascosta"}
+                            </p>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {matchedProducts.length > 0 && (
+                  <div>
+                    <p className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-2">
+                      Prodotti ({matchedProducts.length})
+                    </p>
+                    <ul className="divide-y divide-border border-y border-border">
+                      {matchedProducts.map((p) => {
+                        const c = catById.get(p.category_id);
+                        if (!c) return null;
+                        return (
+                          <li key={p.id}>
+                            <button
+                              type="button"
+                              onClick={() => onJumpToProduct(p, c.section)}
+                              className="w-full text-left py-2 px-1 hover:bg-accent/10 transition-colors"
+                            >
+                              <p className="font-medium text-foreground">
+                                {p.name}
+                                {p.price && <span className="ml-2 text-accent tabular-nums">€ {p.price}</span>}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {catBreadcrumb(c)}
+                                {!p.visible && " · nascosto"}
+                              </p>
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
