@@ -33,7 +33,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { Pencil, Trash2, Plus, Eye, EyeOff } from "lucide-react";
+import { Pencil, Trash2, Plus, Eye, EyeOff, Search } from "lucide-react";
 import { SortableList } from "@/components/SortableList";
 
 async function persistOrder(
