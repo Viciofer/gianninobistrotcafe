@@ -533,14 +533,9 @@ function ProductsManager({
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1 text-xs">
-                  <Switch checked={p.visible} onCheckedChange={(v) => patch(p, { visible: v })} />
-                  <span className="text-muted-foreground">Visibile</span>
-                </div>
-                <div className="flex items-center gap-1 text-xs">
-                  <Switch checked={p.available} onCheckedChange={(v) => patch(p, { available: v })} />
-                  <span className="text-muted-foreground">Disponibile</span>
-                </div>
+                <Button variant="ghost" size="icon" onClick={() => patch(p, { visible: !p.visible })} title={p.visible ? "Nascondi" : "Mostra"}>
+                  {p.visible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4 text-muted-foreground" />}
+                </Button>
                 <Button variant="ghost" size="icon" onClick={() => setEditing(p)}>
                   <Pencil className="h-4 w-4" />
                 </Button>
