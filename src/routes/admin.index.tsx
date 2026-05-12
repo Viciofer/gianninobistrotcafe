@@ -634,7 +634,6 @@ function ProductDialog({
       price: price.trim() || null,
       sort_order: sortOrder,
       visible,
-      available,
     };
     const { error } = product
       ? await supabase.from("products").update(payload).eq("id", product.id)
