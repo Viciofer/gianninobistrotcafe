@@ -106,6 +106,42 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_items: {
+        Row: {
+          created_at: string
+          href: string | null
+          icon: string
+          id: string
+          label: string
+          sort_order: number
+          updated_at: string
+          value: string
+          visible: boolean
+        }
+        Insert: {
+          created_at?: string
+          href?: string | null
+          icon?: string
+          id?: string
+          label?: string
+          sort_order?: number
+          updated_at?: string
+          value?: string
+          visible?: boolean
+        }
+        Update: {
+          created_at?: string
+          href?: string | null
+          icon?: string
+          id?: string
+          label?: string
+          sort_order?: number
+          updated_at?: string
+          value?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           available: boolean
