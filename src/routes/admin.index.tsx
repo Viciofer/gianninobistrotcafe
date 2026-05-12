@@ -93,7 +93,7 @@ function AdminPage() {
   const { session, isAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const [section, setSection] = useState<Section>("menu");
-  const [tab, setTab] = useState<"products" | "categories">("products");
+  const [tab, setTab] = useState<"products" | "categories" | "contacts">("products");
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingData, setLoadingData] = useState(false);
@@ -148,22 +148,25 @@ function AdminPage() {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 mb-6">
-        <Label className="text-xs tracking-widest uppercase text-muted-foreground">Sezione</Label>
-        <Select value={section} onValueChange={(v) => setSection(v as Section)}>
-          <SelectTrigger className="w-[220px]"><SelectValue /></SelectTrigger>
-          <SelectContent>
-            {SECTIONS.map((s) => (
-              <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      {tab !== "contacts" && (
+        <div className="flex flex-wrap items-center gap-4 mb-6">
+          <Label className="text-xs tracking-widest uppercase text-muted-foreground">Sezione</Label>
+          <Select value={section} onValueChange={(v) => setSection(v as Section)}>
+            <SelectTrigger className="w-[220px]"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {SECTIONS.map((s) => (
+                <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
-      <Tabs value={tab} onValueChange={(v) => setTab(v as "products" | "categories")}>
+      <Tabs value={tab} onValueChange={(v) => setTab(v as "products" | "categories" | "contacts")}>
         <TabsList>
           <TabsTrigger value="products">Prodotti</TabsTrigger>
           <TabsTrigger value="categories">Categorie</TabsTrigger>
+          <TabsTrigger value="contacts">Contatti</TabsTrigger>
         </TabsList>
         <TabsContent value="products" className="mt-6">
           <ProductsManager
@@ -181,6 +184,9 @@ function AdminPage() {
             loading={loadingData}
             onChange={refresh}
           />
+        </TabsContent>
+        <TabsContent value="contacts" className="mt-6">
+          <ContactsManager />
         </TabsContent>
       </Tabs>
     </div>
@@ -527,14 +533,9 @@ function ProductsManager({
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1 text-xs">
-                  <Switch checked={p.visible} onCheckedChange={(v) => patch(p, { visible: v })} />
-                  <span className="text-muted-foreground">Visibile</span>
-                </div>
-                <div className="flex items-center gap-1 text-xs">
-                  <Switch checked={p.available} onCheckedChange={(v) => patch(p, { available: v })} />
-                  <span className="text-muted-foreground">Disponibile</span>
-                </div>
+                <Button variant="ghost" size="icon" onClick={() => patch(p, { visible: !p.visible })} title={p.visible ? "Nascondi" : "Mostra"}>
+                  {p.visible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4 text-muted-foreground" />}
+                </Button>
                 <Button variant="ghost" size="icon" onClick={() => setEditing(p)}>
                   <Pencil className="h-4 w-4" />
                 </Button>
@@ -613,7 +614,6 @@ function ProductDialog({
   const [categoryId, setCategoryId] = useState(product?.category_id ?? defaultCategoryId);
   const [sortOrder, setSortOrder] = useState(product?.sort_order ?? 0);
   const [visible, setVisible] = useState(product?.visible ?? true);
-  const [available, setAvailable] = useState(product?.available ?? true);
   const [saving, setSaving] = useState(false);
 
   function catLabel(id: string) {
@@ -634,7 +634,6 @@ function ProductDialog({
       price: price.trim() || null,
       sort_order: sortOrder,
       visible,
-      available,
     };
     const { error } = product
       ? await supabase.from("products").update(payload).eq("id", product.id)
@@ -684,10 +683,6 @@ function ProductDialog({
               <Switch checked={visible} onCheckedChange={setVisible} id="vis-p" />
               <Label htmlFor="vis-p">Visibile</Label>
             </div>
-            <div className="flex items-center gap-2 pt-7">
-              <Switch checked={available} onCheckedChange={setAvailable} id="av-p" />
-              <Label htmlFor="av-p">Disponibile</Label>
-            </div>
           </div>
         </div>
         <DialogFooter>
@@ -696,5 +691,103 @@ function ProductDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+// ---------- CONTACTS ----------
+
+type ContactInfo = {
+  id: string;
+  address_line1: string;
+  address_line2: string;
+  phone: string;
+  email: string;
+  instagram_handle: string;
+  instagram_url: string;
+  maps_pin_address: string;
+  schedule_main: string;
+  schedule_note: string;
+};
+
+function ContactsManager() {
+  const [info, setInfo] = useState<ContactInfo | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    supabase
+      .from("contact_info")
+      .select("*")
+      .limit(1)
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (error) toast.error(error.message);
+        if (data) setInfo(data as ContactInfo);
+        setLoading(false);
+      });
+  }, []);
+
+  function update<K extends keyof ContactInfo>(key: K, value: ContactInfo[K]) {
+    setInfo((prev) => (prev ? { ...prev, [key]: value } : prev));
+  }
+
+  async function save() {
+    if (!info) return;
+    setSaving(true);
+    const { id, ...payload } = info;
+    const { error } = await supabase.from("contact_info").update(payload).eq("id", id);
+    setSaving(false);
+    if (error) return toast.error(error.message);
+    toast.success("Contatti aggiornati");
+  }
+
+  if (loading) return <p className="text-muted-foreground">Caricamento…</p>;
+  if (!info) return <p className="text-muted-foreground italic">Nessuna informazione di contatto trovata.</p>;
+
+  return (
+    <div className="space-y-6 max-w-2xl">
+      <div className="grid gap-4">
+        <div className="space-y-2">
+          <Label>Indirizzo (riga 1)</Label>
+          <Input value={info.address_line1} onChange={(e) => update("address_line1", e.target.value)} />
+        </div>
+        <div className="space-y-2">
+          <Label>Indirizzo (riga 2)</Label>
+          <Input value={info.address_line2} onChange={(e) => update("address_line2", e.target.value)} />
+        </div>
+        <div className="space-y-2">
+          <Label>Telefono</Label>
+          <Input value={info.phone} onChange={(e) => update("phone", e.target.value)} />
+        </div>
+        <div className="space-y-2">
+          <Label>Email</Label>
+          <Input type="email" value={info.email} onChange={(e) => update("email", e.target.value)} />
+        </div>
+        <div className="space-y-2">
+          <Label>Instagram — handle visualizzato</Label>
+          <Input value={info.instagram_handle} onChange={(e) => update("instagram_handle", e.target.value)} placeholder="@nomeprofilo" />
+        </div>
+        <div className="space-y-2">
+          <Label>Instagram — URL completo</Label>
+          <Input value={info.instagram_url} onChange={(e) => update("instagram_url", e.target.value)} placeholder="https://www.instagram.com/..." />
+        </div>
+        <div className="space-y-2">
+          <Label>Indirizzo per il pin sulla mappa</Label>
+          <Input value={info.maps_pin_address} onChange={(e) => update("maps_pin_address", e.target.value)} />
+          <p className="text-xs text-muted-foreground">Usato per la mappa di Google. Può differire dall'indirizzo mostrato.</p>
+        </div>
+        <div className="space-y-2">
+          <Label>Orari — riga principale</Label>
+          <Input value={info.schedule_main} onChange={(e) => update("schedule_main", e.target.value)} placeholder="Lunedì – Domenica" />
+        </div>
+        <div className="space-y-2">
+          <Label>Orari — nota</Label>
+          <Input value={info.schedule_note} onChange={(e) => update("schedule_note", e.target.value)} placeholder="Giovedì chiuso" />
+        </div>
+      </div>
+      <div className="flex justify-end">
+        <Button onClick={save} disabled={saving}>{saving ? "Salvataggio…" : "Salva contatti"}</Button>
+      </div>
+    </div>
   );
 }
