@@ -76,12 +76,6 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="border-t border-sidebar-border px-6 py-5">
-        <div className="flex items-center gap-2 text-[10px] tracking-widest uppercase text-sidebar-foreground/60 group-data-[collapsible=icon]:justify-center">
-          <span className="size-1.5 rounded-full bg-accent shadow-[0_0_8px_var(--candle)]" />
-          <span className="group-data-[collapsible=icon]:hidden">Servizio attivo</span>
-        </div>
-      </SidebarFooter>
     </Sidebar>
   );
 }
