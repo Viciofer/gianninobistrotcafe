@@ -61,6 +61,51 @@ export type Database = {
           },
         ]
       }
+      contact_info: {
+        Row: {
+          address_line1: string
+          address_line2: string
+          created_at: string
+          email: string
+          id: string
+          instagram_handle: string
+          instagram_url: string
+          maps_pin_address: string
+          phone: string
+          schedule_main: string
+          schedule_note: string
+          updated_at: string
+        }
+        Insert: {
+          address_line1?: string
+          address_line2?: string
+          created_at?: string
+          email?: string
+          id?: string
+          instagram_handle?: string
+          instagram_url?: string
+          maps_pin_address?: string
+          phone?: string
+          schedule_main?: string
+          schedule_note?: string
+          updated_at?: string
+        }
+        Update: {
+          address_line1?: string
+          address_line2?: string
+          created_at?: string
+          email?: string
+          id?: string
+          instagram_handle?: string
+          instagram_url?: string
+          maps_pin_address?: string
+          phone?: string
+          schedule_main?: string
+          schedule_note?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           available: boolean
