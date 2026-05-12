@@ -614,7 +614,6 @@ function ProductDialog({
   const [categoryId, setCategoryId] = useState(product?.category_id ?? defaultCategoryId);
   const [sortOrder, setSortOrder] = useState(product?.sort_order ?? 0);
   const [visible, setVisible] = useState(product?.visible ?? true);
-  const [available, setAvailable] = useState(product?.available ?? true);
   const [saving, setSaving] = useState(false);
 
   function catLabel(id: string) {
