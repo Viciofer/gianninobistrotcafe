@@ -9,33 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ViniRouteImport } from './routes/vini'
-import { Route as MenuRouteImport } from './routes/menu'
-import { Route as DrinkRouteImport } from './routes/drink'
-import { Route as ContattiRouteImport } from './routes/contatti'
-import { Route as CaffetteriaRouteImport } from './routes/caffetteria'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CaffetteriaRouteImport } from './routes/caffetteria'
+import { Route as ContattiRouteImport } from './routes/contatti'
+import { Route as DrinkRouteImport } from './routes/drink'
+import { Route as MenuRouteImport } from './routes/menu'
+import { Route as ViniRouteImport } from './routes/vini'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 
-const ViniRoute = ViniRouteImport.update({
-  id: '/vini',
-  path: '/vini',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MenuRoute = MenuRouteImport.update({
-  id: '/menu',
-  path: '/menu',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DrinkRoute = DrinkRouteImport.update({
-  id: '/drink',
-  path: '/drink',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContattiRoute = ContattiRouteImport.update({
-  id: '/contatti',
-  path: '/contatti',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CaffetteriaRoute = CaffetteriaRouteImport.update({
@@ -43,9 +28,24 @@ const CaffetteriaRoute = CaffetteriaRouteImport.update({
   path: '/caffetteria',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ContattiRoute = ContattiRouteImport.update({
+  id: '/contatti',
+  path: '/contatti',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DrinkRoute = DrinkRouteImport.update({
+  id: '/drink',
+  path: '/drink',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MenuRoute = MenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ViniRoute = ViniRouteImport.update({
+  id: '/vini',
+  path: '/vini',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -136,32 +136,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/vini': {
-      id: '/vini'
-      path: '/vini'
-      fullPath: '/vini'
-      preLoaderRoute: typeof ViniRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/menu': {
-      id: '/menu'
-      path: '/menu'
-      fullPath: '/menu'
-      preLoaderRoute: typeof MenuRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/drink': {
-      id: '/drink'
-      path: '/drink'
-      fullPath: '/drink'
-      preLoaderRoute: typeof DrinkRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contatti': {
-      id: '/contatti'
-      path: '/contatti'
-      fullPath: '/contatti'
-      preLoaderRoute: typeof ContattiRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/caffetteria': {
@@ -171,11 +150,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CaffetteriaRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/contatti': {
+      id: '/contatti'
+      path: '/contatti'
+      fullPath: '/contatti'
+      preLoaderRoute: typeof ContattiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/drink': {
+      id: '/drink'
+      path: '/drink'
+      fullPath: '/drink'
+      preLoaderRoute: typeof DrinkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/menu': {
+      id: '/menu'
+      path: '/menu'
+      fullPath: '/menu'
+      preLoaderRoute: typeof MenuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vini': {
+      id: '/vini'
+      path: '/vini'
+      fullPath: '/vini'
+      preLoaderRoute: typeof ViniRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -208,3 +208,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
