@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export type Section = "menu" | "caffetteria" | "drink" | "vini";
+export type Section = string;
 
 export type Category = {
   id: string;
@@ -74,4 +74,32 @@ export function slugify(s: string): string {
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
+}
+
+import * as Icons from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
+export type SectionRow = {
+  id: string;
+  slug: string;
+  title: string;
+  icon: string;
+  builtin: boolean;
+  sort_order: number;
+  visible: boolean;
+};
+
+export async function fetchSections(includeHidden = false): Promise<SectionRow[]> {
+  const { data, error } = await supabase.from("sections").select("*").order("sort_order");
+  if (error) throw error;
+  return ((data ?? []) as SectionRow[]).filter((s) => includeHidden || s.visible);
+}
+
+export function sectionIcon(name: string): LucideIcon {
+  const I = (Icons as unknown as Record<string, LucideIcon>)[name];
+  return I ?? Icons.UtensilsCrossed;
+}
+
+export function sectionUrl(s: Pick<SectionRow, "slug" | "builtin">): string {
+  return s.builtin ? `/${s.slug}` : `/sezione/${s.slug}`;
 }

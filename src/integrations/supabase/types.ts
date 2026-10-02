@@ -22,7 +22,7 @@ export type Database = {
           name: string
           parent_id: string | null
           schedule: string | null
-          section: Database["public"]["Enums"]["section_type"]
+          section: string
           sort_order: number
           updated_at: string
           visible: boolean
@@ -34,7 +34,7 @@ export type Database = {
           name: string
           parent_id?: string | null
           schedule?: string | null
-          section: Database["public"]["Enums"]["section_type"]
+          section: string
           sort_order?: number
           updated_at?: string
           visible?: boolean
@@ -46,7 +46,7 @@ export type Database = {
           name?: string
           parent_id?: string | null
           schedule?: string | null
-          section?: Database["public"]["Enums"]["section_type"]
+          section?: string
           sort_order?: number
           updated_at?: string
           visible?: boolean
@@ -58,6 +58,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "categories"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "categories_section_fkey"
+            columns: ["section"]
+            isOneToOne: false
+            referencedRelation: "sections"
+            referencedColumns: ["slug"]
           },
         ]
       }
@@ -188,6 +195,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      sections: {
+        Row: {
+          builtin: boolean
+          created_at: string
+          icon: string
+          id: string
+          slug: string
+          sort_order: number
+          title: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          builtin?: boolean
+          created_at?: string
+          icon?: string
+          id?: string
+          slug: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          builtin?: boolean
+          created_at?: string
+          icon?: string
+          id?: string
+          slug?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {

@@ -35,6 +35,7 @@ import {
 import { toast } from "sonner";
 import { Pencil, Trash2, Plus, Eye, EyeOff, Search } from "lucide-react";
 import { SortableList } from "@/components/SortableList";
+import { fetchSections, sectionIcon, slugify, type SectionRow } from "@/lib/catalog";
 
 async function persistOrder(
   table: "categories" | "products",
@@ -58,7 +59,7 @@ export const Route = createFileRoute("/admin/")({
   component: AdminPage,
 });
 
-type Section = "menu" | "caffetteria" | "drink" | "vini";
+type Section = string;
 
 type Category = {
   id: string;
@@ -82,18 +83,12 @@ type Product = {
   available: boolean;
 };
 
-const SECTIONS: { value: Section; label: string }[] = [
-  { value: "menu", label: "Menù" },
-  { value: "caffetteria", label: "Caffetteria" },
-  { value: "drink", label: "Drink List" },
-  { value: "vini", label: "Carta dei Vini" },
-];
-
 function AdminPage() {
   const { session, isAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const [section, setSection] = useState<Section>("menu");
-  const [tab, setTab] = useState<"products" | "categories" | "contacts">("products");
+  const [sections, setSections] = useState<SectionRow[]>([]);
+  const [tab, setTab] = useState<"products" | "categories" | "sections" | "contacts">("products");
   const [searchOpen, setSearchOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -102,6 +97,13 @@ function AdminPage() {
   useEffect(() => {
     if (!loading && !session) navigate({ to: "/admin/login" });
   }, [loading, session, navigate]);
+
+  const loadSections = useCallback(async () => {
+    const list = await fetchSections(true);
+    setSections(list);
+    window.dispatchEvent(new Event("sections-changed"));
+    setSection((cur) => (list.some((s) => s.slug === cur) ? cur : list[0]?.slug ?? ""));
+  }, []);
 
   const refresh = useCallback(async () => {
     setLoadingData(true);
@@ -120,6 +122,10 @@ function AdminPage() {
   useEffect(() => {
     if (isAdmin) refresh();
   }, [isAdmin, refresh]);
+
+  useEffect(() => {
+    if (isAdmin) loadSections();
+  }, [isAdmin, loadSections]);
 
   if (loading) return <div className="px-6 py-12 text-muted-foreground">Caricamento…</div>;
   if (!session) return null;
@@ -155,6 +161,7 @@ function AdminPage() {
       <SearchDialog
         open={searchOpen}
         onOpenChange={setSearchOpen}
+        sections={sections}
         onJumpToCategory={(c) => {
           setSection(c.section);
           setTab("categories");
@@ -167,24 +174,27 @@ function AdminPage() {
         }}
       />
 
-      {tab !== "contacts" && (
+      {(tab === "products" || tab === "categories") && (
         <div className="flex flex-wrap items-center gap-4 mb-6">
           <Label className="text-xs tracking-widest uppercase text-muted-foreground">Sezione</Label>
-          <Select value={section} onValueChange={(v) => setSection(v as Section)}>
+          <Select value={section} onValueChange={(v) => setSection(v)}>
             <SelectTrigger className="w-[220px]"><SelectValue /></SelectTrigger>
             <SelectContent>
-              {SECTIONS.map((s) => (
-                <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+              {sections.map((s) => (
+                <SelectItem key={s.slug} value={s.slug}>
+                  {s.title}{s.visible ? "" : " (nascosta)"}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
       )}
 
-      <Tabs value={tab} onValueChange={(v) => setTab(v as "products" | "categories" | "contacts")}>
+      <Tabs value={tab} onValueChange={(v) => setTab(v as typeof tab)}>
         <TabsList>
           <TabsTrigger value="products">Prodotti</TabsTrigger>
           <TabsTrigger value="categories">Categorie</TabsTrigger>
+          <TabsTrigger value="sections">Sezioni</TabsTrigger>
           <TabsTrigger value="contacts">Contatti</TabsTrigger>
         </TabsList>
         <TabsContent value="products" className="mt-6">
@@ -204,11 +214,140 @@ function AdminPage() {
             onChange={refresh}
           />
         </TabsContent>
+        <TabsContent value="sections" className="mt-6">
+          <SectionsManager sections={sections} onChange={loadSections} />
+        </TabsContent>
         <TabsContent value="contacts" className="mt-6">
           <ContactsManager />
         </TabsContent>
       </Tabs>
     </div>
+  );
+}
+
+// ---------- SECTIONS ----------
+
+const SECTION_ICONS = ["UtensilsCrossed", "Coffee", "Martini", "Wine", "Beer", "Pizza", "Sandwich", "IceCream", "Cake", "Salad", "Soup", "Croissant", "GlassWater", "Star"];
+
+function SectionsManager({ sections, onChange }: { sections: SectionRow[]; onChange: () => void }) {
+  const [editing, setEditing] = useState<SectionRow | null>(null);
+  const [creating, setCreating] = useState(false);
+  const [toDelete, setToDelete] = useState<SectionRow | null>(null);
+
+  async function reorder(next: SectionRow[]) {
+    const res = await Promise.all(next.map((s, i) => supabase.from("sections").update({ sort_order: i }).eq("id", s.id)));
+    if (res.some((r) => r.error)) toast.error("Errore riordino");
+    onChange();
+  }
+  async function toggle(s: SectionRow) {
+    const { error } = await supabase.from("sections").update({ visible: !s.visible }).eq("id", s.id);
+    if (error) toast.error(error.message);
+    onChange();
+  }
+  async function doDelete() {
+    if (!toDelete) return;
+    const { error } = await supabase.from("sections").delete().eq("id", toDelete.id);
+    if (error) toast.error(error.message); else toast.success("Sezione eliminata");
+    setToDelete(null);
+    onChange();
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <p className="text-sm text-muted-foreground">Le sezioni compaiono nel menù laterale del sito. Trascina per riordinarle.</p>
+        <Button size="sm" onClick={() => setCreating(true)}><Plus className="h-4 w-4 mr-1" />Nuova sezione</Button>
+      </div>
+      <SortableList
+        items={sections}
+        onReorder={reorder}
+        renderItem={(s) => (
+          <div className="flex items-center justify-between gap-3 py-2 flex-1">
+            <div>
+              <p className={`font-serif text-lg ${s.visible ? "text-foreground" : "text-muted-foreground line-through"}`}>{s.title}</p>
+              <p className="text-xs text-muted-foreground">{s.builtin ? `/${s.slug}` : `/sezione/${s.slug}`}</p>
+            </div>
+            <div className="flex gap-1">
+              <Button variant="ghost" size="icon" onClick={() => toggle(s)} title={s.visible ? "Nascondi" : "Mostra"}>
+                {s.visible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => setEditing(s)}><Pencil className="h-4 w-4" /></Button>
+              <Button variant="ghost" size="icon" onClick={() => setToDelete(s)}><Trash2 className="h-4 w-4" /></Button>
+            </div>
+          </div>
+        )}
+      />
+      {(creating || editing) && (
+        <SectionDialog
+          section={editing}
+          count={sections.length}
+          onClose={() => { setCreating(false); setEditing(null); }}
+          onSaved={() => { setCreating(false); setEditing(null); onChange(); }}
+        />
+      )}
+      <AlertDialog open={!!toDelete} onOpenChange={(o) => !o && setToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Eliminare "{toDelete?.title}"?</AlertDialogTitle>
+            <AlertDialogDescription>Verranno eliminate anche tutte le categorie e i prodotti di questa sezione. L'operazione non è reversibile.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annulla</AlertDialogCancel>
+            <AlertDialogAction onClick={doDelete}>Elimina</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
+}
+
+function SectionDialog({ section, count, onClose, onSaved }: { section: SectionRow | null; count: number; onClose: () => void; onSaved: () => void }) {
+  const [title, setTitle] = useState(section?.title ?? "");
+  const [icon, setIcon] = useState(section?.icon ?? "UtensilsCrossed");
+  const [saving, setSaving] = useState(false);
+
+  async function save() {
+    if (!title.trim()) return toast.error("Inserisci un nome");
+    setSaving(true);
+    let error;
+    if (section) {
+      ({ error } = await supabase.from("sections").update({ title: title.trim(), icon }).eq("id", section.id));
+    } else {
+      const base = slugify(title) || "sezione";
+      const slug = `${base}-${Math.random().toString(36).slice(2, 6)}`;
+      ({ error } = await supabase.from("sections").insert({ title: title.trim(), icon, slug, sort_order: count }));
+    }
+    setSaving(false);
+    if (error) return toast.error(error.message);
+    toast.success("Sezione salvata");
+    onSaved();
+  }
+
+  return (
+    <Dialog open onOpenChange={(o) => !o && onClose()}>
+      <DialogContent>
+        <DialogHeader><DialogTitle>{section ? "Modifica sezione" : "Nuova sezione"}</DialogTitle></DialogHeader>
+        <div className="space-y-4">
+          <div className="space-y-2"><Label>Nome</Label><Input value={title} onChange={(e) => setTitle(e.target.value)} /></div>
+          <div className="space-y-2">
+            <Label>Icona</Label>
+            <Select value={icon} onValueChange={setIcon}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {SECTION_ICONS.map((i) => {
+                  const I = sectionIcon(i);
+                  return <SelectItem key={i} value={i}><span className="flex items-center gap-2"><I className="h-4 w-4" />{i}</span></SelectItem>;
+                })}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>Annulla</Button>
+          <Button onClick={save} disabled={saving}>Salva</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -982,11 +1121,13 @@ function SearchDialog({
   onOpenChange,
   onJumpToCategory,
   onJumpToProduct,
+  sections,
 }: {
   open: boolean;
   onOpenChange: (o: boolean) => void;
   onJumpToCategory: (c: Category) => void;
   onJumpToProduct: (p: Product, section: Section) => void;
+  sections: SectionRow[];
 }) {
   const [query, setQuery] = useState("");
   const [allCategories, setAllCategories] = useState<Category[]>([]);
@@ -1018,7 +1159,7 @@ function SearchDialog({
     ? allProducts.filter((p) => p.name.toLowerCase().includes(q))
     : [];
 
-  const sectionLabel = (s: Section) => SECTIONS.find((x) => x.value === s)?.label ?? s;
+  const sectionLabel = (s: Section) => sections.find((x) => x.slug === s)?.title ?? s;
 
   const catBreadcrumb = (c: Category) => {
     const parent = c.parent_id ? catById.get(c.parent_id) : null;
