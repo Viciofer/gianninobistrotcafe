@@ -17,6 +17,7 @@ import { Route as MenuRouteImport } from './routes/menu'
 import { Route as ViniRouteImport } from './routes/vini'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as SezioneSlugRouteImport } from './routes/sezione.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -58,6 +59,11 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SezioneSlugRoute = SezioneSlugRouteImport.update({
+  id: '/sezione/$slug',
+  path: '/sezione/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/menu': typeof MenuRoute
   '/vini': typeof ViniRoute
   '/admin/login': typeof AdminLoginRoute
+  '/sezione/$slug': typeof SezioneSlugRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/menu': typeof MenuRoute
   '/vini': typeof ViniRoute
   '/admin/login': typeof AdminLoginRoute
+  '/sezione/$slug': typeof SezioneSlugRoute
   '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/menu': typeof MenuRoute
   '/vini': typeof ViniRoute
   '/admin/login': typeof AdminLoginRoute
+  '/sezione/$slug': typeof SezioneSlugRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/menu'
     | '/vini'
     | '/admin/login'
+    | '/sezione/$slug'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
     | '/menu'
     | '/vini'
     | '/admin/login'
+    | '/sezione/$slug'
     | '/admin'
   id:
     | '__root__'
@@ -120,6 +131,7 @@ export interface FileRouteTypes {
     | '/menu'
     | '/vini'
     | '/admin/login'
+    | '/sezione/$slug'
     | '/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -131,6 +143,7 @@ export interface RootRouteChildren {
   MenuRoute: typeof MenuRoute
   ViniRoute: typeof ViniRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  SezioneSlugRoute: typeof SezioneSlugRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sezione/$slug': {
+      id: '/sezione/$slug'
+      path: '/sezione/$slug'
+      fullPath: '/sezione/$slug'
+      preLoaderRoute: typeof SezioneSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -203,6 +223,7 @@ const rootRouteChildren: RootRouteChildren = {
   MenuRoute: MenuRoute,
   ViniRoute: ViniRoute,
   AdminLoginRoute: AdminLoginRoute,
+  SezioneSlugRoute: SezioneSlugRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 export const routeTree = rootRouteImport
