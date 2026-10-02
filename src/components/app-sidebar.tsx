@@ -1,6 +1,8 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, UtensilsCrossed, Coffee, Wine, Martini, Mail, Lock } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Home, Mail, Lock } from "lucide-react";
 import logoGiannino from "@/assets/logo-giannino.png";
+import { fetchSections, sectionIcon, sectionUrl, type SectionRow } from "@/lib/catalog";
 import {
   Sidebar,
   SidebarContent,
@@ -13,20 +15,32 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 
-const items = [
-  { title: "Home", url: "/", icon: Home },
-  { title: "Menù", url: "/menu", icon: UtensilsCrossed },
-  { title: "Caffetteria", url: "/caffetteria", icon: Coffee },
-  { title: "Drink List", url: "/drink", icon: Martini },
-  { title: "Carta dei Vini", url: "/vini", icon: Wine },
-  { title: "Contatti", url: "/contatti", icon: Mail },
-  { title: "Admin", url: "/admin", icon: Lock },
+const DEFAULT_SECTIONS: SectionRow[] = [
+  { id: "menu", slug: "menu", title: "Menù", icon: "UtensilsCrossed", builtin: true, sort_order: 1, visible: true },
+  { id: "caffetteria", slug: "caffetteria", title: "Caffetteria", icon: "Coffee", builtin: true, sort_order: 2, visible: true },
+  { id: "drink", slug: "drink", title: "Drink List", icon: "Martini", builtin: true, sort_order: 3, visible: true },
+  { id: "vini", slug: "vini", title: "Carta dei Vini", icon: "Wine", builtin: true, sort_order: 4, visible: true },
 ];
 
 export function AppSidebar() {
   const currentPath = useRouterState({
     select: (router) => router.location.pathname,
   });
+  const [sections, setSections] = useState<SectionRow[]>(DEFAULT_SECTIONS);
+
+  useEffect(() => {
+    const load = () => fetchSections().then(setSections).catch(() => {});
+    load();
+    window.addEventListener("sections-changed", load);
+    return () => window.removeEventListener("sections-changed", load);
+  }, []);
+
+  const items = [
+    { title: "Home", url: "/", icon: Home },
+    ...sections.map((s) => ({ title: s.title, url: sectionUrl(s), icon: sectionIcon(s.icon) })),
+    { title: "Contatti", url: "/contatti", icon: Mail },
+    { title: "Admin", url: "/admin", icon: Lock },
+  ];
 
   return (
     <Sidebar collapsible="icon">
