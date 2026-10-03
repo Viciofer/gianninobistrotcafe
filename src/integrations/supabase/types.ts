@@ -149,6 +149,99 @@ export type Database = {
         }
         Relationships: []
       }
+      events: {
+        Row: {
+          created_at: string
+          description: string
+          event_date: string
+          event_time: string
+          id: string
+          image_path: string | null
+          image_url: string | null
+          title: string
+          visible: boolean
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          event_date: string
+          event_time?: string
+          id?: string
+          image_path?: string | null
+          image_url?: string | null
+          title: string
+          visible?: boolean
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          event_date?: string
+          event_time?: string
+          id?: string
+          image_path?: string | null
+          image_url?: string | null
+          title?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
+      home_content: {
+        Row: {
+          body_html: string
+          carousel_enabled: boolean
+          carousel_interval: number
+          id: string
+          title_html: string
+          updated_at: string
+        }
+        Insert: {
+          body_html?: string
+          carousel_enabled?: boolean
+          carousel_interval?: number
+          id?: string
+          title_html?: string
+          updated_at?: string
+        }
+        Update: {
+          body_html?: string
+          carousel_enabled?: boolean
+          carousel_interval?: number
+          id?: string
+          title_html?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      home_images: {
+        Row: {
+          alt: string
+          created_at: string
+          id: string
+          path: string | null
+          sort_order: number
+          url: string
+          visible: boolean
+        }
+        Insert: {
+          alt?: string
+          created_at?: string
+          id?: string
+          path?: string | null
+          sort_order?: number
+          url: string
+          visible?: boolean
+        }
+        Update: {
+          alt?: string
+          created_at?: string
+          id?: string
+          path?: string | null
+          sort_order?: number
+          url?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           available: boolean
