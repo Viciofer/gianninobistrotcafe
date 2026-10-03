@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Home, Mail, Lock } from "lucide-react";
+import { Home, Mail } from "lucide-react";
 import logoGiannino from "@/assets/logo-giannino.png";
 import { fetchSections, sectionIcon, sectionUrl, type SectionRow } from "@/lib/catalog";
 import {
@@ -39,7 +39,6 @@ export function AppSidebar() {
     { title: "Home", url: "/", icon: Home },
     ...sections.map((s) => ({ title: s.title, url: sectionUrl(s), icon: sectionIcon(s.icon) })),
     { title: "Contatti", url: "/contatti", icon: Mail },
-    { title: "Admin", url: "/admin", icon: Lock },
   ];
 
   return (

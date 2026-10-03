@@ -1,9 +1,11 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
+import { Lock } from "lucide-react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { AuthProvider } from "@/lib/auth";
 import { Toaster } from "@/components/ui/sonner";
+import logoGiannino from "@/assets/logo-giannino.png";
 
 function NotFoundComponent() {
   return (
@@ -77,8 +79,28 @@ function RootComponent() {
         <div className="min-h-screen flex w-full bg-background">
           <AppSidebar />
           <div className="flex-1 flex flex-col min-w-0">
-            <header className="h-14 flex items-center gap-3 border-b border-border px-4 md:px-8 bg-background/80 backdrop-blur-sm sticky top-0 z-20">
-              <SidebarTrigger className="text-foreground hover:text-accent" />
+            <header className="h-16 flex items-center justify-between border-b border-border px-4 md:px-8 bg-background/80 backdrop-blur-sm sticky top-0 z-20">
+              <SidebarTrigger className="h-10 w-10 rounded-full border border-border text-foreground hover:text-accent hover:border-accent [&_svg]:size-5" />
+              <Link to="/" className="flex items-center gap-3 absolute left-1/2 -translate-x-1/2">
+                <img
+                  src={logoGiannino}
+                  alt="Giannino Bistrot Cafè"
+                  className="h-11 w-11 rounded-full object-cover border border-border"
+                />
+                <span className="hidden sm:flex flex-col leading-tight">
+                  <span className="font-serif text-lg text-foreground">Giannino</span>
+                  <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
+                    Bistrot · Cafè
+                  </span>
+                </span>
+              </Link>
+              <Link
+                to="/admin"
+                aria-label="Area riservata"
+                className="h-10 w-10 rounded-full border border-border flex items-center justify-center text-foreground hover:text-accent hover:border-accent transition-colors"
+              >
+                <Lock className="h-4 w-4" />
+              </Link>
             </header>
             <main className="flex-1">
               <Outlet />
