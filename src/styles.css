@@ -62,7 +62,7 @@
   --color-candle: var(--candle);
   --color-linen-dark: var(--linen-dark);
   --color-silver: var(--silver);
-  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-serif: Georgia, "Times New Roman", serif;
   --font-sans: "Inter", system-ui, sans-serif;
 }
 
