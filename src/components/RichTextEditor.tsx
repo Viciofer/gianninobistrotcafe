@@ -12,14 +12,8 @@ import { cn } from "@/lib/utils";
 export const FONTS = [
   { label: "Predefinito", value: "" },
   { label: "Cormorant Garamond", value: "Cormorant Garamond, serif" },
-  { label: "Playfair Display", value: "Playfair Display, serif" },
-  { label: "Lora", value: "Lora, serif" },
-  { label: "Libre Baskerville", value: "Libre Baskerville, serif" },
   { label: "Georgia", value: "Georgia, serif" },
   { label: "Inter", value: "Inter, sans-serif" },
-  { label: "Montserrat", value: "Montserrat, sans-serif" },
-  { label: "Dancing Script", value: "Dancing Script, cursive" },
-  { label: "Great Vibes", value: "Great Vibes, cursive" },
 ];
 const SIZES = ["", "12px", "14px", "16px", "18px", "20px", "24px", "28px", "32px", "40px", "48px", "56px", "64px", "72px", "88px"];
 
