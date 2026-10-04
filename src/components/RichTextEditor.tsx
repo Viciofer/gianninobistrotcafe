@@ -41,7 +41,7 @@ export function RichTextEditor({ value, onChange, minHeight = 200 }: { value: st
       color: (e.getAttributes("textStyle").color as string) ?? "#2b2420",
       bg: (e.getAttributes("textStyle").backgroundColor as string) ?? "#ffffff",
     } : null,
-  });
+  }) ?? { bold: false, italic: false, underline: false, strike: false, left: false, center: false, right: false, justify: false, bullet: false, ordered: false, h2: false, h3: false, font: "", size: "", color: "#2b2420", bg: "#ffffff" };
 
   if (!editor) return <div className="border border-border rounded-md" style={{ minHeight }} />;
   const c = () => editor.chain().focus();
