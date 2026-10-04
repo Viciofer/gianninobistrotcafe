@@ -103,7 +103,6 @@ export function HomeManager() {
         {images.length === 0 && <p className="text-sm text-muted-foreground">Nessuna immagine: viene mostrata la foto predefinita della sala.</p>}
         <SortableList
           items={images}
-          getId={(i) => i.id}
           onReorder={reorderImages}
           renderItem={(img) => (
             <div className="flex items-center gap-4 p-2 border border-border rounded-md bg-card">

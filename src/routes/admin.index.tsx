@@ -35,6 +35,7 @@ import {
 import { toast } from "sonner";
 import { Pencil, Trash2, Plus, Eye, EyeOff, Search } from "lucide-react";
 import { SortableList } from "@/components/SortableList";
+import { HomeManager } from "@/components/HomeManager";
 import { fetchSections, sectionIcon, slugify, type SectionRow } from "@/lib/catalog";
 
 async function persistOrder(
@@ -88,7 +89,7 @@ function AdminPage() {
   const navigate = useNavigate();
   const [section, setSection] = useState<Section>("menu");
   const [sections, setSections] = useState<SectionRow[]>([]);
-  const [tab, setTab] = useState<"products" | "categories" | "sections" | "contacts">("products");
+  const [tab, setTab] = useState<"products" | "categories" | "sections" | "contacts" | "home">("products");
   const [searchOpen, setSearchOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -196,6 +197,7 @@ function AdminPage() {
           <TabsTrigger value="categories">Categorie</TabsTrigger>
           <TabsTrigger value="sections">Sezioni</TabsTrigger>
           <TabsTrigger value="contacts">Contatti</TabsTrigger>
+          <TabsTrigger value="home">Home</TabsTrigger>
         </TabsList>
         <TabsContent value="products" className="mt-6">
           <ProductsManager
@@ -219,6 +221,9 @@ function AdminPage() {
         </TabsContent>
         <TabsContent value="contacts" className="mt-6">
           <ContactsManager />
+        </TabsContent>
+        <TabsContent value="home" className="mt-6">
+          <HomeManager />
         </TabsContent>
       </Tabs>
     </div>
