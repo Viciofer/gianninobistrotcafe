@@ -10,9 +10,9 @@ import {
 import { cn } from "@/lib/utils";
 
 export const FONTS = [
-  { label: "Predefinito", value: "" },
-  { label: "Cormorant Garamond", value: "Cormorant Garamond, serif" },
+  { label: "Predefinito (Georgia)", value: "" },
   { label: "Georgia", value: "Georgia, serif" },
+  { label: "Cormorant Garamond", value: "Cormorant Garamond, serif" },
   { label: "Inter", value: "Inter, sans-serif" },
 ];
 const SIZES = ["", "12px", "14px", "16px", "18px", "20px", "24px", "28px", "32px", "40px", "48px", "56px", "64px", "72px", "88px"];
