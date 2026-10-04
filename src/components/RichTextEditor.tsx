@@ -43,7 +43,7 @@ export function RichTextEditor({ value, onChange, minHeight = 200 }: { value: st
     } : null,
   });
 
-  if (!editor || !st) return <div className="border border-border rounded-md" style={{ minHeight }} />;
+  if (!editor) return <div className="border border-border rounded-md" style={{ minHeight }} />;
   const c = () => editor.chain().focus();
 
   const Btn = ({ on, active, title, children }: { on: () => void; active?: boolean; title: string; children: React.ReactNode }) => (
