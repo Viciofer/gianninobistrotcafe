@@ -1,4 +1,5 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import appCss from "../styles.css?url";
 import { Lock } from "lucide-react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -6,6 +7,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { AuthProvider } from "@/lib/auth";
 import { Toaster } from "@/components/ui/sonner";
 import logoGiannino from "@/assets/logo-giannino.png";
+import { applyDesign, fetchDesign } from "@/lib/site-design";
 
 function NotFoundComponent() {
   return (
@@ -53,7 +55,7 @@ export const Route = createRootRoute({
       },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&family=Playfair+Display:wght@400;500;600&family=Lora:wght@400;500;600&family=Libre+Baskerville:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap",
       },
     ],
   }),
@@ -64,7 +66,7 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="it">
       <head>
         <HeadContent />
       </head>
@@ -77,17 +79,39 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const [brandLogo, setBrandLogo] = useState("");
+  useEffect(() => {
+    const load = () => fetchDesign().then(({ id, settings }) => {
+      setBrandLogo(id ? settings.logoUrl : "");
+      if (id) applyDesign(settings);
+    }).catch(() => {});
+    load();
+    window.addEventListener("site-design-changed", load);
+    return () => window.removeEventListener("site-design-changed", load);
+  }, []);
+  useEffect(() => {
+    const root = document.documentElement;
+    const path = pathname.startsWith("/sezione/") ? "/sezione" : pathname.startsWith("/admin") ? "" : pathname;
+    const pageColors = root.dataset.pageColors;
+    if (pageColors) {
+      try {
+        const colors = JSON.parse(pageColors) as Record<string, string>;
+        root.style.setProperty("--design-page-background", colors[path] || root.style.getPropertyValue("--background"));
+      } catch { /* Keep current background. */ }
+    }
+  }, [pathname]);
   return (
     <AuthProvider>
       <SidebarProvider>
-        <div className="min-h-screen flex w-full bg-background">
+        <div data-site-shell className="min-h-screen flex w-full bg-background">
           <AppSidebar />
           <div className="flex-1 flex flex-col min-w-0">
             <header className="h-16 flex items-center justify-between border-b border-border px-4 md:px-8 bg-background/80 backdrop-blur-sm sticky top-0 z-20">
               <SidebarTrigger className="h-10 w-10 rounded-full border border-border text-foreground hover:text-accent hover:border-accent [&_svg]:size-5" />
               <Link to="/" className="flex items-center gap-3 absolute left-1/2 -translate-x-1/2">
                 <img
-                  src={logoGiannino}
+                  src={brandLogo || logoGiannino}
                   alt="Giannino Bistrot Cafè"
                   className="h-11 w-11 rounded-full object-cover border border-border"
                 />

@@ -36,6 +36,7 @@ import { toast } from "sonner";
 import { Pencil, Trash2, Plus, Eye, EyeOff, Search } from "lucide-react";
 import { SortableList } from "@/components/SortableList";
 import { HomeManager } from "@/components/HomeManager";
+import { DesignManager } from "@/components/DesignManager";
 import { fetchSections, sectionIcon, slugify, type SectionRow } from "@/lib/catalog";
 
 async function persistOrder(
@@ -54,6 +55,11 @@ export const Route = createFileRoute("/admin/")({
   head: () => ({
     meta: [
       { title: "Pannello Admin — Giannino Bistrot Cafè" },
+      { name: "description", content: "Gestisci catalogo, contenuti e design del Giannino Bistrot Cafè." },
+      { property: "og:title", content: "Pannello Admin — Giannino Bistrot Cafè" },
+      { property: "og:description", content: "Area riservata per la gestione del Giannino Bistrot Cafè." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
@@ -89,7 +95,7 @@ function AdminPage() {
   const navigate = useNavigate();
   const [section, setSection] = useState<Section>("menu");
   const [sections, setSections] = useState<SectionRow[]>([]);
-  const [tab, setTab] = useState<"products" | "categories" | "sections" | "contacts" | "home">("products");
+  const [tab, setTab] = useState<"products" | "categories" | "sections" | "contacts" | "home" | "design">("products");
   const [searchOpen, setSearchOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -198,6 +204,7 @@ function AdminPage() {
           <TabsTrigger value="sections">Sezioni</TabsTrigger>
           <TabsTrigger value="contacts">Contatti</TabsTrigger>
           <TabsTrigger value="home">Home</TabsTrigger>
+          <TabsTrigger value="design">Design</TabsTrigger>
         </TabsList>
         <TabsContent value="products" className="mt-6">
           <ProductsManager
@@ -224,6 +231,9 @@ function AdminPage() {
         </TabsContent>
         <TabsContent value="home" className="mt-6">
           <HomeManager />
+        </TabsContent>
+        <TabsContent value="design" className="mt-6">
+          <DesignManager />
         </TabsContent>
       </Tabs>
     </div>
