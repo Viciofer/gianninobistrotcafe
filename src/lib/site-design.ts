@@ -98,6 +98,7 @@ export function applyDesign(settings: DesignSettings) {
   };
   for (const [key, value] of Object.entries(pairs)) root.style.setProperty(key, value);
   root.dataset.designStyle = settings.backgroundStyle;
+  root.dataset.pageColors = JSON.stringify(settings.pageBackgrounds);
   const image = settings.backgroundImage;
   root.style.setProperty("--design-image", image ? `url("${image.replace(/["\\]/g, "")}")` : "none");
   const path = window.location.pathname;

@@ -2,6 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Home, Mail } from "lucide-react";
 import logoGiannino from "@/assets/logo-giannino.png";
+import { fetchDesign } from "@/lib/site-design";
 import { fetchSections, sectionIcon, sectionUrl, type SectionRow } from "@/lib/catalog";
 import {
   Sidebar,
@@ -27,6 +28,14 @@ export function AppSidebar() {
     select: (router) => router.location.pathname,
   });
   const [sections, setSections] = useState<SectionRow[]>(DEFAULT_SECTIONS);
+  const [brandLogo, setBrandLogo] = useState("");
+
+  useEffect(() => {
+    const load = () => fetchDesign().then(({ id, settings }) => setBrandLogo(id ? settings.logoUrl : "")).catch(() => {});
+    load();
+    window.addEventListener("site-design-changed", load);
+    return () => window.removeEventListener("site-design-changed", load);
+  }, []);
 
   useEffect(() => {
     const load = () => fetchSections().then(setSections).catch(() => {});
@@ -46,7 +55,7 @@ export function AppSidebar() {
       <SidebarHeader className="px-6 py-8 border-b border-sidebar-border">
         <div className="flex flex-col items-center">
           <img
-            src={logoGiannino}
+            src={brandLogo || logoGiannino}
             alt="Giannino Bistrot Cafè"
             className="w-[125px] h-[125px] rounded-full object-cover group-data-[collapsible=icon]:size-8"
           />

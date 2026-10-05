@@ -1,4 +1,5 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import appCss from "../styles.css?url";
 import { Lock } from "lucide-react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -6,6 +7,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { AuthProvider } from "@/lib/auth";
 import { Toaster } from "@/components/ui/sonner";
 import logoGiannino from "@/assets/logo-giannino.png";
+import { applyDesign, fetchDesign } from "@/lib/site-design";
 
 function NotFoundComponent() {
   return (
@@ -77,6 +79,28 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const [brandLogo, setBrandLogo] = useState("");
+  useEffect(() => {
+    const load = () => fetchDesign().then(({ id, settings }) => {
+      setBrandLogo(id ? settings.logoUrl : "");
+      if (id) applyDesign(settings);
+    }).catch(() => {});
+    load();
+    window.addEventListener("site-design-changed", load);
+    return () => window.removeEventListener("site-design-changed", load);
+  }, []);
+  useEffect(() => {
+    const root = document.documentElement;
+    const path = pathname.startsWith("/sezione/") ? "/sezione" : pathname.startsWith("/admin") ? "" : pathname;
+    const pageColors = root.dataset.pageColors;
+    if (pageColors) {
+      try {
+        const colors = JSON.parse(pageColors) as Record<string, string>;
+        root.style.setProperty("--design-page-background", colors[path] || root.style.getPropertyValue("--background"));
+      } catch { /* Keep current background. */ }
+    }
+  }, [pathname]);
   return (
     <AuthProvider>
       <SidebarProvider>
@@ -87,7 +111,7 @@ function RootComponent() {
               <SidebarTrigger className="h-10 w-10 rounded-full border border-border text-foreground hover:text-accent hover:border-accent [&_svg]:size-5" />
               <Link to="/" className="flex items-center gap-3 absolute left-1/2 -translate-x-1/2">
                 <img
-                  src={logoGiannino}
+                  src={brandLogo || logoGiannino}
                   alt="Giannino Bistrot Cafè"
                   className="h-11 w-11 rounded-full object-cover border border-border"
                 />

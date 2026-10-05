@@ -167,3 +167,27 @@
   .rich-content ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem; }
   .rich-content ol { list-style: decimal; padding-left: 1.5rem; margin-bottom: 1.5rem; }
 }
+
+/* Site-wide design controls. Values are provided by the saved design settings. */
+html:has([data-site-shell]) {
+  font-size: calc(16px * var(--design-body-scale, 1));
+}
+html:has([data-site-shell]) .font-serif,
+html:has([data-site-shell]) h1,
+html:has([data-site-shell]) h2,
+html:has([data-site-shell]) h3 {
+  font-size: calc(1em * var(--design-heading-scale, 1));
+}
+[data-site-shell] main {
+  background-color: var(--design-page-background, var(--background));
+  background-image: var(--design-image, none);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+html[data-design-style="paper"] [data-site-shell] main {
+  background-image: var(--design-image, none), repeating-linear-gradient(0deg, transparent 0 7px, color-mix(in oklab, var(--foreground) 3%, transparent) 8px);
+}
+html[data-design-style="lines"] [data-site-shell] main {
+  background-image: var(--design-image, none), repeating-linear-gradient(90deg, transparent 0 31px, color-mix(in oklab, var(--foreground) 5%, transparent) 32px);
+}

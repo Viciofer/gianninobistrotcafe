@@ -1,0 +1,3 @@
+- [x] Aggiungere una sezione Design nell'area admin.
+- [x] Salvare colori, font, sfondi e loghi condivisi tra tutte le pagine.
+- [ ] Verificare modifica, salvataggio e risultato sul sito.
