@@ -55,7 +55,7 @@ export const Route = createRootRoute({
       },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&family=Playfair+Display:wght@400;500;600&family=Lora:wght@400;500;600&family=Libre+Baskerville:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap",
       },
     ],
   }),
@@ -66,7 +66,7 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="it">
       <head>
         <HeadContent />
       </head>
@@ -104,7 +104,7 @@ function RootComponent() {
   return (
     <AuthProvider>
       <SidebarProvider>
-        <div className="min-h-screen flex w-full bg-background">
+        <div data-site-shell className="min-h-screen flex w-full bg-background">
           <AppSidebar />
           <div className="flex-1 flex flex-col min-w-0">
             <header className="h-16 flex items-center justify-between border-b border-border px-4 md:px-8 bg-background/80 backdrop-blur-sm sticky top-0 z-20">

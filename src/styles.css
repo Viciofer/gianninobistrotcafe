@@ -172,11 +172,15 @@
 html:has([data-site-shell]) {
   font-size: calc(16px * var(--design-body-scale, 1));
 }
-html:has([data-site-shell]) .font-serif,
-html:has([data-site-shell]) h1,
-html:has([data-site-shell]) h2,
-html:has([data-site-shell]) h3 {
-  font-size: calc(1em * var(--design-heading-scale, 1));
+html:has([data-site-shell]) {
+  --text-lg: calc(1.125rem * var(--design-heading-scale, 1));
+  --text-xl: calc(1.25rem * var(--design-heading-scale, 1));
+  --text-2xl: calc(1.5rem * var(--design-heading-scale, 1));
+  --text-3xl: calc(1.875rem * var(--design-heading-scale, 1));
+  --text-4xl: calc(2.25rem * var(--design-heading-scale, 1));
+  --text-5xl: calc(3rem * var(--design-heading-scale, 1));
+  --text-6xl: calc(3.75rem * var(--design-heading-scale, 1));
+  --text-7xl: calc(4.5rem * var(--design-heading-scale, 1));
 }
 [data-site-shell] main {
   background-color: var(--design-page-background, var(--background));

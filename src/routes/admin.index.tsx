@@ -55,6 +55,11 @@ export const Route = createFileRoute("/admin/")({
   head: () => ({
     meta: [
       { title: "Pannello Admin — Giannino Bistrot Cafè" },
+      { name: "description", content: "Gestisci catalogo, contenuti e design del Giannino Bistrot Cafè." },
+      { property: "og:title", content: "Pannello Admin — Giannino Bistrot Cafè" },
+      { property: "og:description", content: "Area riservata per la gestione del Giannino Bistrot Cafè." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),

@@ -10,6 +10,11 @@ export const Route = createFileRoute("/admin/login")({
   head: () => ({
     meta: [
       { title: "Accesso Admin — Giannino Bistrot Cafè" },
+      { name: "description", content: "Accesso riservato alla gestione del Giannino Bistrot Cafè." },
+      { property: "og:title", content: "Accesso Admin — Giannino Bistrot Cafè" },
+      { property: "og:description", content: "Accesso riservato alla gestione del Giannino Bistrot Cafè." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),

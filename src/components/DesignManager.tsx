@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ImagePlus, RotateCcw, Save, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { uploadHomeMedia, removeHomeMedia } from "@/lib/home";
+import { uploadHomeMedia } from "@/lib/home";
 import { applyDesign, DESIGN_DEFAULTS, DESIGN_FONTS, DESIGN_PAGES, DESIGN_PRESETS, fetchDesign, type DesignSettings } from "@/lib/site-design";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 
