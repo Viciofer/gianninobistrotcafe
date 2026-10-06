@@ -13,9 +13,22 @@ export const FONTS = [
   { label: "Predefinito (Georgia)", value: "" },
   { label: "Georgia", value: "Georgia, serif" },
   { label: "Cormorant Garamond", value: "Cormorant Garamond, serif" },
+  { label: "Playfair Display", value: "Playfair Display, serif" },
+  { label: "Lora", value: "Lora, serif" },
+  { label: "Libre Baskerville", value: "Libre Baskerville, serif" },
+  { label: "Merriweather", value: "Merriweather, serif" },
+  { label: "EB Garamond", value: "EB Garamond, serif" },
+  { label: "Dancing Script", value: "Dancing Script, cursive" },
+  { label: "Great Vibes", value: "Great Vibes, cursive" },
   { label: "Inter", value: "Inter, sans-serif" },
+  { label: "Montserrat", value: "Montserrat, sans-serif" },
+  { label: "Roboto", value: "Roboto, sans-serif" },
+  { label: "Open Sans", value: "Open Sans, sans-serif" },
+  { label: "Oswald", value: "Oswald, sans-serif" },
 ];
 const SIZES = ["", "12px", "14px", "16px", "18px", "20px", "24px", "28px", "32px", "40px", "48px", "56px", "64px", "72px", "88px"];
+export const QUICK_TEXT_COLORS = ["#2b2420", "#302824", "#75685e", "#c79e63", "#a45339", "#a34c46", "#24342c", "#202d38", "#ffffff"];
+export const QUICK_BG_COLORS = ["#ffffff", "#faf7f1", "#f4f5f2", "#f3f5f6", "#fdfbf7", "#eee8dc", "#ded8cf", "#cbd4ca", "#d4dde1"];
 
 export function RichTextEditor({ value, onChange, minHeight = 200 }: { value: string; onChange: (html: string) => void; minHeight?: number }) {
   const editor = useEditor({
@@ -66,9 +79,23 @@ export function RichTextEditor({ value, onChange, minHeight = 200 }: { value: st
         <label className="h-8 inline-flex items-center gap-1 px-1 text-xs" title="Colore testo">
           A<input type="color" value={st.color.startsWith("#") ? st.color : "#2b2420"} onChange={(e) => c().setColor(e.target.value).run()} className="h-6 w-6 cursor-pointer bg-transparent" />
         </label>
+        <div className="flex items-center gap-0.5" title="Colori rapidi testo">
+          {QUICK_TEXT_COLORS.map((color) => (
+            <button key={color} type="button" title={color} onMouseDown={(e) => e.preventDefault()} onClick={() => c().setColor(color).run()}
+              className={cn("h-4 w-4 rounded-full border border-border", st.color.toLowerCase() === color && "ring-2 ring-accent")}
+              style={{ backgroundColor: color }} />
+          ))}
+        </div>
         <label className="h-8 inline-flex items-center gap-1 px-1 text-xs" title="Evidenziatore">
           Sf<input type="color" value={st.bg.startsWith("#") ? st.bg : "#ffffff"} onChange={(e) => c().setBackgroundColor(e.target.value).run()} className="h-6 w-6 cursor-pointer bg-transparent" />
         </label>
+        <div className="flex items-center gap-0.5" title="Colori rapidi evidenziatore">
+          {QUICK_BG_COLORS.map((color) => (
+            <button key={color} type="button" title={color} onMouseDown={(e) => e.preventDefault()} onClick={() => c().setBackgroundColor(color).run()}
+              className={cn("h-4 w-4 rounded-full border border-border", st.bg.toLowerCase() === color && "ring-2 ring-accent")}
+              style={{ backgroundColor: color }} />
+          ))}
+        </div>
         <span className="w-px h-6 bg-border mx-1" />
         <Btn title="Grassetto" active={st.bold} on={() => c().toggleBold().run()}><Bold className="h-4 w-4" /></Btn>
         <Btn title="Corsivo" active={st.italic} on={() => c().toggleItalic().run()}><Italic className="h-4 w-4" /></Btn>
