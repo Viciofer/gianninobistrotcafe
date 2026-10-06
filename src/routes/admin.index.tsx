@@ -1,4 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { stripHtml, cleanRich } from "@/lib/rich";
+import { RichTextEditor } from "@/components/RichTextEditor";
 import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
@@ -433,9 +435,9 @@ function CategoriesManager({
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-foreground">
                   {isChild && <span className="text-muted-foreground">↳ </span>}
-                  {c.name}
+                  {stripHtml(c.name)}
                 </p>
-                {c.schedule && <p className="text-xs text-muted-foreground">{c.schedule}</p>}
+                {c.schedule && <p className="text-xs text-muted-foreground">{stripHtml(c.schedule)}</p>}
               </div>
               <Button variant="ghost" size="icon" onClick={() => toggleVisible(c)} title={c.visible ? "Nascondi" : "Mostra"}>
                 {c.visible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4 text-muted-foreground" />}
@@ -530,13 +532,13 @@ function CategoryDialog({
   );
 
   async function save() {
-    if (!name.trim()) return toast.error("Nome obbligatorio");
+    if (!stripHtml(name)) return toast.error("Nome obbligatorio");
     setSaving(true);
     const payload = {
       section,
-      name: name.trim(),
-      description: description.trim() || null,
-      schedule: schedule.trim() || null,
+      name: cleanRich(name),
+      description: cleanRich(description) || null,
+      schedule: cleanRich(schedule) || null,
       parent_id: parentId === "__none__" ? null : parentId,
       sort_order: sortOrder,
       visible,
@@ -559,7 +561,7 @@ function CategoryDialog({
         <div className="space-y-4">
           <div className="space-y-2">
             <Label>Nome *</Label>
-            <Input value={name} onChange={(e) => setName(e.target.value)} />
+            <RichTextEditor value={name} onChange={setName} minHeight={50} />
           </div>
           <div className="space-y-2">
             <Label>Sotto-categoria di</Label>
@@ -568,18 +570,18 @@ function CategoryDialog({
               <SelectContent>
                 <SelectItem value="__none__">— Nessuna (categoria principale) —</SelectItem>
                 {possibleParents.map((p) => (
-                  <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+                  <SelectItem key={p.id} value={p.id}>{stripHtml(p.name)}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
             <Label>Orario / Sotto-titolo</Label>
-            <Input value={schedule} onChange={(e) => setSchedule(e.target.value)} placeholder="es. Dalle 12:00 alle 15:00" />
+            <RichTextEditor value={schedule} onChange={setSchedule} minHeight={50} />
           </div>
           <div className="space-y-2">
             <Label>Nota</Label>
-            <Textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} />
+            <RichTextEditor value={description} onChange={setDescription} minHeight={80} />
           </div>
           <div className="flex gap-4">
             <div className="space-y-2 flex-1">
@@ -642,7 +644,7 @@ function ProductsManager({
     const c = categories.find((x) => x.id === id);
     if (!c) return "—";
     const parent = c.parent_id ? categories.find((p) => p.id === c.parent_id) : null;
-    return parent ? `${parent.name} › ${c.name}` : c.name;
+    return parent ? `${stripHtml(parent.name)} › ${stripHtml(c.name)}` : stripHtml(c.name);
   }
 
   if (categories.length === 0) {
@@ -698,11 +700,11 @@ function ProductsManager({
             <>
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-foreground">
-                  {p.name}
+                  {stripHtml(p.name)}
                   {p.price && <span className="ml-3 text-accent tabular-nums">€ {p.price}</span>}
                 </p>
                 {p.description && (
-                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{p.description}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{stripHtml(p.description)}</p>
                 )}
               </div>
               <div className="flex items-center gap-2">
@@ -793,17 +795,17 @@ function ProductDialog({
     const c = categories.find((x) => x.id === id);
     if (!c) return "";
     const parent = c.parent_id ? categories.find((p) => p.id === c.parent_id) : null;
-    return parent ? `${parent.name} › ${c.name}` : c.name;
+    return parent ? `${stripHtml(parent.name)} › ${stripHtml(c.name)}` : stripHtml(c.name);
   }
 
   async function save() {
-    if (!name.trim()) return toast.error("Nome obbligatorio");
+    if (!stripHtml(name)) return toast.error("Nome obbligatorio");
     if (!categoryId) return toast.error("Categoria obbligatoria");
     setSaving(true);
     const payload = {
       category_id: categoryId,
-      name: name.trim(),
-      description: description.trim() || null,
+      name: cleanRich(name),
+      description: cleanRich(description) || null,
       price: price.trim() || null,
       sort_order: sortOrder,
       visible,
@@ -826,7 +828,7 @@ function ProductDialog({
         <div className="space-y-4">
           <div className="space-y-2">
             <Label>Nome *</Label>
-            <Input value={name} onChange={(e) => setName(e.target.value)} />
+            <RichTextEditor value={name} onChange={setName} minHeight={50} />
           </div>
           <div className="space-y-2">
             <Label>Categoria *</Label>
@@ -845,7 +847,7 @@ function ProductDialog({
           </div>
           <div className="space-y-2">
             <Label>Descrizione</Label>
-            <Textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
+            <RichTextEditor value={description} onChange={setDescription} minHeight={100} />
           </div>
           <div className="flex flex-wrap gap-6">
             <div className="space-y-2 flex-1 min-w-[120px]">
@@ -997,10 +999,10 @@ function ContactsManager() {
                 <>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-foreground">
-                      {it.value || <span className="italic text-muted-foreground">(vuoto)</span>}
+                      {stripHtml(it.value) || <span className="italic text-muted-foreground">(vuoto)</span>}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {it.label || "—"} · {it.icon}
+                      {stripHtml(it.label) || "—"} · {it.icon}
                       {it.href && ` · ${it.href}`}
                     </p>
                   </div>
@@ -1066,11 +1068,11 @@ function ContactItemDialog({
   const [saving, setSaving] = useState(false);
 
   async function save() {
-    if (!value.trim()) return toast.error("Il valore è obbligatorio");
+    if (!stripHtml(value)) return toast.error("Il valore è obbligatorio");
     setSaving(true);
     const payload = {
-      label: label.trim(),
-      value: value.trim(),
+      label: cleanRich(label),
+      value: cleanRich(value),
       href: href.trim() || null,
       icon,
       visible,
@@ -1094,11 +1096,11 @@ function ContactItemDialog({
         <div className="space-y-4">
           <div className="space-y-2">
             <Label>Etichetta (sopra il valore)</Label>
-            <Input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="es. Telefono, Email, Quando siamo aperti…" />
+            <RichTextEditor value={label} onChange={setLabel} minHeight={50} />
           </div>
           <div className="space-y-2">
             <Label>Valore *</Label>
-            <Input value={value} onChange={(e) => setValue(e.target.value)} placeholder="es. 0921 995719" />
+            <RichTextEditor value={value} onChange={setValue} minHeight={50} />
           </div>
           <div className="space-y-2">
             <Label>Link (opzionale)</Label>
@@ -1168,17 +1170,17 @@ function SearchDialog({
   const catById = new Map(allCategories.map((c) => [c.id, c]));
 
   const matchedCategories = q
-    ? allCategories.filter((c) => c.name.toLowerCase().includes(q))
+    ? allCategories.filter((c) => stripHtml(c.name).toLowerCase().includes(q))
     : [];
   const matchedProducts = q
-    ? allProducts.filter((p) => p.name.toLowerCase().includes(q))
+    ? allProducts.filter((p) => stripHtml(p.name).toLowerCase().includes(q))
     : [];
 
   const sectionLabel = (s: Section) => sections.find((x) => x.slug === s)?.title ?? s;
 
   const catBreadcrumb = (c: Category) => {
     const parent = c.parent_id ? catById.get(c.parent_id) : null;
-    return parent ? `${sectionLabel(c.section)} › ${parent.name} › ${c.name}` : `${sectionLabel(c.section)} › ${c.name}`;
+    return parent ? `${sectionLabel(c.section)} › ${stripHtml(parent.name)} › ${stripHtml(c.name)}` : `${sectionLabel(c.section)} › ${stripHtml(c.name)}`;
   };
 
   return (
@@ -1221,7 +1223,7 @@ function SearchDialog({
                             onClick={() => onJumpToCategory(c)}
                             className="w-full text-left py-2 px-1 hover:bg-accent/10 transition-colors"
                           >
-                            <p className="font-medium text-foreground">{c.name}</p>
+                            <p className="font-medium text-foreground">{stripHtml(c.name)}</p>
                             <p className="text-xs text-muted-foreground">
                               {catBreadcrumb(c)}
                               {c.parent_id ? " · sotto-categoria" : ""}
@@ -1251,7 +1253,7 @@ function SearchDialog({
                               className="w-full text-left py-2 px-1 hover:bg-accent/10 transition-colors"
                             >
                               <p className="font-medium text-foreground">
-                                {p.name}
+                                {stripHtml(p.name)}
                                 {p.price && <span className="ml-2 text-accent tabular-nums">€ {p.price}</span>}
                               </p>
                               <p className="text-xs text-muted-foreground">

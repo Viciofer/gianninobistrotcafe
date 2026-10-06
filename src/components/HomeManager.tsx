@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { stripHtml, cleanRich } from "@/lib/rich";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -142,7 +143,7 @@ export function HomeManager() {
               <div key={ev.id} className={`flex items-center gap-4 p-2 border border-border rounded-md bg-card ${past ? "opacity-50" : ""}`}>
                 {ev.image_url ? <img src={ev.image_url} alt="" className="h-14 w-14 object-cover rounded" /> : <div className="h-14 w-14 rounded bg-muted" />}
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium truncate">{ev.title}</p>
+                  <p className="font-medium truncate">{stripHtml(ev.title)}</p>
                   <p className="text-xs text-muted-foreground capitalize">{formatEventDate(ev.event_date)}{ev.event_time ? ` · ${ev.event_time}` : ""}{past ? " · passato" : ""}</p>
                 </div>
                 <Button variant="ghost" size="icon" onClick={async () => { await supabase.from("events").update({ visible: !ev.visible }).eq("id", ev.id); load(); }}>
@@ -179,9 +180,9 @@ function EventDialog({ ev, onClose, onSaved }: { ev: Partial<EventRow>; onClose:
   };
 
   const save = async () => {
-    if (!f.title?.trim() || !f.event_date) return toast.error("Titolo e data sono obbligatori");
+    if (!stripHtml(f.title) || !f.event_date) return toast.error("Titolo e data sono obbligatori");
     setBusy(true);
-    const payload = { title: f.title.trim(), description: f.description ?? "", event_date: f.event_date, event_time: f.event_time ?? "", image_url: f.image_url ?? null, image_path: f.image_path ?? null, visible: f.visible ?? true };
+    const payload = { title: cleanRich(f.title), description: cleanRich(f.description), event_date: f.event_date, event_time: f.event_time ?? "", image_url: f.image_url ?? null, image_path: f.image_path ?? null, visible: f.visible ?? true };
     const { error } = f.id ? await supabase.from("events").update(payload).eq("id", f.id) : await supabase.from("events").insert(payload);
     setBusy(false);
     if (error) return toast.error(error.message);
@@ -195,12 +196,12 @@ function EventDialog({ ev, onClose, onSaved }: { ev: Partial<EventRow>; onClose:
       <DialogContent>
         <DialogHeader><DialogTitle>{f.id ? "Modifica evento" : "Nuovo evento"}</DialogTitle></DialogHeader>
         <div className="space-y-3">
-          <div><Label>Titolo</Label><Input value={f.title ?? ""} onChange={(e) => setF({ ...f, title: e.target.value })} /></div>
+          <div><Label>Titolo</Label><RichTextEditor value={f.title ?? ""} onChange={(v) => setF((p) => ({ ...p, title: v }))} minHeight={50} /></div>
           <div className="grid grid-cols-2 gap-3">
             <div><Label>Data</Label><Input type="date" value={f.event_date ?? ""} onChange={(e) => setF({ ...f, event_date: e.target.value })} /></div>
             <div><Label>Orario</Label><Input placeholder="es. 19:30" value={f.event_time ?? ""} onChange={(e) => setF({ ...f, event_time: e.target.value })} /></div>
           </div>
-          <div><Label>Descrizione</Label><Textarea rows={4} value={f.description ?? ""} onChange={(e) => setF({ ...f, description: e.target.value })} /></div>
+          <div><Label>Descrizione</Label><RichTextEditor value={f.description ?? ""} onChange={(v) => setF((p) => ({ ...p, description: v }))} minHeight={120} /></div>
           <div className="space-y-2">
             <Label>Foto</Label>
             {f.image_url && <img src={f.image_url} alt="" className="h-32 w-full object-cover rounded" />}
