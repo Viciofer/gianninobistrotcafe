@@ -198,7 +198,7 @@ function AdminPage() {
       )}
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as typeof tab)}>
-        <TabsList>
+        <TabsList className="grid h-auto w-full max-w-xl grid-cols-3 gap-1 [&>button]:min-w-0 [&>button]:py-2">
           <TabsTrigger value="products">Prodotti</TabsTrigger>
           <TabsTrigger value="categories">Categorie</TabsTrigger>
           <TabsTrigger value="sections">Sezioni</TabsTrigger>
