@@ -961,11 +961,11 @@ function ContactsManager() {
           <div className="grid gap-4">
             <div className="space-y-2">
               <Label>Indirizzo (riga 1)</Label>
-              <Input value={info.address_line1} onChange={(e) => update("address_line1", e.target.value)} />
+              <RichTextEditor value={info.address_line1} onChange={(v) => update("address_line1", v)} minHeight={50} />
             </div>
             <div className="space-y-2">
               <Label>Indirizzo (riga 2)</Label>
-              <Input value={info.address_line2} onChange={(e) => update("address_line2", e.target.value)} />
+              <RichTextEditor value={info.address_line2} onChange={(v) => update("address_line2", v)} minHeight={50} />
             </div>
             <div className="space-y-2">
               <Label>Indirizzo per il pin sulla mappa</Label>
