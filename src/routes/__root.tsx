@@ -107,21 +107,22 @@ function RootComponent() {
         <div data-site-shell className="min-h-screen flex w-full bg-background">
           <AppSidebar />
           <div className="flex-1 flex flex-col min-w-0">
-            <header className="h-16 flex items-center justify-between border-b border-border px-4 md:px-8 bg-background/80 backdrop-blur-sm sticky top-0 z-20">
-              <SidebarTrigger className="h-10 w-10 rounded-full border border-border text-foreground hover:text-accent hover:border-accent [&_svg]:size-5" />
-              <Link to="/" className="flex items-center gap-3 absolute left-1/2 -translate-x-1/2">
+            <header className="h-16 flex items-center gap-3 border-b border-border px-4 md:px-6 bg-background/80 backdrop-blur-sm sticky top-0 z-20">
+              <SidebarTrigger className="h-10 w-10 shrink-0 rounded-full border border-border text-foreground hover:text-accent hover:border-accent [&_svg]:size-5" />
+              <Link to="/" className="flex items-center gap-3 min-w-0">
                 <img
                   src={brandLogo || logoGiannino}
                   alt="Giannino Bistrot Cafè"
-                  className="h-11 w-11 rounded-full object-cover border border-border"
+                  className="h-11 w-11 shrink-0 rounded-full object-cover border border-border"
                 />
-                <span className="hidden sm:flex flex-col leading-tight">
-                  <span className="font-serif text-lg text-foreground">Giannino</span>
-                  <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
+                <span className="flex flex-col leading-tight min-w-0">
+                  <span className="font-serif text-lg text-foreground truncate">Giannino</span>
+                  <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground whitespace-nowrap">
                     Bistrot · Cafè
                   </span>
                 </span>
               </Link>
+              <div className="flex-1" />
               <Link
                 to="/admin"
                 aria-label="Area riservata"
