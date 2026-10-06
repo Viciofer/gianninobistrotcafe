@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { RichText, stripHtml } from "@/lib/rich";
 import { PageHeader } from "@/components/PageHeader";
 import { useEffect, useState } from "react";
 import { fetchSection, type CategoryNode, slugify } from "@/lib/catalog";
@@ -32,10 +33,10 @@ function ViniPage() {
             {cats.map((m) => (
               <li key={m.id}>
                 <a
-                  href={`#${slugify(m.name)}`}
+                  href={`#${slugify(stripHtml(m.name))}`}
                   className="text-sm text-foreground/80 hover:text-accent transition-colors underline-offset-4 hover:underline"
                 >
-                  {m.name}
+                  <RichText html={m.name} />
                 </a>
               </li>
             ))}
@@ -48,9 +49,9 @@ function ViniPage() {
       ) : (
         <div className="space-y-20">
           {cats.map((macro) => (
-            <section key={macro.id} id={slugify(macro.name)} className="scroll-mt-20">
+            <section key={macro.id} id={slugify(stripHtml(macro.name))} className="scroll-mt-20">
               <h2 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-2">
-                {macro.name}
+                <RichText html={macro.name} />
               </h2>
               <div className="h-px w-12 bg-accent mb-10" />
               <div className="space-y-10">
@@ -58,7 +59,7 @@ function ViniPage() {
                 {macro.children.map((sub) => (
                   <div key={sub.id}>
                     <h3 className="text-[11px] tracking-[0.3em] uppercase text-accent font-medium mb-5">
-                      {sub.name}
+                      <RichText html={sub.name} />
                     </h3>
                     <WineList items={sub.products} />
                   </div>
@@ -82,9 +83,9 @@ function WineList({ items }: { items: { id: string; name: string; description: s
       {items.map((v) => (
         <li key={v.id} className="grid grid-cols-[1fr_auto] gap-x-6 py-4 items-baseline">
           <div className="min-w-0">
-            <p className="font-serif text-lg text-foreground leading-snug">{v.name}</p>
+            <p className="font-serif text-lg text-foreground leading-snug"><RichText html={v.name} /></p>
             {v.description && (
-              <p className="text-sm text-muted-foreground mt-1 font-light">{v.description}</p>
+              <p className="text-sm text-muted-foreground mt-1 font-light"><RichText html={v.description} /></p>
             )}
           </div>
           {v.price && (

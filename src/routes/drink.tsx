@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { RichText, stripHtml } from "@/lib/rich";
 import { PageHeader } from "@/components/PageHeader";
 import { useEffect, useState } from "react";
 import { fetchSection, type CategoryNode, slugify } from "@/lib/catalog";
@@ -32,10 +33,10 @@ function DrinkPage() {
             {cats.map((g) => (
               <li key={g.id}>
                 <a
-                  href={`#${slugify(g.name)}`}
+                  href={`#${slugify(stripHtml(g.name))}`}
                   className="text-sm text-foreground/80 hover:text-accent transition-colors underline-offset-4 hover:underline"
                 >
-                  {g.name}
+                  <RichText html={g.name} />
                 </a>
               </li>
             ))}
@@ -48,9 +49,9 @@ function DrinkPage() {
       ) : (
         <div className="space-y-20">
           {cats.map((group) => (
-            <section key={group.id} id={slugify(group.name)} className="scroll-mt-20">
+            <section key={group.id} id={slugify(stripHtml(group.name))} className="scroll-mt-20">
               <h2 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-2">
-                {group.name}
+                <RichText html={group.name} />
               </h2>
               <div className="h-px w-12 bg-accent mb-10" />
 
@@ -60,9 +61,9 @@ function DrinkPage() {
                 )}
                 {group.children.map((sub) => (
                   <div key={sub.id} className="scroll-mt-20">
-                    {sub.name !== group.name && (
+                    {stripHtml(sub.name) !== stripHtml(group.name) && (
                       <h3 className="text-[11px] tracking-[0.3em] uppercase text-accent font-medium mb-5">
-                        {sub.name}
+                        <RichText html={sub.name} />
                       </h3>
                     )}
                     <ItemList items={sub.products} />
@@ -83,9 +84,9 @@ function ItemList({ items }: { items: { id: string; name: string; description: s
       {items.map((item) => (
         <li key={item.id} className="grid grid-cols-[1fr_auto] gap-x-6 py-4 items-baseline">
           <div className="min-w-0">
-            <p className="font-serif text-lg text-foreground leading-snug">{item.name}</p>
+            <p className="font-serif text-lg text-foreground leading-snug"><RichText html={item.name} /></p>
             {item.description && (
-              <p className="text-sm text-muted-foreground mt-1 font-light">{item.description}</p>
+              <p className="text-sm text-muted-foreground mt-1 font-light"><RichText html={item.description} /></p>
             )}
           </div>
           {item.price && (

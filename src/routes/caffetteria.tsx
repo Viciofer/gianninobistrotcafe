@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { RichText, stripHtml } from "@/lib/rich";
 import { PageHeader } from "@/components/PageHeader";
 import { useEffect, useState } from "react";
 import { fetchSection, type CategoryNode } from "@/lib/catalog";
@@ -31,12 +32,12 @@ function CaffetteriaPage() {
           {cats.map((c) => (
             <section key={c.id}>
               {cats.length > 1 && (
-                <h2 className="font-serif text-2xl text-foreground mb-4">{c.name}</h2>
+                <h2 className="font-serif text-2xl text-foreground mb-4"><RichText html={c.name} /></h2>
               )}
               <ul className="divide-y divide-border/60 border-y border-border">
                 {c.products.map((item) => (
                   <li key={item.id} className="grid grid-cols-[1fr_auto] gap-x-6 py-4 items-baseline">
-                    <p className="font-serif text-lg text-foreground leading-snug">{item.name}</p>
+                    <p className="font-serif text-lg text-foreground leading-snug"><RichText html={item.name} /></p>
                     {item.price && (
                       <span className="font-serif text-lg text-accent tabular-nums whitespace-nowrap">
                         € {item.price}

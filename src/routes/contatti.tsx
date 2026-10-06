@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { RichText, stripHtml } from "@/lib/rich";
 import { useEffect, useState } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import {
@@ -86,10 +87,10 @@ function ContattiPage() {
                   Dove siamo
                 </p>
                 {info.address_line1 && (
-                  <p className="font-serif text-xl text-foreground leading-snug">{info.address_line1}</p>
+                  <p className="font-serif text-xl text-foreground leading-snug"><RichText html={info.address_line1} /></p>
                 )}
                 {info.address_line2 && (
-                  <p className="font-serif text-xl text-foreground leading-snug">{info.address_line2}</p>
+                  <p className="font-serif text-xl text-foreground leading-snug"><RichText html={info.address_line2} /></p>
                 )}
                 <a
                   href={mapsLink}
@@ -109,7 +110,7 @@ function ContattiPage() {
             const Icon = ICON_MAP[it.icon] ?? Info;
             const content = (
               <span className="font-serif text-xl text-foreground hover:text-accent transition-colors">
-                {it.value}
+                <RichText html={it.value} />
               </span>
             );
             return (
@@ -118,7 +119,7 @@ function ContattiPage() {
                 <div>
                   {it.label && (
                     <p className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-2">
-                      {it.label}
+                      <RichText html={it.label} />
                     </p>
                   )}
                   {it.href ? (
