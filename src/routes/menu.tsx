@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { RichText, stripHtml } from "@/lib/rich";
 import { PageHeader } from "@/components/PageHeader";
 import { useEffect, useState } from "react";
 import { fetchSection, type CategoryNode } from "@/lib/catalog";
@@ -33,10 +34,10 @@ function MenuPage() {
           {cats.map((s) => (
             <section key={s.id}>
               <div className="mb-6">
-                <h2 className="font-serif text-3xl text-foreground">{s.name}</h2>
+                <h2 className="font-serif text-3xl text-foreground"><RichText html={s.name} /></h2>
                 {s.schedule && (
                   <p className="text-[11px] tracking-[0.2em] uppercase text-muted-foreground mt-2">
-                    {s.schedule}
+                    <RichText html={s.schedule} />
                   </p>
                 )}
               </div>
@@ -45,10 +46,10 @@ function MenuPage() {
                   {s.products.map((p) => (
                     <li key={p.id} className="py-5 flex items-baseline gap-6">
                       <div className="flex-1">
-                        <h3 className="font-serif text-xl text-foreground">{p.name}</h3>
+                        <h3 className="font-serif text-xl text-foreground"><RichText html={p.name} /></h3>
                         {p.description && (
                           <p className="text-sm text-muted-foreground mt-1 font-light">
-                            {p.description}
+                            <RichText html={p.description} />
                           </p>
                         )}
                       </div>
@@ -60,7 +61,7 @@ function MenuPage() {
                 </ul>
               )}
               {s.description && (
-                <p className="text-xs italic text-muted-foreground mt-3 text-right">{s.description}</p>
+                <p className="text-xs italic text-muted-foreground mt-3 text-right"><RichText html={s.description} /></p>
               )}
             </section>
           ))}

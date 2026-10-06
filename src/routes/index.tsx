@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { RichText, stripHtml } from "@/lib/rich";
 import { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
 import heroImg from "@/assets/hero-sala.jpg";
@@ -83,11 +84,11 @@ function Index() {
           <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {events.map((ev) => (
               <div key={ev.id} className="border border-border bg-card shadow-lg shadow-foreground/5">
-                {ev.image_url && <img src={ev.image_url} alt={ev.title} className="w-full aspect-[4/3] object-cover" />}
+                {ev.image_url && <img src={ev.image_url} alt={stripHtml(ev.title)} className="w-full aspect-[4/3] object-cover" />}
                 <div className="p-5">
                   <p className="text-xs uppercase tracking-[0.15em] text-accent capitalize">{formatEventDate(ev.event_date)}{ev.event_time ? ` · ${ev.event_time}` : ""}</p>
-                  <h3 className="font-serif text-2xl mt-2">{ev.title}</h3>
-                  {ev.description && <p className="mt-3 text-muted-foreground whitespace-pre-line">{ev.description}</p>}
+                  <h3 className="font-serif text-2xl mt-2"><RichText html={ev.title} /></h3>
+                  {ev.description && <p className="mt-3 text-muted-foreground "><RichText html={ev.description} /></p>}
                 </div>
               </div>
             ))}

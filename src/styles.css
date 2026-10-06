@@ -195,3 +195,11 @@ html[data-design-style="paper"] [data-site-shell] main {
 html[data-design-style="lines"] [data-site-shell] main {
   background-image: var(--design-image, none), repeating-linear-gradient(90deg, transparent 0 31px, color-mix(in oklab, var(--foreground) 5%, transparent) 32px);
 }
+
+.rich-inline { display: block; }
+.rich-inline p { margin: 0; }
+.rich-inline p + p { margin-top: 0.4em; }
+.rich-inline h2 { font-size: 1.4em; margin: 0; }
+.rich-inline h3 { font-size: 1.2em; margin: 0; }
+.rich-inline ul { list-style: disc; padding-left: 1.25rem; }
+.rich-inline ol { list-style: decimal; padding-left: 1.25rem; }

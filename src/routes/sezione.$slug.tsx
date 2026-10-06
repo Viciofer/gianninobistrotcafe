@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { RichText, stripHtml } from "@/lib/rich";
 import { useEffect, useState } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import { fetchSection, fetchSections, type CategoryNode, type SectionRow } from "@/lib/catalog";
@@ -19,17 +20,17 @@ function CategoryBlock({ c, nested }: { c: CategoryNode; nested?: boolean }) {
   return (
     <section className="space-y-4">
       <div>
-        <h2 className={`font-serif text-foreground ${nested ? "text-xl" : "text-2xl"}`}>{c.name}</h2>
-        {c.schedule && <p className="text-xs tracking-widest uppercase text-muted-foreground mt-1">{c.schedule}</p>}
-        {c.description && <p className="text-muted-foreground mt-1">{c.description}</p>}
+        <h2 className={`font-serif text-foreground ${nested ? "text-xl" : "text-2xl"}`}><RichText html={c.name} /></h2>
+        {c.schedule && <p className="text-xs tracking-widest uppercase text-muted-foreground mt-1"><RichText html={c.schedule} /></p>}
+        {c.description && <p className="text-muted-foreground mt-1"><RichText html={c.description} /></p>}
       </div>
       {c.products.length > 0 && (
         <ul className="divide-y divide-border/60 border-y border-border">
           {c.products.map((p) => (
             <li key={p.id} className="grid grid-cols-[1fr_auto] gap-x-6 py-4 items-baseline">
               <div>
-                <p className="font-serif text-lg text-foreground leading-snug">{p.name}</p>
-                {p.description && <p className="text-sm text-muted-foreground">{p.description}</p>}
+                <p className="font-serif text-lg text-foreground leading-snug"><RichText html={p.name} /></p>
+                {p.description && <p className="text-sm text-muted-foreground"><RichText html={p.description} /></p>}
               </div>
               {p.price && <span className="font-serif text-lg text-accent tabular-nums whitespace-nowrap">€ {p.price}</span>}
             </li>
