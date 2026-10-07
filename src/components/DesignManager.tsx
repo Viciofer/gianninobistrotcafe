@@ -7,6 +7,7 @@ import { applyDesign, DESIGN_DEFAULTS, DESIGN_FONTS, DESIGN_PAGES, DESIGN_PRESET
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { DesignPreview } from "@/components/DesignPreview";
 
 const colors: { key: keyof DesignSettings; label: string }[] = [
   { key: "background", label: "Sfondo del sito" }, { key: "surface", label: "Superfici" },
@@ -60,13 +61,15 @@ export function DesignManager() {
 
   return (
     <div className="space-y-10 pb-20">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="font-serif text-2xl">Design del sito</h2>
-        <div className="flex gap-2">
+      <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
+        <h2 className="min-w-0 font-serif text-2xl">Design del sito</h2>
+        <div className="flex flex-wrap gap-2">
           <Button variant="outline" onClick={reset}><RotateCcw className="h-4 w-4 mr-2" />Ripristina</Button>
           <Button onClick={save} disabled={busy}><Save className="h-4 w-4 mr-2" />{busy ? "Salvataggio…" : "Salva e applica"}</Button>
         </div>
       </div>
+
+      <DesignPreview settings={settings} />
 
       <section className="space-y-4 border-t border-border pt-6">
         <h3 className="font-serif text-xl">Stili</h3>
