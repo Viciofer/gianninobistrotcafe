@@ -195,6 +195,14 @@ html[data-design-style="paper"] [data-site-shell] main {
 html[data-design-style="lines"] [data-site-shell] main {
   background-image: var(--design-image, none), repeating-linear-gradient(90deg, transparent 0 31px, color-mix(in oklab, var(--foreground) 5%, transparent) 32px);
 }
+html[data-design-style="dots"] [data-site-shell] main {
+  background-image: var(--design-image, none), radial-gradient(color-mix(in oklab, var(--foreground) 9%, transparent) 1px, transparent 1.5px);
+  background-size: cover, 18px 18px;
+}
+html[data-design-style="grid"] [data-site-shell] main {
+  background-image: var(--design-image, none), linear-gradient(color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px);
+  background-size: cover, 28px 28px, 28px 28px;
+}
 
 .rich-inline { display: block; }
 .rich-inline p { margin: 0; }
