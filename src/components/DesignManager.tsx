@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { ImagePlus, RotateCcw, Save, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { uploadHomeMedia } from "@/lib/home";
-import { applyDesign, DESIGN_DEFAULTS, DESIGN_FONTS, DESIGN_PAGES, DESIGN_PRESETS, fetchDesign, type DesignSettings } from "@/lib/site-design";
+import { applyDesign, DESIGN_DEFAULTS, DESIGN_FONTS, DESIGN_PAGES, DESIGN_PRESETS, PALETTE_GROUPS, PRESET_LABELS, fetchDesign, type DesignSettings } from "@/lib/site-design";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
@@ -70,11 +70,40 @@ export function DesignManager() {
 
       <section className="space-y-4 border-t border-border pt-6">
         <h3 className="font-serif text-xl">Stili</h3>
-        <div className="grid gap-3 sm:grid-cols-3">
-          {(["classico", "editoriale", "contemporaneo"] as const).map((preset) => (
-            <Button key={preset} type="button" variant={settings.preset === preset ? "default" : "outline"} className="h-14 capitalize" onClick={() => update({ ...DESIGN_PRESETS[preset], preset })}>{preset}</Button>
-          ))}
+        <p className="text-sm text-muted-foreground">Ogni stile cambia insieme colori, caratteri e sfondo.</p>
+        <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
+          {(Object.keys(DESIGN_PRESETS) as DesignSettings["preset"][]).map((preset) => {
+            const p = DESIGN_PRESETS[preset];
+            return (
+              <button key={preset} type="button" onClick={() => update({ ...p, preset })} className={`rounded-md border p-3 text-left transition ${settings.preset === preset ? "border-accent ring-2 ring-accent" : "border-border hover:border-accent"}`} style={{ background: p.background, color: p.foreground }}>
+                <span className="block text-lg leading-tight" style={{ fontFamily: `"${p.headingFont}", serif` }}>{PRESET_LABELS[preset]}</span>
+                <span className="block text-xs mt-1" style={{ fontFamily: `"${p.bodyFont}", sans-serif`, color: p.muted }}>{p.headingFont} · {p.bodyFont}</span>
+                <span className="mt-2 flex gap-1">{[p.sidebar, p.accent, p.surface].map((c, i) => <span key={i} className="h-3 w-6 rounded-sm border border-border" style={{ background: c }} />)}</span>
+              </button>
+            );
+          })}
         </div>
+      </section>
+
+      <section className="space-y-5 border-t border-border pt-6">
+        <h3 className="font-serif text-xl">Palette di colori</h3>
+        <p className="text-sm text-muted-foreground">Cambia solo i colori, mantenendo caratteri e sfondo.</p>
+        {PALETTE_GROUPS.map(({ group, palettes }) => (
+          <div key={group} className="space-y-2">
+            <h4 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">{group}</h4>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {palettes.map(({ name, colors: c }) => {
+                const active = c.background === settings.background && c.accent === settings.accent && c.foreground === settings.foreground;
+                return (
+                  <button key={name} type="button" onClick={() => update(c)} className={`rounded-md border overflow-hidden text-left transition ${active ? "border-accent ring-2 ring-accent" : "border-border hover:border-accent"}`}>
+                    <div className="flex h-10">{[c.background, c.surface, c.accent, c.muted, c.foreground, c.sidebar].map((col, i) => <span key={i} className="flex-1" style={{ background: col }} />)}</div>
+                    <div className="px-3 py-2 text-sm" style={{ background: c.background, color: c.foreground }}>{name}</div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </section>
 
       <section className="space-y-5 border-t border-border pt-6">
@@ -115,7 +144,7 @@ export function DesignManager() {
       <section className="space-y-5 border-t border-border pt-6">
         <h3 className="font-serif text-xl">Sfondi</h3>
         <div className="flex flex-wrap gap-2">
-          {([ ["plain", "Tinta unita"], ["paper", "Carta"], ["lines", "Righe sottili"] ] as const).map(([value, label]) => (
+          {([ ["plain", "Tinta unita"], ["paper", "Carta"], ["lines", "Righe sottili"], ["dots", "Puntinato"], ["grid", "Griglia"] ] as const).map(([value, label]) => (
             <Button key={value} variant={settings.backgroundStyle === value ? "default" : "outline"} onClick={() => update({ backgroundStyle: value })}>{label}</Button>
           ))}
         </div>
