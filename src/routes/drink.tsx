@@ -10,6 +10,8 @@ export const Route = createFileRoute("/drink")({
       { title: "Drink List — Giannino Bistrot Cafè" },
       { name: "description", content: "Bibite, birre, cocktail, gin, distillati e amari." },
       { property: "og:title", content: "Drink List — Giannino Bistrot Cafè" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:description", content: "La selezione completa di drink." },
     ],
   }),

@@ -16,6 +16,8 @@ export const Route = createFileRoute("/contatti")({
       { name: "description", content: "Contatti, indirizzo e mappa della Giannino Bistrot Cafè a Santo Stefano di Camastra (ME)." },
       { property: "og:title", content: "Contatti — Giannino Bistrot Cafè" },
       { property: "og:description", content: "Vieni a trovarci in Via Nazionale 34, Santo Stefano di Camastra (ME)." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: ContattiPage,

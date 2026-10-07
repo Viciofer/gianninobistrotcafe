@@ -11,6 +11,8 @@ export const Route = createFileRoute("/vini")({
       { name: "description", content: "Champagne, spumanti, bianchi, rosati e rossi." },
       { property: "og:title", content: "Carta dei Vini — Giannino Bistrot Cafè" },
       { property: "og:description", content: "La nostra selezione di etichette." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: ViniPage,
