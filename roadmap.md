@@ -1,3 +1,4 @@
 - [x] Aggiungere una sezione Design nell'area admin.
 - [x] Salvare colori, font, sfondi e loghi condivisi tra tutte le pagine.
 - [ ] Verificare modifica, salvataggio e risultato sul sito.
+- [ ] Aggiungere e verificare l’anteprima Home desktop/mobile con le impostazioni Design non salvate.

@@ -11,6 +11,8 @@ export const Route = createFileRoute("/caffetteria")({
       { name: "description", content: "La caffetteria della Giannino Bistrot Cafè." },
       { property: "og:title", content: "Caffetteria — Giannino Bistrot Cafè" },
       { property: "og:description", content: "Espresso, cappuccino, the e infusi." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: CaffetteriaPage,

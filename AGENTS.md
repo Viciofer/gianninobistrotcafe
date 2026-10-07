@@ -1,2 +1,3 @@
 - Store site-wide visual settings in the public-readable, admin-writable `site_design` record and apply them as validated CSS variables from the root layout, so all pages share one persistent design while authorization remains enforced by RLS.
 - Store uploaded branding images in the existing `home-media` bucket using signed URLs, so site images follow the project's current media flow.
+- Render unsaved Design previews in a same-origin iframe of the actual Home, accepting validated settings only from its parent, so draft changes never alter or save the surrounding site.

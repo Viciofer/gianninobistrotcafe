@@ -1,5 +1,5 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import appCss from "../styles.css?url";
 import { Lock } from "lucide-react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -7,7 +7,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { AuthProvider } from "@/lib/auth";
 import { Toaster } from "@/components/ui/sonner";
 import logoGiannino from "@/assets/logo-giannino.png";
-import { applyDesign, fetchDesign } from "@/lib/site-design";
+import { applyDesign, fetchDesign, normalizeDesign } from "@/lib/site-design";
 
 function NotFoundComponent() {
   return (
@@ -45,8 +45,6 @@ export const Route = createRootRoute({
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: "Giannino Bistrot Cafè" },
       { name: "twitter:description", content: "Web app per il Giannino Bistrot Cafe, con informazioni su storia, menu, vini, drink e contatti." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/72b423e2-d671-4d18-ae13-6330ae1a16de" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/72b423e2-d671-4d18-ae13-6330ae1a16de" },
     ],
     links: [
       {
@@ -81,8 +79,23 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const [brandLogo, setBrandLogo] = useState("");
+  const previewActive = useRef(false);
+  useEffect(() => {
+    if (window.parent === window) return;
+    const receive = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin || event.source !== window.parent || event.data?.type !== "giannino-design-preview") return;
+      const settings = normalizeDesign(event.data.settings);
+      previewActive.current = true;
+      setBrandLogo(settings.logoUrl);
+      applyDesign(settings);
+    };
+    window.addEventListener("message", receive);
+    window.parent.postMessage({ type: "giannino-preview-ready" }, window.location.origin);
+    return () => window.removeEventListener("message", receive);
+  }, []);
   useEffect(() => {
     const load = () => fetchDesign().then(({ id, settings }) => {
+      if (previewActive.current) return;
       setBrandLogo(id ? settings.logoUrl : "");
       if (id) applyDesign(settings);
     }).catch(() => {});

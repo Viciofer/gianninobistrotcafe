@@ -10,6 +10,8 @@ export const Route = createFileRoute("/menu")({
       { title: "Menù — Giannino Bistrot Cafè" },
       { name: "description", content: "Il menù della Giannino Bistrot Cafè." },
       { property: "og:title", content: "Menù — Giannino Bistrot Cafè" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:description", content: "Cucina, dal focolare al piatto." },
     ],
   }),
