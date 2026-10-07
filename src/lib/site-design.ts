@@ -41,7 +41,7 @@ export const DESIGN_PAGES = [
   { path: "/contatti", label: "Contatti" }, { path: "/sezione", label: "Altre sezioni" },
 ];
 
-export const DESIGN_FONTS = ["Georgia", "Cormorant Garamond", "Playfair Display", "Lora", "Libre Baskerville", "Inter", "Montserrat"];
+export const DESIGN_FONTS = ["Georgia", "Cormorant Garamond", "Playfair Display", "Lora", "Libre Baskerville", "Merriweather", "EB Garamond", "Dancing Script", "Great Vibes", "Inter", "Montserrat", "Roboto", "Open Sans", "Oswald"];
 const colorOk = (value: unknown): value is string => typeof value === "string" && /^#[0-9a-fA-F]{6}$/.test(value);
 const imageOk = (value: unknown): value is string => typeof value === "string" && (value === "" || /^https:\/\//.test(value));
 
