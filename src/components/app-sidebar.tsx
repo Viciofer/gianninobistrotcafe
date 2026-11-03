@@ -14,6 +14,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 const DEFAULT_SECTIONS: SectionRow[] = [
@@ -24,6 +25,7 @@ const DEFAULT_SECTIONS: SectionRow[] = [
 ];
 
 export function AppSidebar() {
+  const { setOpenMobile } = useSidebar();
   const currentPath = useRouterState({
     select: (router) => router.location.pathname,
   });
@@ -85,7 +87,7 @@ export function AppSidebar() {
                       tooltip={item.title}
                       className="h-11 px-3 text-sm tracking-wider uppercase data-[active=true]:bg-sidebar-accent data-[active=true]:text-accent data-[active=true]:border-l-2 data-[active=true]:border-accent rounded-none"
                     >
-                      <Link to={item.url}>
+                      <Link to={item.url} onClick={() => setOpenMobile(false)}>
                         <item.icon className="h-4 w-4" />
                         <span>{item.title}</span>
                       </Link>
