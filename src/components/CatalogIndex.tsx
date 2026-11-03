@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { stripHtml } from "@/lib/rich";
+import { RichText, stripHtml } from "@/lib/rich";
 import { slugify, type CategoryNode } from "@/lib/catalog";
 
 export function CatalogIndex({ categories, label }: { categories: CategoryNode[]; label: string }) {
@@ -21,19 +20,19 @@ export function CatalogIndex({ categories, label }: { categories: CategoryNode[]
   }, []);
 
   return (
-    <nav ref={navRef} aria-label={label} className="catalog-index sticky top-16 z-10 mb-12 border-y border-border py-3">
-      <span className="mb-2 block text-[10px] uppercase text-muted-foreground">Indice</span>
-      <ul className="flex flex-wrap gap-2">
-        {categories.map((category) => {
-          const title = stripHtml(category.name);
-          return (
-            <li key={category.id} className="min-w-0 max-w-full">
-              <Button asChild variant="outline" className="h-auto min-h-11 max-w-full whitespace-normal rounded-full px-4 py-2 text-left text-xs leading-snug">
-                <a href={`#${slugify(title)}`}>{title}</a>
-              </Button>
-            </li>
-          );
-        })}
+    <nav ref={navRef} aria-label={label} className="catalog-index sticky top-16 z-10 mb-12 border-y border-border py-1.5">
+      <span className="mb-1 block text-[10px] tracking-[0.25em] uppercase text-muted-foreground">Indice</span>
+      <ul className="flex flex-wrap gap-x-1.5 gap-y-1">
+        {categories.map((category) => (
+          <li key={category.id}>
+            <a
+              href={`#${slugify(stripHtml(category.name))}`}
+              className="inline-block rounded-full border border-border px-2 py-0.5 text-sm leading-tight text-foreground/80 transition-colors hover:border-accent hover:text-accent"
+            >
+              <RichText html={category.name} />
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
   );
