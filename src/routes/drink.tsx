@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { RichText, stripHtml } from "@/lib/rich";
 import { PageHeader } from "@/components/PageHeader";
+import { CatalogIndex } from "@/components/CatalogIndex";
 import { useEffect, useState } from "react";
 import { fetchSection, type CategoryNode, slugify } from "@/lib/catalog";
 
@@ -29,21 +30,7 @@ function DrinkPage() {
       <PageHeader title="Drink List" />
 
       {cats && cats.length > 0 && (
-        <nav aria-label="Indice drink list" className="mb-16 border-y border-border py-6">
-          <span className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground block mb-3">Indice</span>
-          <ul className="flex flex-wrap gap-x-6 gap-y-2">
-            {cats.map((g) => (
-              <li key={g.id}>
-                <a
-                  href={`#${slugify(stripHtml(g.name))}`}
-                  className="text-sm text-foreground/80 hover:text-accent transition-colors underline-offset-4 hover:underline"
-                >
-                  <RichText html={g.name} />
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <CatalogIndex categories={cats} label="Indice drink list" />
       )}
 
       {!cats ? (
@@ -51,7 +38,7 @@ function DrinkPage() {
       ) : (
         <div className="space-y-20">
           {cats.map((group) => (
-            <section key={group.id} id={slugify(stripHtml(group.name))} className="scroll-mt-20">
+            <section key={group.id} id={slugify(stripHtml(group.name))} className="catalog-section">
               <h2 className="font-serif text-3xl md:text-4xl font-light text-foreground mb-2">
                 <RichText html={group.name} />
               </h2>
