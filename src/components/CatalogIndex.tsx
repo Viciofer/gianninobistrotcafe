@@ -20,14 +20,14 @@ export function CatalogIndex({ categories, label }: { categories: CategoryNode[]
   }, []);
 
   return (
-    <nav ref={navRef} aria-label={label} className="catalog-index sticky top-16 z-10 mb-12 border-y border-border py-1.5">
-      <span className="mb-1 block text-[10px] tracking-[0.25em] uppercase text-muted-foreground">Indice</span>
-      <ul className="flex flex-wrap gap-x-1.5 gap-y-1">
+    <nav ref={navRef} aria-label={label} className="catalog-index sticky top-16 z-10 mb-8 border-y border-border py-1">
+      <span className="mb-0.5 block text-[9px] tracking-[0.25em] uppercase text-muted-foreground">Indice</span>
+      <ul className="flex flex-wrap gap-x-1 gap-y-0.5">
         {categories.map((category) => (
           <li key={category.id}>
             <a
               href={`#${slugify(stripHtml(category.name))}`}
-              className="inline-block rounded-full border border-border px-2 py-0.5 text-sm leading-tight text-foreground/80 transition-colors hover:border-accent hover:text-accent"
+              className="inline-block rounded-full border border-border px-1.5 py-0 text-xs leading-tight text-foreground/80 transition-colors hover:border-accent hover:text-accent"
             >
               <RichText html={category.name} />
             </a>
