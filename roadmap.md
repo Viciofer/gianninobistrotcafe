@@ -3,4 +3,4 @@
 - [ ] Verificare modifica, salvataggio e risultato sul sito.
 - [ ] Aggiungere e verificare l’anteprima Home desktop/mobile con le impostazioni Design non salvate.
 - [x] Rendere fissi e a pulsante gli indici Vini e Drink, su più righe negli smartphone, e verificarli.
-- [ ] Includere Contatti nelle Sezioni per nasconderla e riordinarla, mantenendo la gestione dedicata; verificare salvataggio e menù.
+- [x] Includere Contatti nelle Sezioni per nasconderla e riordinarla, mantenendo la gestione dedicata; verificare salvataggio e menù.
