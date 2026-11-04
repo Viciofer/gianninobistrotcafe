@@ -2,3 +2,4 @@
 - Store uploaded branding images in the existing `home-media` bucket using signed URLs, so site images follow the project's current media flow.
 - Render unsaved Design previews in a same-origin iframe of the actual Home, accepting validated settings only from its parent, so draft changes never alter or save the surrounding site.
 - Share wine and drink navigation through CatalogIndex; measure its wrapped height for anchor offsets so category headings remain below both sticky bars.
+- Drive Contacts navigation visibility and order from its builtin sections row; exclude non-catalog sections from product/category selectors while retaining dedicated content management.

@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Home, Mail } from "lucide-react";
+import { Home } from "lucide-react";
 import logoGiannino from "@/assets/logo-giannino.png";
 import { fetchDesign } from "@/lib/site-design";
 import { fetchSections, sectionIcon, sectionUrl, type SectionRow } from "@/lib/catalog";
@@ -22,6 +22,7 @@ const DEFAULT_SECTIONS: SectionRow[] = [
   { id: "caffetteria", slug: "caffetteria", title: "Caffetteria", icon: "Coffee", builtin: true, sort_order: 2, visible: true },
   { id: "drink", slug: "drink", title: "Drink List", icon: "Martini", builtin: true, sort_order: 3, visible: true },
   { id: "vini", slug: "vini", title: "Carta dei Vini", icon: "Wine", builtin: true, sort_order: 4, visible: true },
+  { id: "contatti", slug: "contatti", title: "Contatti", icon: "Mail", builtin: true, sort_order: 5, visible: true },
 ];
 
 export function AppSidebar() {
@@ -49,7 +50,6 @@ export function AppSidebar() {
   const items = [
     { title: "Home", url: "/", icon: Home },
     ...sections.map((s) => ({ title: s.title, url: sectionUrl(s), icon: sectionIcon(s.icon) })),
-    { title: "Contatti", url: "/contatti", icon: Mail },
   ];
 
   return (
