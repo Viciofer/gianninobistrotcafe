@@ -4,3 +4,4 @@
 - [ ] Aggiungere e verificare l’anteprima Home desktop/mobile con le impostazioni Design non salvate.
 - [x] Rendere fissi e a pulsante gli indici Vini e Drink, su più righe negli smartphone, e verificarli.
 - [x] Includere Contatti nelle Sezioni per nasconderla e riordinarla, mantenendo la gestione dedicata; verificare salvataggio e menù.
+- [ ] Rendere utilizzabili sullo smartphone le finestre admin e gli editor completi; verificare apertura, strumenti e scorrimento.
