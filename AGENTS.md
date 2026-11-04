@@ -3,3 +3,4 @@
 - Render unsaved Design previews in a same-origin iframe of the actual Home, accepting validated settings only from its parent, so draft changes never alter or save the surrounding site.
 - Share wine and drink navigation through CatalogIndex; measure its wrapped height for anchor offsets so category headings remain below both sticky bars.
 - Drive Contacts navigation visibility and order from its builtin sections row; exclude non-catalog sections from product/category selectors while retaining dedicated content management.
+- Keep shared dialogs within the dynamic viewport with internal vertical scrolling, and rich-editor toolbars horizontally scrollable on mobile, so all admin fields and commands remain reachable.

@@ -8,6 +8,7 @@ import {
   List, ListOrdered, Undo2, Redo2, Eraser, Heading2, Heading3, Pilcrow,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export const FONTS = [
   { label: "Predefinito (Georgia)", value: "" },
@@ -36,7 +37,7 @@ export function RichTextEditor({ value, onChange, minHeight = 200 }: { value: st
     extensions: [StarterKit, TextStyleKit, TextAlign.configure({ types: ["heading", "paragraph"] })],
     content: value,
     onUpdate: ({ editor }) => onChange(editor.getHTML()),
-    editorProps: { attributes: { class: "rich-content focus:outline-none px-4 py-3", style: `min-height:${minHeight}px` } },
+    editorProps: { attributes: { class: "rich-content rich-editor-content focus:outline-none px-4 py-3", style: `--editor-min-height:${minHeight}px` } },
   });
 
   useEffect(() => {
@@ -60,16 +61,16 @@ export function RichTextEditor({ value, onChange, minHeight = 200 }: { value: st
   const c = () => editor.chain().focus();
 
   const Btn = ({ on, active, title, children }: { on: () => void; active?: boolean; title: string; children: React.ReactNode }) => (
-    <button type="button" title={title} onMouseDown={(e) => e.preventDefault()} onClick={on}
-      className={cn("h-8 w-8 inline-flex items-center justify-center rounded hover:bg-muted", active && "bg-muted text-foreground ring-1 ring-border")}>
+    <Button type="button" variant="ghost" size="icon" title={title} aria-label={title} aria-pressed={active} onMouseDown={(e) => e.preventDefault()} onClick={on}
+      className={cn("h-8 w-8 shrink-0 rounded", active && "bg-muted text-foreground ring-1 ring-border")}>
       {children}
-    </button>
+    </Button>
   );
   const sel = "h-8 rounded border border-input bg-background px-2 text-sm";
 
   return (
-    <div className="border border-border rounded-md bg-card">
-      <div className="flex flex-wrap items-center gap-1 border-b border-border p-2">
+    <div className="min-w-0 max-w-full [contain:inline-size] overflow-hidden border border-border rounded-md bg-card">
+      <div role="toolbar" aria-label="Formattazione testo" className="rich-editor-toolbar flex flex-nowrap sm:flex-wrap items-center gap-1 overflow-x-auto border-b border-border p-2">
         <select className={sel} value={st.font} onChange={(e) => e.target.value ? c().setFontFamily(e.target.value).run() : c().unsetFontFamily().run()} title="Carattere">
           {FONTS.map((f) => <option key={f.label} value={f.value} style={{ fontFamily: f.value || undefined }}>{f.label}</option>)}
         </select>
@@ -81,7 +82,7 @@ export function RichTextEditor({ value, onChange, minHeight = 200 }: { value: st
         </label>
         <div className="flex items-center gap-0.5" title="Colori rapidi testo">
           {QUICK_TEXT_COLORS.map((color) => (
-            <button key={color} type="button" title={color} onMouseDown={(e) => e.preventDefault()} onClick={() => c().setColor(color).run()}
+            <Button key={color} type="button" variant="ghost" size="icon" title={color} aria-label={`Colore testo ${color}`} onMouseDown={(e) => e.preventDefault()} onClick={() => c().setColor(color).run()}
               className={cn("h-4 w-4 rounded-full border border-border", st.color.toLowerCase() === color && "ring-2 ring-accent")}
               style={{ backgroundColor: color }} />
           ))}
@@ -91,7 +92,7 @@ export function RichTextEditor({ value, onChange, minHeight = 200 }: { value: st
         </label>
         <div className="flex items-center gap-0.5" title="Colori rapidi evidenziatore">
           {QUICK_BG_COLORS.map((color) => (
-            <button key={color} type="button" title={color} onMouseDown={(e) => e.preventDefault()} onClick={() => c().setBackgroundColor(color).run()}
+            <Button key={color} type="button" variant="ghost" size="icon" title={color} aria-label={`Evidenziatore ${color}`} onMouseDown={(e) => e.preventDefault()} onClick={() => c().setBackgroundColor(color).run()}
               className={cn("h-4 w-4 rounded-full border border-border", st.bg.toLowerCase() === color && "ring-2 ring-accent")}
               style={{ backgroundColor: color }} />
           ))}
