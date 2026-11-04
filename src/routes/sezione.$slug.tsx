@@ -5,14 +5,14 @@ import { PageHeader } from "@/components/PageHeader";
 import { fetchSection, fetchSections, type CategoryNode, type SectionRow } from "@/lib/catalog";
 
 export const Route = createFileRoute("/sezione/$slug")({
-  head: () => ({
+  head: ({ params }) => ({
     meta: [
-      { title: "Giannino Bistrot Cafè — Sezione" },
-      { name: "description", content: "Scopri le proposte della Giannino Bistrot Cafè." },
-      { property: "og:title", content: "Giannino Bistrot Cafè" },
+      { title: `Giannino Bistrot Cafè — ${params.slug.replace(/-/g, " ")}` },
+      { name: "description", content: `Scopri ${params.slug.replace(/-/g, " ")} e le proposte di Giannino Bistrot Cafè.` },
+      { property: "og:title", content: `Giannino Bistrot Cafè — ${params.slug.replace(/-/g, " ")}` },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { property: "og:description", content: "Scopri le proposte della Giannino Bistrot Cafè." },
+      { property: "og:description", content: `Scopri ${params.slug.replace(/-/g, " ")} e le proposte di Giannino Bistrot Cafè.` },
     ],
   }),
   component: SectionPage,

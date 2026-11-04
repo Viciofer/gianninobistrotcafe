@@ -69,7 +69,7 @@ export function RichTextEditor({ value, onChange, minHeight = 200 }: { value: st
   const sel = "h-8 rounded border border-input bg-background px-2 text-sm";
 
   return (
-    <div className="min-w-0 max-w-full overflow-hidden border border-border rounded-md bg-card">
+    <div className="min-w-0 max-w-full [contain:inline-size] overflow-hidden border border-border rounded-md bg-card">
       <div role="toolbar" aria-label="Formattazione testo" className="rich-editor-toolbar flex flex-nowrap sm:flex-wrap items-center gap-1 overflow-x-auto border-b border-border p-2">
         <select className={sel} value={st.font} onChange={(e) => e.target.value ? c().setFontFamily(e.target.value).run() : c().unsetFontFamily().run()} title="Carattere">
           {FONTS.map((f) => <option key={f.label} value={f.value} style={{ fontFamily: f.value || undefined }}>{f.label}</option>)}
