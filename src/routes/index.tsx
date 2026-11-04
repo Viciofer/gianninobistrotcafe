@@ -63,10 +63,10 @@ function Index() {
   const body = useSafe(content?.body_html ?? "");
 
   return (
-    <article className="px-6 md:px-16 lg:px-24 py-12 md:py-20 max-w-7xl mx-auto">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+    <article className="px-6 md:px-16 lg:px-24 pt-4 pb-12 md:py-20 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-16">
         <div className="lg:col-span-7 flex flex-col justify-center">
-          <div className="rich-content rich-title font-serif text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] text-foreground mb-10"
+          <div className="rich-content rich-title font-serif text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] text-foreground mb-3 md:mb-10"
             dangerouslySetInnerHTML={{ __html: title }} />
           <div className="rich-content font-serif space-y-6 text-lg md:text-xl leading-relaxed text-muted-foreground font-light max-w-[58ch]"
             dangerouslySetInnerHTML={{ __html: body }} />
@@ -77,7 +77,14 @@ function Index() {
       </div>
 
       {events.length > 0 && (
-        <section className="mt-20 md:mt-28">
+        <a href="#eventi" className="mt-4 flex flex-col items-center text-[10px] tracking-[0.25em] uppercase text-muted-foreground hover:text-accent">
+          Eventi in programma
+          <span aria-hidden className="mt-1 text-lg animate-bounce">↓</span>
+        </a>
+      )}
+
+      {events.length > 0 && (
+        <section id="eventi" className="mt-12 md:mt-28 scroll-mt-20">
           <span className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground">Prossimamente</span>
           <h2 className="font-serif text-4xl md:text-5xl font-light mt-3">Eventi</h2>
           <div className="mt-6 h-px w-16 bg-accent" />
