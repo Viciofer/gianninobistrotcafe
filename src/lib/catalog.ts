@@ -92,7 +92,15 @@ export type SectionRow = {
 export async function fetchSections(includeHidden = false): Promise<SectionRow[]> {
   const { data, error } = await supabase.from("sections").select("*").order("sort_order");
   if (error) throw error;
-  return ((data ?? []) as SectionRow[]).filter((s) => includeHidden || s.visible);
+  return filterSections((data ?? []) as SectionRow[], includeHidden);
+}
+
+export function filterSections(sections: SectionRow[], includeHidden = false): SectionRow[] {
+  return sections.filter((s) => includeHidden || s.visible);
+}
+
+export function isCatalogSection(section: SectionRow): boolean {
+  return !(section.builtin && section.slug === "contatti");
 }
 
 export function sectionIcon(name: string): LucideIcon {

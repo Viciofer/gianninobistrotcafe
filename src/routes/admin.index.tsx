@@ -39,7 +39,7 @@ import { Pencil, Trash2, Plus, Eye, EyeOff, Search } from "lucide-react";
 import { SortableList } from "@/components/SortableList";
 import { HomeManager } from "@/components/HomeManager";
 import { DesignManager } from "@/components/DesignManager";
-import { fetchSections, sectionIcon, slugify, type SectionRow } from "@/lib/catalog";
+import { fetchSections, isCatalogSection, sectionIcon, slugify, type SectionRow } from "@/lib/catalog";
 
 async function persistOrder(
   table: "categories" | "products",
@@ -111,7 +111,8 @@ function AdminPage() {
     const list = await fetchSections(true);
     setSections(list);
     window.dispatchEvent(new Event("sections-changed"));
-    setSection((cur) => (list.some((s) => s.slug === cur) ? cur : list[0]?.slug ?? ""));
+    const catalogSections = list.filter(isCatalogSection);
+    setSection((cur) => (catalogSections.some((s) => s.slug === cur) ? cur : catalogSections[0]?.slug ?? ""));
   }, []);
 
   const refresh = useCallback(async () => {
@@ -189,7 +190,7 @@ function AdminPage() {
           <Select value={section} onValueChange={(v) => setSection(v)}>
             <SelectTrigger className="w-[220px]"><SelectValue /></SelectTrigger>
             <SelectContent>
-              {sections.map((s) => (
+              {sections.filter(isCatalogSection).map((s) => (
                 <SelectItem key={s.slug} value={s.slug}>
                   {s.title}{s.visible ? "" : " (nascosta)"}
                 </SelectItem>
@@ -244,7 +245,7 @@ function AdminPage() {
 
 // ---------- SECTIONS ----------
 
-const SECTION_ICONS = ["UtensilsCrossed", "Coffee", "Martini", "Wine", "Beer", "Pizza", "Sandwich", "IceCream", "Cake", "Salad", "Soup", "Croissant", "GlassWater", "Star"];
+const SECTION_ICONS = ["UtensilsCrossed", "Coffee", "Martini", "Wine", "Beer", "Pizza", "Sandwich", "IceCream", "Cake", "Salad", "Soup", "Croissant", "GlassWater", "Star", "Mail", "MapPin", "Phone"];
 
 function SectionsManager({ sections, onChange }: { sections: SectionRow[]; onChange: () => void }) {
   const [editing, setEditing] = useState<SectionRow | null>(null);
@@ -285,7 +286,7 @@ function SectionsManager({ sections, onChange }: { sections: SectionRow[]; onCha
               <p className="text-xs text-muted-foreground">{s.builtin ? `/${s.slug}` : `/sezione/${s.slug}`}</p>
             </div>
             <div className="flex gap-1">
-              <Button variant="ghost" size="icon" onClick={() => toggle(s)} title={s.visible ? "Nascondi" : "Mostra"}>
+              <Button variant="ghost" size="icon" onClick={() => toggle(s)} title={s.visible ? "Nascondi" : "Mostra"} aria-label={`${s.visible ? "Nascondi" : "Mostra"} ${s.title}`}>
                 {s.visible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
               </Button>
               <Button variant="ghost" size="icon" onClick={() => setEditing(s)}><Pencil className="h-4 w-4" /></Button>
