@@ -21,3 +21,13 @@ describe("Contacts section navigation", () => {
     expect([contacts, wines].filter(isCatalogSection)).toEqual([wines]);
   });
 });
+import { orderCategories as oc } from "./catalog";
+test("orderCategories puts each subcategory right after its parent", () => {
+  const r = oc([
+    { id: "s1", parent_id: "b", sort_order: 0 },
+    { id: "a", parent_id: null, sort_order: 0 },
+    { id: "b", parent_id: null, sort_order: 1 },
+    { id: "s2", parent_id: "a", sort_order: 0 },
+  ]).map((c) => c.id);
+  expect(r).toEqual(["a", "s2", "b", "s1"]);
+});
