@@ -39,7 +39,7 @@ import { Pencil, Trash2, Plus, Eye, EyeOff, Search } from "lucide-react";
 import { SortableList } from "@/components/SortableList";
 import { HomeManager } from "@/components/HomeManager";
 import { DesignManager } from "@/components/DesignManager";
-import { fetchSections, isCatalogSection, sectionIcon, slugify, type SectionRow } from "@/lib/catalog";
+import { fetchSections, isCatalogSection, orderCategories, sectionIcon, slugify, type SectionRow } from "@/lib/catalog";
 
 async function persistOrder(
   table: "categories" | "products",
@@ -528,7 +528,7 @@ function CategoryDialog({
   const [visible, setVisible] = useState(category?.visible ?? true);
   const [saving, setSaving] = useState(false);
 
-  const possibleParents = categories.filter(
+  const possibleParents = orderCategories(categories).filter(
     (c) => c.parent_id === null && c.id !== category?.id,
   );
 
@@ -665,7 +665,7 @@ function ProductsManager({
             <SelectTrigger className="w-[280px]"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="__all__">Tutte</SelectItem>
-              {categories.map((c) => (
+              {orderCategories(categories).map((c) => (
                 <SelectItem key={c.id} value={c.id}>{catLabel(c.id)}</SelectItem>
               ))}
             </SelectContent>
@@ -684,12 +684,13 @@ function ProductsManager({
         (() => {
           // Group products by category to allow drag within each group
           const groups = new Map<string, Product[]>();
+          for (const c of orderCategories(categories)) groups.set(c.id, []);
           for (const p of filtered) {
             const arr = groups.get(p.category_id) ?? [];
             arr.push(p);
             groups.set(p.category_id, arr);
           }
-          for (const arr of groups.values()) arr.sort((a, b) => a.sort_order - b.sort_order);
+          for (const [k, arr] of groups) arr.length ? arr.sort((a, b) => a.sort_order - b.sort_order) : groups.delete(k);
 
           const reorder = async (items: Product[]) => {
             const err = await persistOrder("products", items);
@@ -836,7 +837,7 @@ function ProductDialog({
             <Select value={categoryId} onValueChange={setCategoryId}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
-                {categories.map((c) => (
+                {orderCategories(categories).map((c) => (
                   <SelectItem key={c.id} value={c.id}>{catLabel(c.id)}</SelectItem>
                 ))}
               </SelectContent>
