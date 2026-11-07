@@ -67,6 +67,14 @@ export async function fetchSection(
   return roots;
 }
 
+/** Categories in public page order: each root followed by its children. */
+export function orderCategories<T extends Pick<Category, "id" | "parent_id" | "sort_order">>(cats: T[]): T[] {
+  const ids = new Set(cats.map((c) => c.id));
+  const by = (a: T, b: T) => a.sort_order - b.sort_order;
+  const roots = cats.filter((c) => !c.parent_id || !ids.has(c.parent_id)).sort(by);
+  return roots.flatMap((r) => [r, ...cats.filter((c) => c.parent_id === r.id).sort(by)]);
+}
+
 export function slugify(s: string): string {
   return s
     .toLowerCase()
